@@ -7,10 +7,10 @@ closeBtn.addEventListener("click", ()=>{
     menuBtnChange();
 });
 
-searchBtn.addEventListener("click", ()=>{ 
-    sidebar.classList.toggle("open");
-    menuBtnChange();
-});
+//searchBtn.addEventListener("click", ()=>{ 
+//    sidebar.classList.toggle("open");
+//    menuBtnChange();
+//});
 
 function menuBtnChange() {
 if(sidebar.classList.contains("open")){

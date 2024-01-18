@@ -1,4 +1,4 @@
-{% extends "cliente.html" %}
+{% extends "gerente.html" %}
 {% load static %}
 
 {% block 'head' %}
@@ -19,8 +19,10 @@
                 <button class="search-btn">Pesquisar</button>
             </div>
 
-            <div class="profile">
-                <a class="cart" href="#"><ion-icon name="cart-outline"></ion-icon></a>
+            <div class="add-produto" name="addProduto">
+                <a href="{% url 'addProduto' %}">
+                    <button class="add-btn">Adicionar produto</button>
+                </a>
             </div>
         </div>
         <!--Main highlight-->

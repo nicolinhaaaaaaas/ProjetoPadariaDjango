@@ -1,12 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
 
 :root{
-    --main-color: #F5BE7C;
-    --dark-color: #7F4600;
+    --main-color: #c5b1a7;
+    --dark-color: #69452F;
     --light-color: #E7E7E7;
-    --contrast-color: #f88863;
-    --differential-color: #FF1616;
-    --red-color: #ff6464;
+    --contrast-color: #faab66;
+    --differential-color: #4b280b;
+    --red-color: #9E7047;
 }
 
 *{
@@ -67,6 +67,22 @@ body{
     cursor: pointer;
     margin-left: 35px;
 }
+.add-btn{
+    background-color: var(--dark-color);
+    color: white;
+    border: none;
+    border-radius: 20px;
+    width: 180px;
+    cursor: pointer;
+    margin-left: 35px;
+    padding: 9px;
+}
+.add-btn:hover{
+    background-color: var(--light-color);
+    color: var(--dark-color);
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
 .search:hover{
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
@@ -113,6 +129,7 @@ body{
 }
 .main-title{
     font-size: 20px;
+    font-weight: 700;
 }
 .main-arrow{
     font-size: 24px;
@@ -216,7 +233,7 @@ body{
     height: 60%;
     font-size: 50px;
     background-color: var(--main-color);
-    color: var(--contrast-color);
+    color: var(--dark-color);
     border-radius: 8px;
 }
 .filter-card:hover{

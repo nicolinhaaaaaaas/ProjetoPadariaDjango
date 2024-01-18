@@ -1,0 +1,126 @@
+:root{
+    --main-color: #c5b1a7;
+    --dark-color: #69452F;
+    --light-color: #E7E7E7;
+    --contrast-color: #faab66;
+    --differential-color: #4b280b;
+    --red-color: #9E7047;
+}
+
+*{
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+outline: none;
+font-family: 'Montserrat', sans-serif;
+}
+
+body{
+width: 100%;
+height: auto;
+display: flex;
+}
+
+.main{
+width: 100%;
+height: max-content;
+padding: 2%;
+min-height: 100vh;
+background-color: var(--main-color);
+}
+
+.main-produto{
+margin-left: 200px;
+display: flex;
+flex-direction: column;
+justify-content: space-between;
+align-items: left;
+background-color: var(--light-color);
+padding: 40px;
+border-radius: 20px;
+width: 1000px;
+}
+
+.main-title{
+font-size: 35px;
+font-weight: 700;
+align-self: center;
+}
+.row{
+display: flex;
+align-items: center;
+
+}
+
+.label-text{
+font-size: 20px;
+font-weight: 550;
+margin-bottom: 5px;
+}
+
+.caixa-entrada{
+margin-bottom: 15px;
+width: 900px;
+height: 40px;
+display: flex;
+border-radius: 3px;
+
+}
+.label-imagem{
+font-size: 20px;
+font-weight: 550;
+margin-left: 140px;
+}
+
+.select{
+    padding: 4px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    color: #333;
+    width: 150px;
+    margin-left: 5px;
+}
+
+.add-ingredientes{
+    margin-left: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: left;
+    background-color: var(--light-color);
+    padding: 40px;
+    border-radius: 20px;
+    width: 1000px;
+}
+
+.btn-add-ingredientes{
+    background-color: var(--dark-color);
+    color: white;
+    border: none;
+    border-radius: 20px;
+    width: 250px;
+    cursor: pointer;
+    padding: 9px;
+}
+.btn-add-ingredientes:hover{
+    background-color: var(--contrast-color);
+    color: var(--dark-color);
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+.btn-add-principal{
+    background-color: var(--dark-color);
+    color: white;
+    border: none;
+    border-radius: 20px;
+    width: 250px;
+    cursor: pointer;
+    padding: 9px;
+    margin-left: 570px;
+}
+.btn-add-principal:hover{
+    background-color: var(--contrast-color);
+    color: var(--dark-color);
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
