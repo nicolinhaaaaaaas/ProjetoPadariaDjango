@@ -1,0 +1,164 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+
+body{
+    background-image: url('static\media\imagem-fundo.jpeg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+    background: #E7E7E7;
+}
+
+.button{
+    width: 300px;
+    height: 53px;
+    flex-shrink: 0;
+    border-radius: 15px;
+    border: 2px solid #7F4600;
+    background: #FF8515;   
+    font-size: 25px;
+    margin-top: -60px;
+}
+
+.button-pequeno{
+    display: flex;
+    width: 275px;
+    height:50px;
+    flex-shrink: 0;
+    border-radius: 5px;
+    border: 2px solid #7F4600;
+    background: #ffa653;   
+    font-size: 15px;
+    color: black;
+    margin-top: -10px;
+}
+
+.caixa{
+    display: flex;
+    position: relative;
+    padding-top: 5px;
+    width: 800px;
+    height: 700px;
+    flex-shrink: 0;
+    border-radius: 35px;
+    border: 15px solid #804600;
+    background: #F5BE7C;
+    margin-top: 25px;
+    margin-left: 100px;
+}
+
+.caixa-login{
+    display: flex;
+    position: relative;
+    padding-top: 5px;
+    width: 500px;
+    height: 600px;
+    flex-shrink: 0;
+    border-radius: 35px;
+    border: 15px solid #804600;
+    background: #F5BE7C;
+    margin-top: 25px;
+    margin-left: 250px;
+}
+
+
+.login-usuario{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+    padding: 50px;
+    color: #7F4600;
+    text-align: center;
+
+    /* TITULO */
+    font-family: Montserrat;
+    font-size: 28px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.cadastro-usuario{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+    padding: 50px;
+    color: #7F4600;
+    text-align: center;
+    /* TITULO */
+    font-family: Montserrat;
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.row{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.card-dashboard{
+    background-color: var(--main-color);
+    width: 10%;
+    position: relative;
+    margin-left: 10px;
+    margin-top: 10px;
+    text-align: center;
+    cursor: pointer;
+    border:#7F4600 2px solid;
+    border-radius: 15px;
+}
+
+.text-card{
+    font-family: Montserrat;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    color: #7F4600;
+    margin-top: 15px;
+}
+
+.caixa-perfil{
+    display: flex;
+    position: relative;
+    background-color: #F5BE7C;
+    border-radius: 25px;
+    border: 10px solid #804600;
+    padding: 15px;
+    flex-shrink: 0;
+}
+
+.att-perfil{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    height: 50%;
+    padding: 25px;
+    text-align: center;
+    /* TITULO */
+    font-family: Montserrat;
+    font-size: 26px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.btn-att-perfil{
+    width: 300px;
+    height: 53px;
+    flex-shrink: 0;
+    border-radius: 15px;
+    border: 2px solid #7F4600;
+    background: #FF8515;   
+    font-size: 25px;
+
+}

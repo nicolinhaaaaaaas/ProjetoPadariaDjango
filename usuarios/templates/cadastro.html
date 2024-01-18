@@ -1,0 +1,60 @@
+{% extends "cliente.html" %}
+{% load static %}
+
+{% block 'head' %}
+    <link rel="stylesheet" href="{% static 'usuarios/css/tela-cadastro.css' %}">
+{% endblock %}
+
+{% block 'dashboard' %}
+
+<body>
+    <div class="container">
+        <form action="{% url 'cadastro' %}" method="POST">
+            {% csrf_token %}
+            <div class="caixa">
+                <div id="cadastro" class="cadastro-usuario">
+                    <h1>Cadastro de Usuário</h1>
+                    <i class='bx bxs-baguette bx-lg'></i>
+                    <div class="row">
+                        <div class="col-md">
+                            <p>Nome:</p>
+                            <input type="text" class="form-control" placeholder="Nome" name="nome" value="{{nome}}" required>
+                        </div>
+                        <div class="col-md">
+                            <p>CPF:</p>
+                            <input type="text" class="form-control" placeholder="___.___.___-__" name="cpf" value="{{cpf}}" required>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-md">
+                            <p>Telefone:</p>
+                            <input type="text" class="form-control" placeholder="Telefone" name="telefone" value="{{telefone}}" required>
+                        </div>
+                        <div class="col-md">
+                            <p>Endereço:</p>
+                            <input type="text" class="form-control" placeholder="Endereço" name="endereco" value="{{endereco}}" required>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                    <div class="col-md">
+                            <p>E-Mail:</p>
+                            <input type="email" class="form-control" placeholder="nome@email.com" name="email" value="{{email}}" required>
+                        </div>
+                        <div class="col-md">
+                            <p>Senha:</p>
+                            <input type="password" class="form-control" placeholder="Senha" name="senha" value="{{senha}}" required>
+                        </div>
+                    </div> 
+                    <div class="row">
+                        <div class="col-md">
+                            <button class="button" value="Cadastrar">Cadastrar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>   
+        </form>
+    </div>
+</body>
+{% endblock %}

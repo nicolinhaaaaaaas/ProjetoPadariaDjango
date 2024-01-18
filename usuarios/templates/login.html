@@ -1,0 +1,47 @@
+{% extends "cliente.html" %}
+{% load static %}
+
+{% block 'head' %}
+    <link rel="stylesheet" href="{% static 'usuarios/css/tela-cadastro.css' %}">
+{% endblock %}
+
+{% block 'dashboard' %}
+
+<body>
+    <div class="container">
+        <form action="{% url 'login' %}" method="POST">
+            {% csrf_token %}
+            <div class="caixa-login">
+                <div id="login" class="login-usuario">
+                    <h1>Login de Usuário</h1>
+                    <i class='bx bxs-baguette bx-lg'></i>
+                    <br>
+                    <div class="row">
+                        <div class="col-md">
+                            <p>CPF:</p>
+                            <input type="text" class="form-control" placeholder="___.___.___-__" name="cpf" value="{{cpf}}" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md">
+                            <p>Senha:</p>
+                            <input type="password" class="form-control" placeholder="Senha" name="senha" value="{{senha}}" required>
+                        </div>
+                    </div> 
+                    <br>
+                    <div class="row">
+                        <div class="col-md">
+                            <button type="submit" class="button" value="Login">Login</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md">
+                            <a href="{% url 'cadastro' %}" class="button-pequeno" value="Conta">Não possui conta? Clique aqui</a>
+                        </div>
+                    </div>
+                </div>
+            </div>   
+        </form>
+    </div>
+</body>
+{% endblock %}
