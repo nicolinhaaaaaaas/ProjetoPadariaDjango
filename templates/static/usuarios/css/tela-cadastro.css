@@ -1,12 +1,29 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
 
+:root{
+    --main-color: #c5b1a7;
+    --dark-color: #69452F;
+    --light-color: #E7E7E7;
+    --contrast-color: #faab66;
+    --differential-color: #4b280b;
+    --red-color: #9E7047;
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    outline: none;
+    font-family: 'Montserrat', sans-serif;
+}
+
 body{
     background-image: url('static\media\imagem-fundo.jpeg');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
     background-attachment: fixed;
-    background: #E7E7E7;
+    background-color: var(--light-color);
 }
 
 .button{

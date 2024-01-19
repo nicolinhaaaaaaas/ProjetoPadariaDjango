@@ -1,0 +1,118 @@
+:root{
+    --main-color: #c5b1a7;
+    --dark-color: #69452F;
+    --light-color: #E7E7E7;
+    --contrast-color: #faab66;
+    --differential-color: #4b280b;
+    --red-color: #9E7047;
+}
+
+.distanciamento{
+    padding-left: 100px;
+    padding-right: 100px;
+    
+}
+.id{
+    width: 15%;
+}
+.data{
+    width: 10%;
+}
+.cliente{
+    width: 50%;
+}
+.titulo{
+    padding-left: 100px;
+    font-weight: 600;
+}
+.subtitulo{
+    padding-left: 100px;
+    font-weight: 350;
+    margin-bottom: 2px;
+}
+.titulo-cliente{
+padding-left: 20px;
+font-weight: 600;
+}
+.subtitulo-cliente{
+    padding-left: 20px;
+    font-weight: 350;
+    margin-bottom: 2px;
+}
+.telefone{
+    width: 17%;
+}
+.endereco{
+    width: 20%;
+}
+.cpf{
+    width: 15%;
+}
+.salario{
+    width: 10%;
+}
+.titulo-funcionario{
+    padding-left: 20px;
+    font-weight: 600;
+}
+.subtitulo-funcionario{
+    padding-left: 20px;
+    font-weight: 350;
+    margin-bottom: 2px;
+}
+.add-funcionario{
+    margin-right: 20px;
+    font-weight: 350;
+    margin-bottom: 2px;
+}
+.adicionar-funcionario{
+    background-color: var(--main-color);
+    padding: 20px;
+    margin: 20px;
+    border-radius: 8px;
+    border: var(--differential-color) solid 1px;
+}
+.funcionarioform{
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    border-radius: 20px;
+}
+.main-title{
+    font-size: 25px;
+    font-weight: 700;
+    align-self: center;
+}
+.caixa-entrada{
+    margin-bottom: 15px;
+    width: 500px;
+    height: 35px;
+    display: flex;
+}
+.label-text{
+    font-size: 20px;
+    font-weight: 550;
+    margin-bottom: 5px;
+}
+.btn-add-principal{
+    background-color: var(--dark-color);
+    color: white;
+    border: none;
+    border-radius: 20px;
+    width: 250px;
+    cursor: pointer;
+    padding: 9px;
+    align-self: center;
+}
+.botoes{
+    display: flex;
+    justify-content: space-between;
+    margin-right: 20px;
+}
+.form-control{
+    width: 500px;
+    height: 35px;
+    border-radius: 20px;
+    border: var(--differential-color) solid 1px;
+    padding-left: 10px;
+}

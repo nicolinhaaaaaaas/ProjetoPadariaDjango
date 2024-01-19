@@ -78,7 +78,7 @@ body{
     padding: 9px;
 }
 .add-btn:hover{
-    background-color: var(--light-color);
+    background-color: var(--contrast-color);
     color: var(--dark-color);
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
@@ -87,7 +87,7 @@ body{
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
 .search-btn:hover{
-    background-color: var(--light-color);
+    background-color: var(--contrast-color);
     color: var(--dark-color);
 }
 

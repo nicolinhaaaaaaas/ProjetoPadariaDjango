@@ -11,6 +11,7 @@
         <form action="% url 'addProduto' %" method="POST">{% csrf_token %}
             <div class="main-produto">
                 <h2 class="main-title">Adicionar produto</h2>
+                #TODO tela de atualizar produto
                 <div class="row">
                     <p class="label-text">Nome do produto</p>
                 </div>
@@ -53,24 +54,20 @@
             <div class="add-ingredientes">
                 <h3>Ingredientes da receita</h3>
                 <span class="btn-add-ingredientes" onclick="addIngrediente()">+ Adicionar um ingrediente</span>
-                <div id="form-ingrediente">
-                    {% for nome, unidadeMedida, quantidade in ingredientes %}
+                <div class="ingredientes" id="form-ingrediente">
                     <br>
                     <div class="row">
-                        <div class="label-text">
-                            <label for="nome">Nome do ingrediente</label>
-                            <input type="text" id="nome-ingrediente" name="nome-ingrediente" placeholder="Nome do ingrediente" value="{{nome_ingrediente}}">
+                        <div class="col-md">
+                            <input type="text" class='ingrediente-entrada' id="nome-ingrediente" name="nome-ingrediente" placeholder="Nome do ingrediente" value="{{nome_ingrediente}}">
                         </div>
-                        <div class="label-text">
-                            <label for="unidadeMedida">Unidade de medida</label>
-                            <input type="text" id="unidadeMedida" name="unidadeMedida" placeholder="Unidade de medida" value="{{unidade_Medida}}">
+                        <div class="col-md">
+                            <input type="text" class='ingrediente-entrada' id="unidadeMedida" name="unidadeMedida" placeholder="Unidade de medida" value="{{unidade_Medida}}">
                         </div>
-                        <div class="label-text">
-                            <label for="quantidade">Quantidade</label>
-                            <input type="text" id="quantidade" name="quantidade" placeholder="Quantidade" value="{{quantidade_usada}}">
+                        <div class="col-md">
+                            <input type="text" class='ingrediente-entrada' id="quantidade" name="quantidade" placeholder="Quantidade" value="{{quantidade_usada}}">
                         </div>
                     </div>
-                    {% endfor %}
+
                 </div>
             </div>
             <br>
@@ -84,6 +81,7 @@
             
         </form>
     </div>
+    <script src="{% static 'gerenciamento/js/gerenciamento.js' %}"></script>
 </body>
 
 {% endblock %}

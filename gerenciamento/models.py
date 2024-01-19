@@ -27,13 +27,12 @@ class ProdutoIngrediente(models.Model):
 class Funcionario(models.Model):
     id_funcionario = models.AutoField(primary_key=True)
     nome_funcionario = models.CharField(max_length=255)
-    cpf_funcionario = models.CharField(max_length=11)
     telefone_funcionario = models.CharField(max_length=20)
     cargo = models.CharField(max_length=255)
     salario = models.FloatField()
 
     def __str__(self) -> str:
-        return f'Nome: {self.nome} | CPF: {self.cpf} | Telefone: {self.telefone} | Cargo: {self.cargo} | Salário: {self.salario}'
+        return f'Nome: {self.nome_funcionario} | Telefone: {self.telefone_funcionario} | Cargo: {self.cargo} | Salário: {self.salario}'
 
 class Pedido(models.Model):
     id_pedido = models.AutoField(primary_key=True)

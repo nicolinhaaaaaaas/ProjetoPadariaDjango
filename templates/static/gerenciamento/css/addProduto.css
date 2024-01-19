@@ -58,6 +58,13 @@ font-weight: 550;
 margin-bottom: 5px;
 }
 
+.ingrediente-entrada{
+    font-size: 17px;
+    font-weight: 450;
+    margin-bottom: 5px;
+    
+}
+
 .caixa-entrada{
 margin-bottom: 15px;
 width: 900px;

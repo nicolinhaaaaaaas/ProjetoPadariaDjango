@@ -2,9 +2,41 @@
 {% load static %}
 
 {% block 'head' %}
-    <link rel="stylesheet" href="{% static 'usuarios/css/tela-cadastro.css' %}">
+    <link rel="stylesheet" href="{% static 'usuarios/css/telaprincipal.css' %}">
+    <link rel="stylesheet" href="{% static 'gerenciamento/css/gerenciamento.css' %}">
 {% endblock %}
 
 {% block 'dashboard' %}
-
+<body>
+    <br>
+    <br>
+    <h3 class="titulo">Pedidos cadastrados no sistema:</h2>
+    <p class="subtitulo">Aqui você pode visualizar todos os pedidos cadastrados no sistema.</p>
+    <p class="subtitulo">Clique no identificador do pedido para visualizar mais detalhes.</p>
+    <br>
+    <div class="container-fluid distanciamento">
+        <table class="table table-dark">
+            <thead>
+                <tr>
+                    <th class="id" scope="col">Identificador</th>
+                    <th class="cliente" scope="col">Cliente</th>
+                    <th class="data" scope="col">Data</th>
+                    <th class="valor" scope="col">Valor</th>
+                    <th class="status" scope="col">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for pedido in pedidos %}
+                    <tr>
+                        <th><a href="{% url 'pedido' pedido.id %}">{{ pedido.id }}</a></th>
+                        <td>{{ pedido.cliente }}</td>
+                        <td>{{ pedido.data }}</td>
+                        <td>{{ pedido.valor }}</td>
+                        <td>{{ pedido.status }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
 {% endblock %}

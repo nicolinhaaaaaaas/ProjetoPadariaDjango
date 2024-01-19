@@ -8,8 +8,9 @@ from .models import Usuario
 from gerenciamento.models import Pedido
 import re
 
-def usuarios(request):
-    return render(request, 'usuarios.html')
+
+def principal(request):
+    return render(request, 'principal.html')
 
 def cadastro(request):
     if request.method == 'GET':
@@ -68,7 +69,6 @@ def atualizarPerfil(request):
     if request.method == 'POST':
         pass
 
-
 #@login_required
 def excluirPerfil():
     pass
@@ -80,9 +80,6 @@ def pedidosProprios():
 #@login_required
 def fazerPedido():
     pass
-
-def principal(request):
-    return render(request, 'principal.html')
 
 def pedidos(request, id):
    pedido = get_object_or_404(Pedido, id=id)
