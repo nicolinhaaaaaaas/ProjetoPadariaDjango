@@ -90,3 +90,14 @@ function dados_funcionario(){
     }
 )}
 
+function expandirProduto(nome, descricao, preco, imagem){
+    document.getElementById('produto-nome').innerHTML = nome;
+    document.getElementById('produto-descricao').innerHTML = descricao;
+    document.getElementById('produto-preco').innerHTML = preco;
+    document.getElementById('produto-imagem').src = imagem;
+
+    document.getElementById('produto-expandido').style.display = "block";
+}
+function contrairProduto(){
+    document.getElementById('produto-expandido').style.display = "none";
+}

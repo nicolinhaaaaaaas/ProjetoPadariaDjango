@@ -156,4 +156,25 @@ font-weight: 600;
     color: var(--dark-color);
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
+.produto-card{
+    transition: transform 0.3s;
+}
+.produto-card.expandido{
+    transform: scale(1.2);
+}
 
+.btn-remover-principal{
+    background-color: #ff6459;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    width: 250px;
+    cursor: pointer;
+    padding: 9px;
+    margin-left: 570px;
+}
+.btn-remover-principal:hover{
+    background-color: var(--contrast-color);
+    color: var(--dark-color);
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
