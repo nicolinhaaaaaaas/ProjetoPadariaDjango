@@ -18,7 +18,6 @@
 }
 
 body{
-    background-image: url('static\media\imagem-fundo.jpeg');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -27,27 +26,39 @@ body{
 }
 
 .button{
-    width: 300px;
-    height: 53px;
-    flex-shrink: 0;
-    border-radius: 15px;
-    border: 2px solid #7F4600;
-    background: #FF8515;   
-    font-size: 25px;
-    margin-top: -60px;
+    background-color: var(--dark-color);
+    color: white;
+    border: none;
+    border-radius: 20px;
+    width: 250px;
+    cursor: pointer;
+    padding: 9px;
+    align-self: center;
+    margin-top: 20px;
+    margin-left: 410px;
+}
+.button:hover{
+    background-color: var(--contrast-color);
+    color: var(--dark-color);
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
 
 .button-pequeno{
-    display: flex;
-    width: 275px;
-    height:50px;
-    flex-shrink: 0;
-    border-radius: 5px;
-    border: 2px solid #7F4600;
-    background: #ffa653;   
-    font-size: 15px;
-    color: black;
-    margin-top: -10px;
+    background-color: var(--dark-color);
+    color: white;
+    border: none;
+    border-radius: 20px;
+    width: 250px;
+    cursor: pointer;
+    padding: 9px;
+    align-self: center;
+    margin-top: 20px;
+    margin-left: 410px;
+}
+.button-pequeno:hover{
+    background-color: var(--contrast-color);
+    color: var(--dark-color);
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
 
 .caixa{
@@ -145,12 +156,16 @@ body{
 
 .caixa-perfil{
     display: flex;
-    position: relative;
-    background-color: #F5BE7C;
-    border-radius: 25px;
-    border: 10px solid #804600;
-    padding: 15px;
-    flex-shrink: 0;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 50px;
+    padding: 20px;
+    background-color: var(--main-color);
+    margin-left: 60px;
+    margin-right: 60px;
+    border-radius: 20px;
+    padding-bottom: 40px;
 }
 
 .att-perfil{
@@ -170,12 +185,20 @@ body{
 }
 
 .btn-att-perfil{
-    width: 300px;
-    height: 53px;
-    flex-shrink: 0;
-    border-radius: 15px;
-    border: 2px solid #7F4600;
-    background: #FF8515;   
-    font-size: 25px;
+    background-color: var(--dark-color);
+    color: white;
+    border: none;
+    border-radius: 20px;
+    width: 250px;
+    cursor: pointer;
+    padding: 9px;
+    align-self: center;
+    margin-top: 20px;
+    margin-left: 410px;
 
+}
+.btn-att-perfil:hover{
+    background-color: var(--contrast-color);
+    color: var(--dark-color);
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }

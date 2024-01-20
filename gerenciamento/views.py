@@ -1,14 +1,17 @@
 import json
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.core import serializers
 from django.views.decorators.csrf import csrf_exempt
+from gerenciamento.forms import ProdutoForm
 
-from gerenciamento.models import Funcionario, Ingrediente, Produto, ProdutoIngrediente
+from gerenciamento.models import Funcionario, Ingrediente, Pedido, Produto, ProdutoIngrediente
 from usuarios.models import Usuario
 
+#telas
 def principalGerente(request):
-    return render(request, 'principalGerente.html')
+    produtos_list = Produto.objects.all()
+    return render(request, 'principalGerente.html', {'produtos': produtos_list})
 
 def lista_pedidos(request):
     return render(request, 'listarPedidos.html')
@@ -26,49 +29,9 @@ def funcionarios(request):
 
 def perfil(request):
     return render(request, 'perfilGerente.html')
-
-def addProduto(request):
-    if request.method == "GET":
-        produtos_list = Produto.objects.all()
-        return render(request, 'adicionarProduto.html', {'produtos': produtos_list})
-    elif request.method == "POST":
-        nome = request.POST.get('nome')
-        preco = request.POST.get('preco')
-        descricao = request.POST.get('descricao')
-
-        nome_ingredientes = request.POST.getlist('nome_ingrediente')
-        unidadeMedidas = request.POST.getlist('unidadeMedida')
-        quantidades = request.POST.getlist('quantidade')
-
-        produto = Produto.objects.create(nome_produto=nome, preco=preco, descricao=descricao)
-        
-        produto.save()
-
-        for nome_ingrediente, unidadeMedida, quantidade in zip(nome_ingredientes, unidadeMedidas, quantidades):
-            try:
-                ingrediente = Ingrediente.objects.get(nome_ingrediente=nome_ingrediente)
-            except Ingrediente.DoesNotExist:
-                ingrediente = Ingrediente.objects.create(nome_ingrediente=nome_ingrediente, unidadeMedida=unidadeMedida)
-                ingrediente.save()
-            
-            produtoIng = ProdutoIngrediente.objects.create(produto=produto, ingrediente=ingrediente, quantidade_usada=quantidade)
-            
-            produtoIng.save()
-        
-        return HttpResponse('Produto adicionado com sucesso!')
-
-def attProduto(request):
-    pass
-
-def pedido(request):
-    pass
-
-def attPedido(request):
-    pass
-
-def gerenciamento(request):
-    pass
-
+    
+#funções de adicionar
+    
 def addFuncionario(request):
     if request.method == "GET":
         funcionarios_list = Funcionario.objects.all()
@@ -84,6 +47,43 @@ def addFuncionario(request):
         funcionario.save()
 
         return render(request, 'funcionarios.html')
+    
+def addProduto(request):
+    if request.method == "GET":
+        form = ProdutoForm()
+        produtos_list = Produto.objects.all()
+        return render(request, 'adicionarProduto.html', {'form': form, 'produtos': produtos_list})
+    elif request.method == "POST":
+        form = ProdutoForm(request.POST, request.FILES)
+        if form.is_valid():
+            produto = form.save()
+            
+            nome_ingredientes = request.POST.getlist('nome_ingrediente')
+            unidadeMedidas = request.POST.getlist('unidadeMedida')
+            quantidades = request.POST.getlist('quantidade')
+
+            for nome_ingrediente, unidadeMedida, quantidade in zip(nome_ingredientes, unidadeMedidas, quantidades):
+                try:
+                    ingrediente = Ingrediente.objects.get(nome_ingrediente=nome_ingrediente)
+                except Ingrediente.DoesNotExist:
+                    ingrediente = Ingrediente.objects.create(nome_ingrediente=nome_ingrediente, unidadeMedida=unidadeMedida)
+                    ingrediente.save()
+                
+                produtoIng = ProdutoIngrediente.objects.create(produto=produto, ingrediente=ingrediente, quantidade_usada=quantidade)
+                
+                produtoIng.save()
+            
+            return redirect('lista_produtos')  # Redireciona para a lista de produtos após adicionar com sucesso
+        else:
+            # Se o formulário não for válido, você pode querer lidar com isso de acordo com seus requisitos
+            return render(request, 'adicionarProduto.html', {'form': form})
+
+#funções de atualizar
+def attProduto(request):
+    pass
+
+def attPedido(request):
+    pass
 
 def attFuncionario(request, id):
     body = json.loads(request.body)
@@ -104,6 +104,53 @@ def attFuncionario(request, id):
     except:
         return JsonResponse({'status': '500'})
     
+#funções de deletar
+    
+def excluirProduto(request):
+    pass
+
+def excluirPedido(request):
+    pass
+
+def excluirFuncionario(request, id):
+    pass
+
+#funções de dados
+
+def dadosPedido(request):
+    id_pedido = request.POST.get('id_pedido')
+    pedido = Pedido.objects.filter(id_pedido=id_pedido)
+    pedido_json = json.loads(serializers.serialize('json', pedido))[0]['fields']
+    pedido_id = json.loads(serializers.serialize('json', pedido))[0]['pk']
+    data = {'pedido': pedido_json, 'pedido_id': pedido_id}
+    return JsonResponse(data)
+
+def dadosProduto(request):
+    if_produto = request.POST.get('id_produto')
+    produto = Produto.objects.filter(id_produto=if_produto)
+    ingredientes = ProdutoIngrediente.objects.filter(produto=produto[0])
+
+    produto_json = json.loads(serializers.serialize('json', produto))[0]['fields']
+    produto_id = json.loads(serializers.serialize('json', produto))[0]['pk']
+
+    ingredientes_json = json.loads(serializers.serialize('json', ingredientes))
+    ingredientes_json = [{'fields': i['fields'], 'id': i['pk']} for i in ingredientes_json]
+    print(ingredientes_json)
+    data = {'produto': produto_json, 'produto_id': produto_id, 'ingredientes': ingredientes_json}
+    return JsonResponse(data)
+
+def dadosFuncionario(request):
+    if_funcionario = request.POST.get('id_funcionario')
+    funcionario = Funcionario.objects.filter(id_funcionario=if_funcionario)
+    funcionario_json = json.loads(serializers.serialize('json', funcionario))[0]['fields']
+    funcionario_id = json.loads(serializers.serialize('json', funcionario))[0]['pk']
+    data = {'funcionario': funcionario_json, 'funcionario_id': funcionario_id}
+    return JsonResponse(data)
+
+#detalhes de pedido
+
+def pedido(request):
+    pass
 
 def notaPedido(request):
     pass

@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, logout
 from django.contrib.auth import login as login_django
 from django.contrib.auth.decorators import login_required
 from .models import Usuario
-from gerenciamento.models import Pedido
+from gerenciamento.models import Pedido, Produto
 import re
 
 
@@ -18,6 +18,8 @@ def cadastro(request):
         return render(request, 'cadastro.html', {'usuarios': usuarios_list})
     elif request.method == 'POST':
         username = request.POST.get('nome')
+        nome = request.POST.get('nome')
+        sobrenome = request.POST.get('sobrenome')
         telefone = request.POST.get('telefone')
         endereco = request.POST.get('endereco')
         email = request.POST.get('email')
@@ -29,12 +31,12 @@ def cadastro(request):
         user = Usuario.objects.filter(email=email)
 
         if user.exists():
-            return render(request, 'cadastro.html', {'nome': username, 'telefone': telefone, 'endereco': endereco, 'permissao': permissao, 'erro': 'Usuário já cadastrado!'})
+            return render(request, 'cadastro.html', {'nome': username, 'sobrenome':sobrenome, 'telefone': telefone, 'endereco': endereco, 'permissao': permissao, 'erro': 'Usuário já cadastrado!'})
         if not re.fullmatch(re.compile(r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+'), email):
-            return render(request, 'cadastro.html', {'nome': username, 'telefone': telefone, 'endereco': endereco, 'cpf': cpf, 'permissao': permissao, 'erro': 'E-mail inválido!'})
+            return render(request, 'cadastro.html', {'nome': username, 'sobrenome':sobrenome, 'telefone': telefone, 'endereco': endereco, 'cpf': cpf, 'permissao': permissao, 'erro': 'E-mail inválido!'})
         
-        usuario = Usuario.objects.create(username=username, cpf=cpf, telefone=telefone, endereco=endereco, email=email, password=password, permissao=permissao)
-        print(username, cpf, email, password, telefone, endereco, permissao)
+        usuario = Usuario.objects.create(username=username, first_name=nome, last_name=sobrenome, cpf=cpf, telefone=telefone, endereco=endereco, email=email, password=password, permissao=permissao)
+        print(username, nome, sobrenome, cpf, email, password, telefone, endereco, permissao)
         usuario.save()
         return HttpResponse('Usuário cadastrado com sucesso!')
     else:
@@ -54,6 +56,11 @@ def login(request):
         else:
             print(cpf, senha)
             return HttpResponse('Usuário ou senha incorretos!')
+        
+def pesquisar_produto(request):
+    termo_pesquisa = request.GET.get('Pesquisar', '')
+    resultados = Produto.objects.filter(nome_produto__icontains=termo_pesquisa)
+    return render(request, 'pesquisarProduto.html', {'resultados': resultados})
         
 #@login_required
 def logout(request):

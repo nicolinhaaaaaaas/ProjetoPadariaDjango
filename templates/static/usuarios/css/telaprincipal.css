@@ -66,6 +66,7 @@ body{
     width: 180px;
     cursor: pointer;
     margin-left: 35px;
+    margin-top: -35px;
 }
 .add-btn{
     background-color: var(--dark-color);

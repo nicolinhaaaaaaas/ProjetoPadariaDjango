@@ -11,17 +11,18 @@ function addIngrediente() {
 
 function exibir_funcionario(tipo){
     
-    add_funcionario = document.getElementById("add_funcionario");
-    att_funcionario = document.getElementById("att_funcionario");
+    var add_funcionario = document.getElementById("add-funcionario");
+    var att_funcionario = document.getElementById("att-funcionario");
 
     if(tipo == '1'){
-        console.log("ADD funcionario")
-        add_funcionario.style.display = "none";
-        att_funcionario.style.display = "block";
-    }else if(tipo == '2'){
-        console.log("ATT funcionario")
+        
         add_funcionario.style.display = "block";
         att_funcionario.style.display = "none";
+        console.log("ADD funcionario")
+    }else if(tipo == '2'){
+        console.log("ATT funcionario")
+        add_funcionario.style.display = "none";
+        att_funcionario.style.display = "block";
     }
 }
 
@@ -66,6 +67,26 @@ function dados_funcionario(){
     data = new FormData()
     data.append('id_funcionario', id_funcionario)
 
-    
-}
+    fetch('/gerenciamento/dadosFuncionario/', {
+        method: "POST",
+        headers: {
+            'X-CSRFToken': csrf_token,
+        },
+        body: data
+    }).then(function(result){
+        return result.json()
+    }).then(function(data){
+        document.getElementById('form-att-funcionario').style.display = "block";
+        id = document.getElementById('id_funcionario');
+        id.value = data['id_funcionario'];
+        nome = document.getElementById('nome_funcionario');
+        nome.value = data['nome_funcionario'];
+        telefone = document.getElementById('telefone_funcionario');
+        telefone.value = data['telefone_funcionario'];
+        cargo = document.getElementById('cargo');
+        cargo.value = data['cargo'];
+        salario = document.getElementById('salario');
+        salario.value = data['salario'];
+    }
+)}
 

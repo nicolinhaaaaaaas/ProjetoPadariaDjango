@@ -104,6 +104,11 @@ font-weight: 600;
     padding: 9px;
     align-self: center;
 }
+.btn-add-principal:hover{
+    background-color: var(--contrast-color);
+    color: var(--dark-color);
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
 .botoes{
     display: flex;
     justify-content: space-between;
@@ -116,3 +121,39 @@ font-weight: 600;
     border: var(--differential-color) solid 1px;
     padding-left: 10px;
 }
+.container-perfil{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 50px;
+    padding: 20px;
+    background-color: var(--main-color);
+    margin-left: 60px;
+    margin-right: 60px;
+    border-radius: 20px;
+    padding-bottom: 40px;
+}
+.titulo_perfil{
+    font-size: 35px;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+.btn-att-perfil{
+    background-color: var(--dark-color);
+    color: white;
+    border: none;
+    border-radius: 20px;
+    width: 250px;
+    cursor: pointer;
+    padding: 9px;
+    align-self: center;
+    margin-top: 20px;
+    margin-left: 410px;
+}
+.btn-att-perfil:hover{
+    background-color: var(--contrast-color);
+    color: var(--dark-color);
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+

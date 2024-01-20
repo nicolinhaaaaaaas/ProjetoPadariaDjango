@@ -10,14 +10,22 @@ class Ingrediente(models.Model):
         return f'Nome: {self.nome} | Unidade de Medida: {self.unidadeMedida}'
 
 class Produto(models.Model):
+    CATEGORIA_CHOICES = [
+        ('doce', 'Doce'),
+        ('salgado', 'Salgado'),
+        ('bebida', 'Bebida'),
+        ('bolo', 'Bolo')
+    ]
+
     id_produto = models.AutoField(primary_key=True)
     nome_produto = models.CharField(max_length=255)
     descricao = models.CharField(max_length=255)
     preco = models.FloatField()
     ingredientes = models.ManyToManyField(Ingrediente, through='ProdutoIngrediente')
+    categoria = models.CharField(max_length=15, choices=CATEGORIA_CHOICES, default='salgado')
+    imagem = models.ImageField(upload_to='media/', null=True, blank=True)
 
-    def __str__(self) -> str:
-        return f'Nome: {self.nome} | Descrição: {self.descricao} | Preço: {self.preco}'
+    
 
 class ProdutoIngrediente(models.Model):
     produto = models.ForeignKey(Produto, on_delete=models.CASCADE)

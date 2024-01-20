@@ -131,3 +131,21 @@ margin-left: 140px;
     color: var(--dark-color);
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
+
+input[type="submit"] {
+    background-color: var(--dark-color);
+    color: white;
+    border: none;
+    border-radius: 20px;
+    width: 250px;
+    cursor: pointer;
+    padding: 9px;
+    margin-left: 570px;
+}
+
+/* Estilizando o botão quando hover */
+input[type="submit"]:hover {
+    background-color: var(--contrast-color);
+    color: var(--dark-color);
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}

@@ -15,8 +15,10 @@
             <ion-icon class="menu-toggle" name="menu-outline"></ion-icon>
 
             <div class="search">
-                <input type="text" placeholder="Pesquisar" name="Pesquisar">
-                <button class="search-btn">Pesquisar</button>
+                <form method="GET" action="{% url 'pesquisar_produto' %}">
+                    <input type="text" placeholder="Pesquisar" name="Pesquisar" value="{{termo_pesquisa}}">
+                    <button class="search-btn">Pesquisar</button>
+                </form>
             </div>
 
             <div class="profile">

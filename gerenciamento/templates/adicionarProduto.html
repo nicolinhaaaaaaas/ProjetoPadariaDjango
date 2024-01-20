@@ -8,7 +8,7 @@
 {% block 'dashboard' %}
 <body>
     <div class="main">
-        <form action="% url 'addProduto' %" method="POST">{% csrf_token %}
+        <form action="% url 'addProduto' %" method="POST" enctype="multipart/form-data">{% csrf_token %}
             <div class="main-produto">
                 <h2 class="main-title">Adicionar produto</h2>
                 #TODO tela de atualizar produto
@@ -16,35 +16,30 @@
                     <p class="label-text">Nome do produto</p>
                 </div>
                 <div class="row">
-                    <input class="caixa-entrada" type="text" id="nome" name="nome" placeholder="Nome do produto">
+                    {{ form.nome_produto }}
                 </div>
                 <div class="row">
                     <p class="label-text">Descrição</p>
                 </div>
                 <div class="row">
-                    <input class="caixa-entrada" type="text" id="descricao" name="descricao" placeholder="Descrição do produto">
+                    {{ form.nome_produto }}
                 </div>
                 <div class="row">
                     <p class="label-text">Preço</p>
                 </div>
                 <div class="row">
-                    <input class="caixa-entrada" type="text" id="preco" name="preco" placeholder="Preço do produto">
+                    {{ form.nome_produto }}
                 </div>
                 <br>
                 <div class="row">
                     <p class="label-text">Categoria</p>
                 
                     <div class="option-entrada">
-                        <select class="select" id="categoria" name="categoria">
-                            <option value="salgado">Salgado</option>
-                            <option value="doce">Doce</option>
-                            <option value="bolo">Bolo</option>
-                            <option value="bebida">Bebida</option>
-                        </select>
+                        {{ form.categoria }}
                     </div>
                     <div class="label-imagem">
-                        <label for="imagem">Imagem</label>
-                        <input class="imagem" type="file" id="imagem" name="imagem" placeholder="Imagem do produto">
+                        <label for="{{ form.imagem.id_for_label }}">Imagem</label>
+                        {{ form.imagem }}
                     </div>
                 </div>
 
@@ -58,25 +53,24 @@
                     <br>
                     <div class="row">
                         <div class="col-md">
-                            <input type="text" class='ingrediente-entrada' id="nome-ingrediente" name="nome-ingrediente" placeholder="Nome do ingrediente" value="{{nome_ingrediente}}">
+                            {{ form.nome_ingrediente }}
                         </div>
                         <div class="col-md">
-                            <input type="text" class='ingrediente-entrada' id="unidadeMedida" name="unidadeMedida" placeholder="Unidade de medida" value="{{unidade_Medida}}">
+                            {{ form.unidadeMedida }}
                         </div>
                         <div class="col-md">
-                            <input type="text" class='ingrediente-entrada' id="quantidade" name="quantidade" placeholder="Quantidade" value="{{quantidade_usada}}">
+                            {{ form.quantidade_usada }}
                         </div>
                     </div>
 
                 </div>
             </div>
+            {{form.submit}}
             <br>
             
             <br>
-            <div class="col-md">
-                <div class="row">
-                    <input type="submit" value="Adicionar" class="btn-add-principal">
-                </div>
+            <div class="botao">
+                <input type="submit" value="Enviar" class="btn-add-principal">
             </div>
             
         </form>

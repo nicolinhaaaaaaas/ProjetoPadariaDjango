@@ -24,7 +24,7 @@
         </div>
     </div>
 
-    <div id="add-funcionario" class="adicionar-funcionario">
+    <div id="add-funcionario" class="adicionar-funcionario" name="add-funcionario" style="display: none;">
         <form action="{% url 'addFuncionario' %}" method="POST">{% csrf_token %}
             <div class="funcionarioform">
                 <h2 class="main-title">Cadastrar funcionário</h2>
@@ -55,25 +55,25 @@
         </form>
     </div>
 
-    <div id="att-funcionario" class="adicionar-funcionario">
+    <div id="att-funcionario" class="adicionar-funcionario" name="att-funcionario" style="display: none;">
         <div class="funcionarioform">
             <h2 class="main-title">Atualizar funcionário</h2>
             <p class="label-text">Funcionário: </p>
                 <select id="funcionario-select" onchange="dados_funcionario(this)" class="form-control">
                     <option value="" selected disabled hidden>Selecione um funcionário</option>
                     {% for funcionario in funcionarios %}
-                        <option value="{{ funcionario.id }}">{{ funcionario.nome }}</option>
+                        <option value="{{ funcionario.id_funcionario }}">{{ funcionario.nome_funcionario }}</option>
                     {% endfor %}
                 </select>
                 <br>
                 <div class="row">
                     <div class="col-md">
                         <p class="label-text">Nome do funcionário</p>
-                        <input class="caixa-entrada" type="text" id="nome" name="nome" placeholder="Nome do funcionário">
+                        <input class="caixa-entrada" type="text" id="nome_funcionario" name="nome" placeholder="Nome do funcionário">
                     </div>
                     <div class="col-md">
                         <p class="label-text">Telefone</p>
-                        <input class="caixa-entrada" type="text" id="telefone" name="telefone" placeholder="Telefone do funcionário">
+                        <input class="caixa-entrada" type="text" id="telefone_funcionario" name="telefone" placeholder="Telefone do funcionário">
                     </div>
                 </div>
                 <br>

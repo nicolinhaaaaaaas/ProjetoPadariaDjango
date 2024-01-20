@@ -28,7 +28,7 @@
                 {% for cliente in clientes %}
                     <tr>
                         <th>{{ cliente.cpf }}</th>
-                        <td>{{ cliente.username }}</td>
+                        <td>{{ cliente.first_name }} {{cliente.last_name}}</td>
                         <td>{{ cliente.email }}</td>
                         <td>{{ cliente.telefone }}</td>
                         <td>{{ cliente.endereco }}</td>

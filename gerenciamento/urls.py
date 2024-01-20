@@ -1,7 +1,10 @@
 from django.urls import path
 from . import views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
+    # TELAS #
     path('', views.principalGerente, name='gerenciamento'),
     path('perfilGerente/', views.perfil, name='perfilGerente'),
     path('principalGerente/', views.principalGerente, name='principalGerente'),
@@ -12,4 +15,12 @@ urlpatterns = [
     path('updateFuncionario/<int:id_funcionario>', views.attFuncionario, name='updateFuncionario'),
     path('addProduto/', views.addProduto, name='addProduto'),
     path('clientes/' , views.clientes, name='clientes'),
+
+    # FUNÇÕES DE DADOS #
+    path('dados_funcionario/', views.dadosFuncionario, name='dados_funcionario'),
+    path('dados_produto/', views.dadosProduto, name='dados_produto'),
+    path('dados_pedido/', views.dadosPedido, name='dados_pedido'),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

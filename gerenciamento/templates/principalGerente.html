@@ -1,6 +1,7 @@
 {% extends "gerente.html" %}
 {% load static %}
 
+
 {% block 'head' %}
     <link rel="stylesheet" href="{% static 'usuarios/css/telaprincipal.css' %}">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
@@ -160,28 +161,19 @@
                             <ion-icon class="detail-favorites" name="bookmark-outline"></ion-icon>
                         </div>
                     </div> 
+                    {% for produto in produtos %}
                     <div class="detail-card">
-                        <img class="detail-img" src="{% static 'usuarios/img/destaque4.jpg' %}">
+                        <img class="detail-img" src="{% produto.imagem.url %}" alt="{% produto.nome_produto %}">
                         <div class="detail-desc">
                             <div class="detail-name">
-                                <h4>Pastel</h4>
-                                <p class="detail-sub">Deliciosa coxinha de coisa que voce gosta</p>
-                                <p class="price">R$ 4,50</p>
+                                <h4>{{produto.nome_produto}}</h4>
+                                <p class="detail-sub">{{produto.descricao}}</p>
+                                <p class="price">{{produto.preco}}</p>
                             </div>
                             <ion-icon class="detail-favorites" name="bookmark-outline"></ion-icon>
                         </div>
                     </div> 
-                    <div class="detail-card">
-                        <img class="detail-img" src="{% static 'usuarios/img/destaque4.jpg' %}">
-                        <div class="detail-desc">
-                            <div class="detail-name">
-                                <h4>Pastel</h4>
-                                <p class="detail-sub">Deliciosa coxinha de coisa que voce gosta</p>
-                                <p class="price">R$ 4,50</p>
-                            </div>
-                            <ion-icon class="detail-favorites" name="bookmark-outline"></ion-icon>
-                        </div>
-                    </div> 
+                    {% endfor %}
                 </div>
             </div>
         </div>
