@@ -90,14 +90,27 @@ function dados_funcionario(){
     }
 )}
 
-function expandirProduto(nome, descricao, preco, imagem){
-    document.getElementById('produto-nome').innerHTML = nome;
-    document.getElementById('produto-descricao').innerHTML = descricao;
-    document.getElementById('produto-preco').innerHTML = preco;
-    document.getElementById('produto-imagem').src = imagem;
+function expandirProduto(nome, descricao, preco, imagemUrl) {
+    document.getElementById('produto-nome-modal').innerText = nome;
+    document.getElementById('produto-descricao-modal').innerText = descricao;
+    document.getElementById('produto-preco-modal').innerText = preco;
+    
+    var imagemModal = document.getElementById('produto-imagem-modal');
+    imagemModal.src = imagemUrl;
+    imagemModal.alt = 'Imagem de ' + nome;
 
-    document.getElementById('produto-expandido').style.display = "block";
+    document.getElementById('produto-modal').style.display = 'block';
+    console.log('expandirProduto');
 }
-function contrairProduto(){
-    document.getElementById('produto-expandido').style.display = "none";
+
+function adicionarAoCarrinho(){
+    console.log('adicionarAoCarrinho');
+}
+
+function fecharModal() {
+    // Recupera o elemento modal
+    var modal = document.getElementById('produto-modal'); // Substitua 'seuModalId' pelo ID real do seu modal
+
+    // Define o estilo display como 'none' para esconder o modal
+    modal.style.display = 'none';
 }

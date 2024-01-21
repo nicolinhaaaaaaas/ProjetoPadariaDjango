@@ -156,12 +156,6 @@ font-weight: 600;
     color: var(--dark-color);
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
-.produto-card{
-    transition: transform 0.3s;
-}
-.produto-card.expandido{
-    transform: scale(1.2);
-}
 
 .btn-remover-principal{
     background-color: #ff6459;
@@ -177,4 +171,48 @@ font-weight: 600;
     background-color: var(--contrast-color);
     color: var(--dark-color);
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 500px;
+    max-height: 570px;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.modal-img {
+    max-width: 450px;
+    max-height: 450px;
+    display: block;
+    margin: 0 auto;
+}
+
+.modal-conteudo {
+    background-color: #fefefe;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.modal-detalhes {
+    margin-top: 20px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
 }
