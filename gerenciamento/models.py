@@ -56,8 +56,6 @@ class Pedido(models.Model):
 
         return total
 
-    def __str__(self) -> str:
-        return f'Cliente: {self.cliente} | Data: {self.data} | Hora: {self.hora} | Valor: {self.valor}'
     
 
 class PedidoProduto(models.Model):

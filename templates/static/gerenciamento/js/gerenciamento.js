@@ -1,3 +1,9 @@
+$(document).ready(function() {
+    $('.search-btn').on('click', function() {
+        pesquisarProdutos();
+    });
+});
+
 function addIngrediente() {
     var container = document.getElementById("form-ingrediente");
 
@@ -7,6 +13,22 @@ function addIngrediente() {
     html += "<br> <div class='col-md'> <input type='text' class='ingrediente-entrada' id='quantidade' name='quantidade' placeholder='Quantidade'> </div> </div>";
 
     container.innerHTML += html;
+}
+function exibir_produto(tipo){
+    
+    var add_produto = document.getElementById("add-produto");
+    var att_produto = document.getElementById("att-produto");
+
+    if(tipo == '1'){
+        
+        add_produto.style.display = "block";
+        att_produto.style.display = "none";
+        console.log("ADD produto")
+    }else if(tipo == '2'){
+        console.log("ATT produto")
+        add_produto.style.display = "none";
+        att_produto.style.display = "block";
+    }
 }
 
 function exibir_funcionario(tipo){
@@ -93,7 +115,7 @@ function dados_funcionario(){
 function expandirProduto(nome, descricao, preco, imagemUrl) {
     document.getElementById('produto-nome-modal').innerText = nome;
     document.getElementById('produto-descricao-modal').innerText = descricao;
-    document.getElementById('produto-preco-modal').innerText = preco;
+    document.getElementById('produto-preco-modal').innerText = 'R$ '+ preco;
     
     var imagemModal = document.getElementById('produto-imagem-modal');
     imagemModal.src = imagemUrl;
@@ -114,3 +136,4 @@ function fecharModal() {
     // Define o estilo display como 'none' para esconder o modal
     modal.style.display = 'none';
 }
+

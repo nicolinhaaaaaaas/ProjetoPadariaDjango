@@ -132,21 +132,28 @@
                     </div> 
                     {% endfor %}
                 </div>
-            </div>
-
-            
+            </div>          
         </div>
     </div>
     <div id="produto-modal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="fecharModal()">&times;</span>
             <img id="produto-imagem-modal" class="modal-img" alt="Imagem do Produto">
-            <h2 id="produto-nome-modal"></h2>
-            <p id="produto-descricao-modal"></p>
-            <p id="produto-preco-modal"></p>
-            <label for="quantidade-modal">Quantidade:</label>
-            <input type="number" id="quantidade-modal" name="quantidade-modal" value="1" min="1">
-            <button onclick="adicionarAoCarrinho()">Adicionar ao Carrinho</button>
+            <div class="conteudo-text">
+                <h2 id="produto-nome-modal"></h2>
+                <p id="produto-descricao-modal"></p>
+                <div class="row">
+                    <div class="col-md">
+                        <p id="produto-preco-modal"></p>
+                    </div>
+                    <div class="col-md">
+                        <label for="quantidade-modal">Quantidade:</label>
+                        <input class="quantidade-selecionar" type="number" id="quantidade-modal" name="quantidade-modal" value="1" min="1">
+                    </div> 
+                </div>
+            </div>
+            
+            <button class="botao-add-carrinho" onclick="adicionarAoCarrinho()">Adicionar ao Carrinho</button>
         </div>
     </div>
 </body>

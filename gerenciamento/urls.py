@@ -14,7 +14,11 @@ urlpatterns = [
     path('addFuncionario/', views.addFuncionario, name='addFuncionario'),
     path('updateFuncionario/<int:id_funcionario>', views.attFuncionario, name='updateFuncionario'),
     path('addProduto/', views.addProduto, name='addProduto'),
+    path('updateProduto/<int:id_produto>', views.attProduto, name='updateProduto'),
     path('clientes/' , views.clientes, name='clientes'),
+    path('pesquisaProduto/', views.pesquisaProduto, name='pesquisaProduto'),
+    path('buscar_sugestao/', views.buscar_sugestoes, name='buscar_sugestoes'),
+    path('notaPedido/<int:id_pedido>', views.notaPedido, name='notaPedido'),
 
     # FUNÇÕES DE DADOS #
     path('dados_funcionario/', views.dadosFuncionario, name='dados_funcionario'),

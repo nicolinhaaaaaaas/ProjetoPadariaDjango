@@ -1,11 +1,13 @@
 import json
-from django.http import HttpResponse, JsonResponse
+from django.http import FileResponse, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.core import serializers
 from django.views.decorators.csrf import csrf_exempt
 from gerenciamento.forms import ProdutoForm
+from fpdf import FPDF
+from io import BytesIO
 
-from gerenciamento.models import Funcionario, Ingrediente, Pedido, Produto, ProdutoIngrediente
+from gerenciamento.models import Funcionario, Ingrediente, Pedido, PedidoProduto, Produto, ProdutoIngrediente
 from usuarios.models import Usuario
 
 #telas
@@ -29,6 +31,8 @@ def funcionarios(request):
 
 def perfil(request):
     return render(request, 'perfilGerente.html')
+
+
     
 #funções de adicionar
     
@@ -77,6 +81,17 @@ def addProduto(request):
         else:
             # Se o formulário não for válido, você pode querer lidar com isso de acordo com seus requisitos
             return render(request, 'adicionarProduto.html', {'form': form})
+        
+# FUNÇÕES DE BUSCA
+def buscar_sugestoes(request):
+    termo_pesquisa = request.GET.get('termo', '')
+    sugestoes = Produto.objects.filter(nome_produto__icontains=termo_pesquisa)[:5]
+
+    sugestoes_data = [{'nome': produto.nome_produto, 'preco': produto.preco, 'imagem_url': produto.imagem.url} for produto in sugestoes]
+    return JsonResponse({'sugestoes': sugestoes_data})
+
+def pesquisaProduto(request):
+    return render(request, 'pesquisaProduto.html')
 
 #funções de atualizar
 def attProduto(request):
@@ -152,5 +167,33 @@ def dadosFuncionario(request):
 def pedido(request):
     pass
 
-def notaPedido(request):
-    pass
+def notaPedido(request, id_pedido):
+    pedido = get_object_or_404(Pedido, id_pedido=id_pedido)
+    pdf = FPDF()
+    pdf.add_page()
+    pdf.set_font('Arial', 'B', 12)
+    pdf.set_fill_color(240, 240, 240)
+    pdf.cell(35, 10, 'Cliente: ', 1, 0, 'L', 1)
+    pdf.cell(0, 10, f'{pedido.cliente.first_name} {pedido.cliente.last_name}', 1, 1, 'L', 1)
+    pdf.cell(35, 10, 'Data da Compra: ', 1, 0, 'L', 1)
+    pdf.cell(0, 10, f'{pedido.data}', 1, 1, 'L', 1)
+
+    pdf.cell(35, 10, 'Produtos: ', 1, 0, 'L', 1)
+
+    pedido_produtos = PedidoProduto.objects.filter(pedido=pedido)
+    for i, pedido_produto in enumerate(pedido_produtos):
+        produto = pedido_produto.produto
+        quantidade = pedido_produto.quantidade_comprada
+
+        pdf.cell(0, 10, f'{produto.nome_produto} - Quantidade: {quantidade} - Preço: R${produto.preco}', 1, 1, 'L', 1)
+        if not i == len(pedido_produtos) - 1:
+            pdf.cell(35, 10, '', 0, 0, 'L', 0)
+
+    pdf.cell(35, 10, 'Valor Total: ', 1, 0, 'L', 1)
+    pdf.cell(0, 10, f'R${pedido.valor_final}', 1, 1, 'L', 1)
+    
+    pdf_content = pdf.output(dest='S').encode('latin-1')
+    pdf_bytes = BytesIO(pdf_content)
+
+    return FileResponse(pdf_bytes, as_attachment=True, filename='notaPedido.pdf')
+
