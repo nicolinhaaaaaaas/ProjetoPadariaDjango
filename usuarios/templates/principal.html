@@ -22,7 +22,15 @@
             </div>
 
             <div class="profile">
-                <a class="cart" href="#"><ion-icon name="cart-outline"></ion-icon></a>
+                <a class="cart" href="#" onclick="mostrarCarrinho()"><ion-icon name="cart-outline"></ion-icon></a>
+            </div>
+
+            <!-- Container do Carrinho -->
+            <div id="carrinho-container" class="carrinho-popup" style="display: none;">
+                <h2>Seu Carrinho</h2>
+                <ul id="produtos-carrinho">
+                    <!-- Lista de produtos no carrinho será atualizada dinamicamente com JavaScript -->
+                </ul>
             </div>
         </div>
         <!--Main highlight-->

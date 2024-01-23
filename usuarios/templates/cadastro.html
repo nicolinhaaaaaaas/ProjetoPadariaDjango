@@ -3,62 +3,56 @@
 
 {% block 'head' %}
     <link rel="stylesheet" href="{% static 'usuarios/css/tela-cadastro.css' %}">
+    <link rel="stylesheet" href="{% static 'usuarios/css/cadastro2.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 {% endblock %}
 
 {% block 'dashboard' %}
-
 <body>
-    <div class="container">
-        <form action="{% url 'cadastro' %}" method="POST">
-            {% csrf_token %}
-            <div class="caixa">
-                <div id="cadastro" class="cadastro-usuario">
-                    <h1>Cadastro de Usuário</h1>
-                    <i class='bx bxs-baguette bx-lg'></i>
-                    <div class="row">
-                        <div class="col-md">
-                            <p>Nome:</p>
-                            <input type="text" class="form-control" placeholder="Nome" name="nome" value="{{nome}}" required>
-                        </div>
-                        <div class="col-md">
-                            <p>Sobrenome:</p>
-                            <input type="text" class="form-control" placeholder="Sobrenome" name="sobrenome" value="{{sobrenome}}" required>
-                        </div>
-                        <div class="col-md">
-                            <p>CPF:</p>
-                            <input type="text" class="form-control" placeholder="___.___.___-__" name="cpf" value="{{cpf}}" required>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="row">
-                        <div class="col-md">
-                            <p>Telefone:</p>
-                            <input type="text" class="form-control" placeholder="Telefone" name="telefone" value="{{telefone}}" required>
-                        </div>
-                        <div class="col-md">
-                            <p>Endereço:</p>
-                            <input type="text" class="form-control" placeholder="Endereço" name="endereco" value="{{endereco}}" required>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="row">
-                    <div class="col-md">
-                            <p>E-Mail:</p>
-                            <input type="email" class="form-control" placeholder="nome@email.com" name="email" value="{{email}}" required>
-                        </div>
-                        <div class="col-md">
-                            <p>Senha:</p>
-                            <input type="password" class="form-control" placeholder="Senha" name="senha" value="{{senha}}" required>
-                        </div>
-                    </div> 
-                    <div class="row">
-                        <div class="col-md">
-                            <button class="button" value="Cadastrar">Cadastrar</button>
-                        </div>
-                    </div>
+    <div class="container" id="container">
+        <div class="form-container sign-up">
+            <form action="{% url 'cadastro' %}" method="POST">
+                {% csrf_token %}>
+                <h1>Criar Conta</h1>
+                <span>Insira seus dados para se registrar</span>
+                <input type="text" placeholder="Nome" name="nome" value="{{nome}}" />
+                <input type="text" placeholder="Sobrenome" name="sobrenome" value="{{sobrenome}}" />
+                <input type="text" placeholder="CPF" name="cpf" value="{{cpf}}" />
+                <input type="text" placeholder="Telefone" name="telefone" value="{{telefone}}" />
+                <input type="text" placeholder="Endereço" name="endereco" value="{{endereco}}" />
+                <input type="email" placeholder="E-mail" name="email" value="{{email}}" />
+                <input type="password" placeholder="Senha" name="senha" value="{{senha}}" />
+                <button class="button" value="Cadastrar">Cadastrar</button>
+            </form>
+        </div>
+        <div class="form-container sign-in">
+            <form>
+                <h1>Fazer Login</h1>
+                <span>Faça Login no sistema</span>
+                <input type="email" placeholder="E-mail" name="email" value="{{email}}" />
+                <input type="password" placeholder="Senha" name="senha" value="{{senha}}" />
+                <a href="#">Esqueceu sua senha?</a>
+                <button class="button" value="Login">Login</button>
+            </form>
+        </div>
+
+        <div class="toggle-container">
+            <div class="toggle">
+                <div class="toggle-panel toggle-left">
+                    <h1>Bem Vindo!</h1>
+                    <p>Para se manter conectado conosco, faça login com suas informações pessoais</p>
+                    <button class="hidden" id="login">Login</button>
                 </div>
-            </div>   
-        </form>
+                <div class="toggle-panel toggle-right">
+                    <h1>Olá, Amigo!</h1>
+                    <p>Insira seus dados pessoais e comece a fazer pedidos conosco</p>
+                    <button class="hidden" id="register">Cadastrar</button>
+            </div>
+        </div>
     </div>
+    
+
+    <script src="{% static 'usuarios/js/usuarios.js' %}"></script>
 </body>
+
 {% endblock %}
