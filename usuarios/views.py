@@ -1,11 +1,12 @@
+import json
 from django.shortcuts import get_object_or_404, render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, logout
 from django.contrib.auth import login as login_django
 from django.contrib.auth.decorators import login_required
 from .models import Usuario
-from gerenciamento.models import Pedido, Produto
+from gerenciamento.models import Pedido, PedidoProduto, Produto
 import re
 
 
@@ -85,10 +86,31 @@ def excluirPerfil():
 def pedidosProprios():
     pass   
 
+def adicionarAoCarrinho(request, id):
+    produto = get_object_or_404(Produto, id=id)
+    return render(request, 'adicionarAoCarrinho.html', {'produto': produto})
+
 #@login_required
 def fazerPedido():
     pass
 
-def pedidos(request, id):
-   pedido = get_object_or_404(Pedido, id=id)
-   return render(request, 'pedidos.html', {'pedido': pedido})
+def pedidos(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        id_produto = data.get('id_produto')  # Certifique-se de enviar o ID do produto na solicitação
+        quantidade = data.get('quantidade', 1)  # Quantidade padrão é 1 se não for fornecida
+
+        produto = get_object_or_404(Produto, id_produto=id_produto)
+        carrinho, criado = Pedido.objects.get_or_create(cliente=request.user, status='carrinho')
+
+        # Verifique se o produto já está no carrinho
+        pedido_produto, criado = PedidoProduto.objects.get_or_create(pedido=carrinho, produto=produto)
+
+        # Atualize a quantidade se o produto já estiver no carrinho
+        if not criado:
+            pedido_produto.quantidade_comprada += quantidade
+            pedido_produto.save()
+
+        return JsonResponse({'mensagem': 'Produto adicionado ao carrinho com sucesso!'})
+    else:
+        return JsonResponse({'mensagem': 'Método não permitido.'}, status=405)

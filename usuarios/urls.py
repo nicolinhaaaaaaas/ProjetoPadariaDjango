@@ -10,6 +10,7 @@ urlpatterns = [
     path('perfil/', views.perfil, name='perfil'),
     path('principal/', views.principal, name='principal'),
     path('pesquisar_produto', views.pesquisar_produto, name='pesquisar_produto'),
+    path('adicionar-ao-carrinho', views.adicionarAoCarrinho, name='adicionarAoCarrinho'),
 ]
 
 if settings.DEBUG:

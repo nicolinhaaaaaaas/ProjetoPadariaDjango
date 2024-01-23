@@ -11,3 +11,4 @@ function exibir_perfil(tipo){
         mostrar_pedidos.style.display = 'block';
     }
 }
+
