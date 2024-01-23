@@ -7,7 +7,7 @@ class Ingrediente(models.Model):
     unidade_Medida = models.CharField(max_length=255)    
 
     def __str__(self) -> str:
-        return f'Nome: {self.nome} | Unidade de Medida: {self.unidadeMedida}'
+        return f'ID: {self.id_ingrediente} | Nome: {self.nome_ingrediente} | Unidade de Medida: {self.unidade_Medida}'
 
 class Produto(models.Model):
     CATEGORIA_CHOICES = [
@@ -25,12 +25,17 @@ class Produto(models.Model):
     categoria = models.CharField(max_length=15, choices=CATEGORIA_CHOICES, default='salgado')
     imagem = models.ImageField(upload_to='media/', null=True, blank=True)
 
+    def __str__(self) -> str:
+        return f'ID: {self.id_produto} | Nome: {self.nome_produto} | Descrição: {self.descricao} | Preço: {self.preco} | Categoria: {self.categoria}'
     
 
 class ProdutoIngrediente(models.Model):
     produto = models.ForeignKey(Produto, on_delete=models.CASCADE)
     ingrediente = models.ForeignKey(Ingrediente, on_delete=models.CASCADE)
     quantidade_usada = models.FloatField()
+
+    def __str__(self) -> str:
+        return f'Produto: {self.produto.nome_produto} | Ingrediente: {self.ingrediente.nome_ingrediente} | Quantidade: {self.quantidade_usada}'
 
 class Funcionario(models.Model):
     id_funcionario = models.AutoField(primary_key=True)
@@ -40,7 +45,7 @@ class Funcionario(models.Model):
     salario = models.FloatField()
 
     def __str__(self) -> str:
-        return f'Nome: {self.nome_funcionario} | Telefone: {self.telefone_funcionario} | Cargo: {self.cargo} | Salário: {self.salario}'
+        return f'ID: {self.id_funcionario} Nome: {self.nome_funcionario} | Telefone: {self.telefone_funcionario} | Cargo: {self.cargo} | Salário: {self.salario}'
 
 class Pedido(models.Model):
     id_pedido = models.AutoField(primary_key=True)
@@ -55,6 +60,9 @@ class Pedido(models.Model):
             total += produto.preco
 
         return total
+    
+    def __str__(self) -> str:
+        return f'ID: {self.id_pedido} | Cliente: {self.cliente} | Data: {self.data} | Valor Final: {self.valor_final}'
 
     
 
@@ -62,6 +70,9 @@ class PedidoProduto(models.Model):
     pedido = models.ForeignKey(Pedido, on_delete=models.CASCADE)
     produto = models.ForeignKey(Produto, on_delete=models.CASCADE)
     quantidade_comprada = models.FloatField()
+
+    def __str__(self) -> str:
+        return f'Pedido: {self.pedido.id_pedido} | Produto: {self.produto.nome_produto} | Quantidade: {self.quantidade_comprada}'
 
 
 

@@ -15,7 +15,7 @@
             <ion-icon class="menu-toggle" name="menu-outline"></ion-icon>
 
             <div class="search">
-                <form method="GET" action="{% url 'pesquisar_produto' %}">
+                <form id="pesquisa-produto" method="GET" action="{% url 'pesquisar_produto' %}">
                     <input type="text" placeholder="Pesquisar" name="Pesquisar" value="{{termo_pesquisa}}">
                     <button class="search-btn">Pesquisar</button>
                 </form>
@@ -116,72 +116,19 @@
             <div class="main-detail">
                 <h2 class="main-title">Faça seu pedido</h2>
                 <div class="detail-wrapper">
-                    <div class="detail-card">
-                        <img class="detail-img" src="{% static 'usuarios/img/destaque1.jpg' %}">
+                    {% for produto in produtos %}
+                    <div class="detail-card produto-card" onclick="expandirProduto('{{ produto.nome_produto }}', '{{ produto.descricao }}', '{{ produto.preco }}', '{{ produto.imagem.url }}')">
+                        <img class="detail-img" src="{{ produto.imagem.url }}" alt="{{ produto.nome_produto }}">
                         <div class="detail-desc">
                             <div class="detail-name">
-                                <h4>Coxinhas</h4>
-                                <p class="detail-sub">Deliciosa coxinha de coisa que voce gosta</p>
-                                <p class="price">R$ 2,50</p>
-                            </div>
-                            <ion-icon class="detail-favorites" name="bookmark-outline"></ion-icon>
-                        </div>
-                    </div>
-                    <div class="detail-card">
-                        <img class="detail-img" src="{% static 'usuarios/img/destaque2.png' %}">
-                        <div class="detail-desc">
-                            <div class="detail-name">
-                                <h4>Pastel</h4>
-                                <p class="detail-sub">Deliciosa coxinha de coisa que voce gosta</p>
-                                <p class="price">R$ 4,50</p>
+                                <h4>{{produto.nome_produto}}</h4>
+                                <p class="detail-sub">{{produto.descricao}}</p>
+                                <p class="price">R$ {{produto.preco}}</p>
                             </div>
                             <ion-icon class="detail-favorites" name="bookmark-outline"></ion-icon>
                         </div>
                     </div> 
-                    <div class="detail-card">
-                        <img class="detail-img" src="{% static 'usuarios/img/destaque3.jpg' %}">
-                        <div class="detail-desc">
-                            <div class="detail-name">
-                                <h4>Pastel</h4>
-                                <p class="detail-sub">Deliciosa coxinha de coisa que voce gosta</p>
-                                <p class="price">R$ 4,50</p>
-                            </div>
-                            <ion-icon class="detail-favorites" name="bookmark-outline"></ion-icon>
-                        </div>
-                    </div> 
-                    <div class="detail-card">
-                        <img class="detail-img" src="{% static 'usuarios/img/destaque4.jpg' %}">
-                        <div class="detail-desc">
-                            <div class="detail-name">
-                                <h4>Pastel</h4>
-                                <p class="detail-sub">Deliciosa coxinha de coisa que voce gosta</p>
-                                <p class="price">R$ 4,50</p>
-                            </div>
-                            <ion-icon class="detail-favorites" name="bookmark-outline"></ion-icon>
-                        </div>
-                    </div> 
-                    <div class="detail-card">
-                        <img class="detail-img" src="{% static 'usuarios/img/destaque4.jpg' %}">
-                        <div class="detail-desc">
-                            <div class="detail-name">
-                                <h4>Pastel</h4>
-                                <p class="detail-sub">Deliciosa coxinha de coisa que voce gosta</p>
-                                <p class="price">R$ 4,50</p>
-                            </div>
-                            <ion-icon class="detail-favorites" name="bookmark-outline"></ion-icon>
-                        </div>
-                    </div> 
-                    <div class="detail-card">
-                        <img class="detail-img" src="{% static 'usuarios/img/destaque4.jpg' %}">
-                        <div class="detail-desc">
-                            <div class="detail-name">
-                                <h4>Pastel</h4>
-                                <p class="detail-sub">Deliciosa coxinha de coisa que voce gosta</p>
-                                <p class="price">R$ 4,50</p>
-                            </div>
-                            <ion-icon class="detail-favorites" name="bookmark-outline"></ion-icon>
-                        </div>
-                    </div> 
+                    {% endfor %}
                 </div>
             </div>
         </div>

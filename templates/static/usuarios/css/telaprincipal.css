@@ -42,7 +42,7 @@ body{
 }
 
 .search{
-    width: 60%;
+    width: 800px;
     height: 40px;
     display: flex;
     justify-content: space-around;
@@ -91,7 +91,11 @@ body{
     background-color: var(--contrast-color);
     color: var(--dark-color);
 }
-
+#pesquisa-produto{
+    width: 800px;
+    display: flex;
+    margin: 0 auto;
+}
 .profile{
     display: flex;
     align-items: center;

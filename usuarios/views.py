@@ -10,7 +10,8 @@ import re
 
 
 def principal(request):
-    return render(request, 'principal.html')
+    produtos_list = Produto.objects.all()
+    return render(request, 'principal.html', {'produtos': produtos_list})
 
 def cadastro(request):
     if request.method == 'GET':
