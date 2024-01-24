@@ -317,3 +317,11 @@ body{
     letter-spacing: 1.5;
     color: var(--differential-color);
 }
+
+#att-perfil{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

@@ -12,7 +12,7 @@
     <div class="container" id="container">
         <div class="form-container sign-up">
             <form action="{% url 'cadastro' %}" method="POST">
-                {% csrf_token %}>
+                {% csrf_token %}
                 <h1>Criar Conta</h1>
                 <span>Insira seus dados para se registrar</span>
                 <input type="text" placeholder="Nome" name="nome" value="{{nome}}" />
@@ -26,12 +26,13 @@
             </form>
         </div>
         <div class="form-container sign-in">
-            <form>
+            <form action="{% url 'login' %}" method="POST">
+                {% csrf_token %}
                 <h1>Fazer Login</h1>
                 <span>Faça Login no sistema</span>
-                <input type="email" placeholder="E-mail" name="email" value="{{email}}" />
-                <input type="password" placeholder="Senha" name="senha" value="{{senha}}" />
-                <a href="#">Esqueceu sua senha?</a>
+                <input type="text" placeholder="CPF" name="cpf" value="{{cpf}}" />
+                <input type="password" placeholder="Senha" name="senha" value="{{password}}" />
+                <br>
                 <button class="button" value="Login">Login</button>
             </form>
         </div>
@@ -50,8 +51,6 @@
             </div>
         </div>
     </div>
-    
-
     <script src="{% static 'usuarios/js/usuarios.js' %}"></script>
 </body>
 

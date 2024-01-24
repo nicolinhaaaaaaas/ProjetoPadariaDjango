@@ -1,5 +1,5 @@
 import json
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, logout
@@ -8,7 +8,6 @@ from django.contrib.auth.decorators import login_required
 from .models import Usuario
 from gerenciamento.models import Pedido, PedidoProduto, Produto
 import re
-
 
 def principal(request):
     produtos_list = Produto.objects.all()
@@ -19,7 +18,7 @@ def cadastro(request):
         usuarios_list = Usuario.objects.all()
         return render(request, 'cadastro.html', {'usuarios': usuarios_list})
     elif request.method == 'POST':
-        username = request.POST.get('nome')
+        username = request.POST.get('email')
         nome = request.POST.get('nome')
         sobrenome = request.POST.get('sobrenome')
         telefone = request.POST.get('telefone')
@@ -45,19 +44,30 @@ def cadastro(request):
         return render(request, 'cadastro.html')
 
 def login(request):
-    if request.method == "GET":
-        return render(request, 'login.html')
-    else:
-        cpf = request.POST.get('cpf')
-        senha = request.POST.get('senha')
+    if request.method == 'GET':
+        usuarios_list = Usuario.objects.all()
+        return render(request, 'cadastro.html', {'usuarios': usuarios_list})
+    elif request.method == 'POST':
+        cpf = request.POST.get('cpf')  # Use o campo 'cpf' do formulário
+        password = request.POST.get('senha')
 
-        user = authenticate(request, cpf=cpf, password=senha)
-        if user is not None:
-            login_django(request, user)
-            return HttpResponse('Usuário logado com sucesso!')
+        # Autenticar o usuário usando o campo 'cpf'
+        authenticated_user = authenticate(request, cpf=cpf, password=password)
+
+        if authenticated_user is not None:
+            print('Usuário autenticado com sucesso!')
+            # Usuário autenticado com sucesso, fazer login
+            login_django(request, authenticated_user)
+            return redirect('principal')  # Redirecionar para a página inicial após o login
         else:
-            print(cpf, senha)
-            return HttpResponse('Usuário ou senha incorretos!')
+            print('Falha na autenticação!')
+            # Imprimir detalhes do erro para depuração
+            print(f'CPF: {cpf}, Senha: {password}')
+            # Falha na autenticação, exibir mensagem de erro
+            return render(request, 'cadastro.html', {'erro': 'Credenciais inválidas'})
+
+    return render(request, 'cadastro.html')
+
         
 def pesquisar_produto(request):
     termo_pesquisa = request.GET.get('Pesquisar', '')
