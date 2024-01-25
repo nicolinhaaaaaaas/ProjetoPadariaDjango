@@ -16,7 +16,8 @@ def principalGerente(request):
     return render(request, 'principalGerente.html', {'produtos': produtos_list})
 
 def lista_pedidos(request):
-    return render(request, 'listarPedidos.html')
+    pedidos_list = Pedido.objects.all()
+    return render(request, 'listarPedidos.html', {'pedidos': pedidos_list})
 
 def clientes(request):
     if request.method == "GET":
@@ -128,7 +129,14 @@ def excluirPedido(request):
     pass
 
 def excluirFuncionario(request, id):
-    pass
+    funcionario = get_object_or_404(Funcionario)
+
+    if request.method == 'POST':
+        # Se a solicitação é um POST, exclua o funcionário
+        funcionario.delete()
+        return redirect('lista_funcionarios')  # Redirecione para a página de lista de funcionários após a exclusão
+
+    return render(request, 'excluir_funcionario.html', {'funcionario': funcionario})
 
 #funções de dados
 

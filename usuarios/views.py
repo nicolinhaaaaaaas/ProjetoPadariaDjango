@@ -9,6 +9,7 @@ from .models import Usuario
 from gerenciamento.models import Pedido, PedidoProduto, Produto
 import re
 
+@login_required(login_url='/usuarios/login/')
 def principal(request):
     produtos_list = Produto.objects.all()
     return render(request, 'principal.html', {'produtos': produtos_list})
@@ -44,27 +45,22 @@ def cadastro(request):
         return render(request, 'cadastro.html')
 
 def login(request):
-    if request.method == 'GET':
+    if request.method == 'POST':
         usuarios_list = Usuario.objects.all()
-        return render(request, 'cadastro.html', {'usuarios': usuarios_list})
-    elif request.method == 'POST':
-        cpf = request.POST.get('cpf')  # Use o campo 'cpf' do formulário
-        password = request.POST.get('senha')
+        print(usuarios_list)
+        emailInserido = request.POST.get('email')
+        passwordInserida = request.POST.get('senha')
 
-        # Autenticar o usuário usando o campo 'cpf'
-        authenticated_user = authenticate(request, cpf=cpf, password=password)
-
-        if authenticated_user is not None:
-            print('Usuário autenticado com sucesso!')
-            # Usuário autenticado com sucesso, fazer login
-            login_django(request, authenticated_user)
-            return redirect('principal')  # Redirecionar para a página inicial após o login
+        for usuario in usuarios_list:
+            if usuario.email == emailInserido and usuario.password == passwordInserida:
+                login_django(request, usuario)
+                # Usuário encontrado, autenticação bem-sucedida
+                print('Usuário autenticado com sucesso!')
+                # Faça qualquer ação adicional necessária
+                return redirect('principal')
         else:
+            # Loop concluído sem encontrar um usuário correspondente
             print('Falha na autenticação!')
-            # Imprimir detalhes do erro para depuração
-            print(f'CPF: {cpf}, Senha: {password}')
-            # Falha na autenticação, exibir mensagem de erro
-            return render(request, 'cadastro.html', {'erro': 'Credenciais inválidas'})
 
     return render(request, 'cadastro.html')
 
@@ -79,9 +75,10 @@ def logout(request):
     logout(request)
     return HttpResponse('Usuário deslogado com sucesso!')
 
-#@login_required(login_url='/usuarios/login/')
+@login_required(login_url='/usuarios/login/')
 def perfil(request):
-    return render(request, 'perfil.html')
+    pedidos = Pedido.objects.filter(cliente=request.user)
+    return render(request, 'perfil.html',{'pedidos': pedidos})
 
 #@login_required
 def atualizarPerfil(request):
@@ -118,8 +115,30 @@ def adicionarAoCarrinho(request, id):
         return JsonResponse({'mensagem': 'Método não permitido.'}, status=405)
 
 #@login_required
-def fazerPedido():
-    pass
+def finalizar_compra(request):
+    # Obter informações do carrinho e do usuário
+    usuario = request.user
+    carrinho = obter_carrinho_do_usuario(usuario)  # Implemente esta função
+
+    # Criar o objeto de Pedido
+    pedido = Pedido.objects.create(usuario=usuario)
+
+    # Adicionar itens ao pedido
+    for item in carrinho:
+        produto = Produto.objects.get(id=item['produto_id'])  # Obtenha o objeto do produto
+        quantidade_comprada = item['quantidade']
+
+        # Crie o objeto PedidoProduto e associe ao pedido
+        PedidoProduto.objects.create(
+            produto=produto,
+            quantidade_comprada=quantidade_comprada,
+            pedido=pedido
+        )
+
+    # Limpar o carrinho após finalizar a compra
+    limpar_carrinho_do_usuario(usuario)  # Implemente esta função
+
+    return render(request, 'pedido_sucesso.html', {'pedido': pedido})
 
 def pedidos(request):
     if request.method == 'POST':

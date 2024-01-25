@@ -2,25 +2,28 @@
 {% load static %}
 
 {% block 'head' %}
-    <link rel="stylesheet" href="{% static 'usuarios/css/tela-cadastro.css' %}">
+    <link rel="stylesheet" href="{% static 'usuarios/css/telaprincipal.css' %}">
+    <link rel="stylesheet" href="{% static 'gerenciamento/css/gerenciamento.css' %}">
 {% endblock %}
 
 {% block 'dashboard' %}
 
 <body>
-    <div class="container">
-        
-
-        <div id="att-perfil" class="att-perfil">
-            <form action="{% url 'perfil' %}" method="POST">
+    <div class="container-perfil">
+        <div id="att-perfil">
+            <form action="{% url 'perfil' %}" method="POST" id="form-perfil">
                 {% csrf_token %}
                 <div class="caixa-perfil">
-                    <div id="perfil" class="att-perfil">
-                        <h1>Atualizar Perfil</h1>
+                    <div id="perfil">
+                        <h1 class="titulo_perfil">Atualizar Perfil</h1>
                         <div class="row">
                             <div class="col-md">
                                 <p>Nome:</p>
                                 <input type="text" class="form-control" placeholder="Nome" name="nome" value="{{nome}}" >
+                            </div>
+                            <div class="col-md">
+                                <p>Sobrenome:</p>
+                                <input type="text" class="form-control" placeholder="Sobrenome" name="sobrenome" value="{{sobrenome}}" >
                             </div>
                         </div>
                         <div class="row">
@@ -44,21 +47,22 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md">
-                                <button class="btn-att-perfil" value="Atualizar">Atualizar</button>
-                            </div>
+                            <button class="btn-att-perfil" value="Atualizar">Atualizar</button>
                         </div>
                     </div>
                 </div>
             </form>
         </div>
+    </div>
+
+    <div class="container-pedidos">
         <br>
         <br>
         <div id="pedidos-anteriores" class="pedidos-anteriores">
             <div class="caixa-pedidos">
                 <div id="pedidos" class="pedidos-anteriores">
                     <br>
-                    <h1>Pedidos Anteriores</h1>
+                    <h1  id="pedidos-anteriores-perfil">Pedidos Anteriores</h1>
                     <div class="container-fluid distanciamento">
                         <table class="table table-dark">
                             <thead>
@@ -72,9 +76,9 @@
                             <tbody>
                                 {% for pedido in pedidos %}
                                 <tr>
-                                    <th><a href="{% url 'pedido' pedido.identificador %}">{{pedido.id}}</a></th>
+                                    <th><a href="{% url 'notaPedido' pedido.id_pedido %}">{{pedido.id_pedido}}</a></th>
                                     <td>{{pedido.data}}</td>
-                                    <td>{{pedido.valor}}</td>
+                                    <td>{{pedido.valor_final}}</td>
                                     <td>{{pedido.status}}</td>
                                 </tr>
                                 {% endfor %}

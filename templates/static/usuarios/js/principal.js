@@ -45,36 +45,62 @@ barraPesquisa.addEventListener('input', function() {
     buscarSugestoes(termoPesquisa);
 });
 
-function adicionarAoCarrinho(nomeProduto, precoProduto) {
-    // Lógica para adicionar o produto ao carrinho
-    // Isso pode incluir uma solicitação AJAX para o Django, onde você salvará o produto no carrinho do usuário
-
-    // Exemplo de uma solicitação AJAX usando Fetch API
-    fetch('/adicionar_ao_carrinho/', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': getCookie('csrftoken'),  // Função para obter o token CSRF do cookie
-        },
-        body: JSON.stringify({
-            nome_produto: nomeProduto,
-            preco_produto: precoProduto,
-        }),
-    })
-    .then(response => response.json())
-    .then(data => {
-        alert(data.mensagem);
-        // Você pode adicionar mais lógica aqui, como atualizar dinamicamente o conteúdo do carrinho na interface do usuário
-    })
-    .catch(error => {
-        console.error('Erro ao adicionar ao carrinho:', error);
-        alert('Ocorreu um erro ao adicionar o produto ao carrinho.');
-    });
-}
-
 function getCookie(name) {
     // Função para obter um cookie específico pelo nome
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
     if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Selecione todos os botões de filtro
+    var filterButtons = document.querySelectorAll('.filter-card.category-filter');
+
+    // Adicione um ouvinte de evento de clique a cada botão
+    filterButtons.forEach(function(button) {
+        button.addEventListener('click', function() {
+            // Remova a classe 'ativo' de todos os botões de filtro
+            filterButtons.forEach(function(btn) {
+                btn.classList.remove('ativo');
+            });
+
+            // Adicione a classe 'ativo' ao botão clicado
+            button.classList.add('ativo');
+
+            // Lógica de filtragem aqui
+            var category = button.getAttribute('data-category');
+            console.log('Categoria selecionada:', category);
+
+            // Adicione a lógica de filtragem que você precisa
+            // Atualize a exibição dos produtos conforme necessário
+        });
+    });
+});
+
+// Estrutura básica do carrinho
+let carrinho = [];
+
+// Função para adicionar um item ao carrinho
+function adicionarAoCarrinho() {
+    const nome = document.getElementById('produto-nome-modal').textContent;
+    const preco = document.getElementById('produto-preco-modal').textContent;
+
+    const item = { nome, preco };
+    carrinho.push(item);
+    atualizarCarrinho();
+}
+
+// Função para atualizar a exibição do carrinho no HTML
+function atualizarCarrinho() {
+    const carrinhoItensElement = document.getElementById('carrinho-itens');
+
+    // Limpar o conteúdo anterior
+    carrinhoItensElement.innerHTML = '';
+
+    // Adicionar itens ao carrinho
+    carrinho.forEach(item => {
+        const itemElement = document.createElement('div');
+        itemElement.innerHTML = `<p>${item.nome} - R$ ${item.preco}</p>`;
+        carrinhoItensElement.appendChild(itemElement);
+    });
 }

@@ -39,34 +39,15 @@
             </div>
             <!--highlight menu-->
             <div class="highlight-wrapper">
-                <div class="highlight-card">
-                    <img class="highlight-img" src="{% static 'usuarios/img/destaque1.jpg' %}">
-                    <div class="highlight-desc">
-                        <h4>Coxinhas</h4>
-                        <p>R$2,50</p>
-                    </div>
-                </div>
-                <div class="highlight-card">
-                    <img class="highlight-img" src="{% static 'usuarios/img/destaque2.png' %}">
-                    <div class="highlight-desc">
-                        <h4>Pastel</h4>
-                        <p>R$4,50</p>
-                    </div>
-                </div>
-                <div class="highlight-card">
-                    <img class="highlight-img" src="{% static 'usuarios/img/destaque3.jpg' %}">
-                    <div class="highlight-desc">
-                        <h4>Bolo</h4>
-                        <p>R$6,50</p>
-                    </div>
-                </div>
-                <div class="highlight-card">
-                    <img class="highlight-img" src="{% static 'usuarios/img/destaque4.jpg' %}">
-                    <div class="highlight-desc">
-                        <h4>Esfiha</h4>
-                        <p>R$4,00</p>
-                    </div>
-                </div>
+                {% for produto in produtos|slice:":4" %}
+                    <div class="highlight-card" onclick="expandirProduto('{{ produto.nome_produto }}', '{{ produto.descricao }}', '{{ produto.preco }}', '{{ produto.imagem.url }}')">
+                        <img class="highlight-img" src="{{ produto.imagem.url }}" alt="{{ produto.nome_produto }}">
+                        <div class="highlight-desc">
+                            <h4>{{ produto.nome_produto }}</h4>
+                            <p>R$ {{ produto.preco }}</p>
+                        </div>
+                    </div> 
+                {% endfor %}
             </div>
         </div>
         <!--Menu-->
@@ -81,36 +62,36 @@
                     </div>
                 </div>
                 <div class="filter-wrapper">
-                    <div class="filter-card">
+                    <button class="filter-card category-filter" data-category="cardapio">
                         <div class="filter-icon">
                             <ion-icon name="restaurant-outline"></ion-icon>
                         </div>
                         <p>Cardápio</p>
-                    </div>
-                    <div class="filter-card">
+                    </button>
+                    <button class="filter-card category-filter" data-category="salgado">
                         <div class="filter-icon">
                             <ion-icon name="fast-food-outline"></ion-icon>
                         </div>
                         <p>Salgados</p>
-                    </div>
-                    <div class="filter-card">
+                    </button>
+                    <button class="filter-card category-filter" data-category="doce">
                         <div class="filter-icon">
                             <ion-icon name="ice-cream-outline"></ion-icon>
                         </div>
                         <p>Doces</p>
-                    </div>
-                    <div class="filter-card">
+                    </button>
+                    <button class="filter-card category-filter" data-category="bolo">
                         <div class="filter-icon">
                             <i class='bx bx-cake'></i>
                         </div>
                         <p>Bolos</p>
-                    </div>
-                    <div class="filter-card">
+                    </button>
+                    <button class="filter-card category-filter" data-category="bebida">
                         <div class="filter-icon">
                             <ion-icon name="cafe-outline"></ion-icon>
                         </div>
                         <p>Bebidas</p>
-                    </div>
+                    </button>
                 </div>
             </div>
             <hr class="divider">
@@ -119,7 +100,7 @@
                 <h2 class="main-title">Faça seu pedido</h2>
                 <div class="detail-wrapper">
                     {% for produto in produtos %}
-                    <div class="detail-card produto-card" onclick="expandirProduto('{{ produto.nome_produto }}', '{{ produto.descricao }}', '{{ produto.preco }}', '{{ produto.imagem.url }}')">
+                    <div class="detail-card produto-card {{ produto.categoria }}" onclick="expandirProduto('{{ produto.nome_produto }}', '{{ produto.descricao }}', '{{ produto.preco }}', '{{ produto.imagem.url }}')">
                         <img class="detail-img" src="{{ produto.imagem.url }}" alt="{{ produto.nome_produto }}">
                         <div class="detail-desc">
                             <div class="detail-name">
@@ -163,4 +144,5 @@
 <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
 <script src="{% static 'usuarios/js/principal.js' %}"></script>
 <script src="{% static 'gerenciamento/js/gerenciamento.js' %}"></script>
+    
 {% endblock %}

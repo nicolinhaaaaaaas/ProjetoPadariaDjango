@@ -9,7 +9,8 @@ class Usuario (AbstractUser):
     groups = models.ManyToManyField('auth.Group', related_name='usuarios', blank=True)
     user_permissions = models.ManyToManyField('auth.Permission', related_name='usuarios', blank=True)
     # Defina o campo 'cpf' como campo de autenticação padrão
-    USERNAME_FIELD = 'cpf'
+    REQUIRED_FIELDS = ['email']
+    
 
     def __str__(self) -> str:
         return self.username
