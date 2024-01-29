@@ -112,7 +112,8 @@ function dados_funcionario(){
     }
 )}
 
-function expandirProduto(nome, descricao, preco, imagemUrl) {
+function expandirProduto(id, nome, descricao, preco, imagemUrl) {
+    document.getElementById('produto-id-modal').innerText = id;
     document.getElementById('produto-nome-modal').innerText = nome;
     document.getElementById('produto-descricao-modal').innerText = descricao;
     document.getElementById('produto-preco-modal').innerText = 'R$ '+ preco;
