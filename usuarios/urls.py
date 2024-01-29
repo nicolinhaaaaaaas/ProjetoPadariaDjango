@@ -10,8 +10,11 @@ urlpatterns = [
     path('perfil/', views.perfil, name='perfil'),
     path('principal/', views.principal, name='principal'),
     path('pesquisar_produto', views.pesquisar_produto, name='pesquisar_produto'),
-    path('adicionar-ao-carrinho', views.adicionarAoCarrinho, name='adicionarAoCarrinho'),
-    path('finalizar-compra/', views.finalizar_compra, name='finalizar_compra'),
+    path('logout/', views.logout, name='logout'),
+    path('carrinho/', views.carrinho, name='carrinho'),
+    path('checkout/', views.checkout, name='checkout'),
+    path('update_item/', views.updateItem, name='update_item'),
+    path('processa_pedido/', views.processaPedido, name='processa_pedido'),
 ]
 
 if settings.DEBUG:

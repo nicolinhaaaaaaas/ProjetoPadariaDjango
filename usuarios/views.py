@@ -1,5 +1,6 @@
 import json
 from django.shortcuts import get_object_or_404, redirect, render
+from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, logout
@@ -8,11 +9,38 @@ from django.contrib.auth.decorators import login_required
 from .models import Usuario
 from gerenciamento.models import Pedido, PedidoProduto, Produto
 import re
+import datetime
 
 @login_required(login_url='/usuarios/login/')
 def principal(request):
     produtos_list = Produto.objects.all()
-    return render(request, 'principal.html', {'produtos': produtos_list})
+    if request.user.is_authenticated:
+        pedido, criado = Pedido.objects.get_or_create(cliente=request.user)
+        itens = pedido.pedidoproduto_set.all()
+        carrinho_itens = pedido.get_carrinho_itens
+
+    contexto = {'produtos': produtos_list, 'itens': itens, 'carrinho_itens': carrinho_itens}
+    return render(request, 'principal.html', contexto)
+
+def carrinho(request):
+    
+    if request.user.is_authenticated:
+        pedido, criado = Pedido.objects.get_or_create(cliente=request.user)
+        itens = pedido.pedidoproduto_set.all()
+        carrinho_itens = pedido.get_carrinho_itens
+
+    contexto = {'itens': itens, 'carrinho_itens': carrinho_itens}
+    return render(request, 'carrinho.html', contexto)
+
+def checkout(request):
+    
+    if request.user.is_authenticated:
+        pedido, criado = Pedido.objects.get_or_create(cliente=request.user)
+        itens = pedido.pedidoproduto_set.all()
+        carrinho_itens = pedido.get_carrinho_itens
+
+    contexto = {'itens': itens, 'carrinho_itens': carrinho_itens, 'pedido': pedido}
+    return render(request, 'checkout.html', contexto)
 
 def cadastro(request):
     if request.method == 'GET':
@@ -89,10 +117,6 @@ def atualizarPerfil(request):
 def excluirPerfil():
     pass
 
-#@login_required
-def pedidosProprios():
-    pass   
-
 def adicionarAoCarrinho(request, id):
     if request.method == 'POST':
         data = json.loads(request.body)
@@ -100,7 +124,7 @@ def adicionarAoCarrinho(request, id):
         quantidade = data.get('quantidade', 1)  # Quantidade padrão é 1 se não for fornecida
 
         produto = get_object_or_404(Produto, id_produto=id_produto)
-        carrinho, criado = Pedido.objects.get_or_create(cliente=request.user, status='carrinho')
+        carrinho, criado = Pedido.objects.get_or_create(cliente=request.user)
 
         # Verifique se o produto já está no carrinho
         pedido_produto, criado = PedidoProduto.objects.get_or_create(pedido=carrinho, produto=produto)
@@ -114,49 +138,48 @@ def adicionarAoCarrinho(request, id):
     else:
         return JsonResponse({'mensagem': 'Método não permitido.'}, status=405)
 
-#@login_required
-def finalizar_compra(request):
-    # Obter informações do carrinho e do usuário
-    usuario = request.user
-    carrinho = obter_carrinho_do_usuario(usuario)  # Implemente esta função
+def updateItem(request):
+    data = json.loads(request.body)
+    id_produto = data['id_produto']
+    action = data['action']
 
-    # Criar o objeto de Pedido
-    pedido = Pedido.objects.create(usuario=usuario)
+    print('Action:', action)
+    print('Produto:', id_produto)
 
-    # Adicionar itens ao pedido
-    for item in carrinho:
-        produto = Produto.objects.get(id=item['produto_id'])  # Obtenha o objeto do produto
-        quantidade_comprada = item['quantidade']
+    cliente = request.user.usuario
+    produto = Produto.objects.get(id_produto=id_produto)
+    pedido, criado = Pedido.objects.get_or_create(cliente=cliente, status='carrinho')
 
-        # Crie o objeto PedidoProduto e associe ao pedido
-        PedidoProduto.objects.create(
-            produto=produto,
-            quantidade_comprada=quantidade_comprada,
-            pedido=pedido
-        )
+    pedido_produto, criado = PedidoProduto.objects.get_or_create(pedido=pedido, produto=produto)
 
-    # Limpar o carrinho após finalizar a compra
-    limpar_carrinho_do_usuario(usuario)  # Implemente esta função
+    if action == 'add':
+        pedido_produto.quantidade_comprada = (pedido_produto.quantidade_comprada + 1)
+    elif action == 'remove':
+        pedido_produto.quantidade_comprada = (pedido_produto.quantidade_comprada - 1)
+    
+    pedido_produto.save()
 
-    return render(request, 'pedido_sucesso.html', {'pedido': pedido})
+    if pedido_produto.quantidade_comprada <= 0:
+        pedido_produto.delete()
 
-def pedidos(request):
-    if request.method == 'POST':
-        data = json.loads(request.body)
-        id_produto = data.get('id_produto')  # Certifique-se de enviar o ID do produto na solicitação
-        quantidade = data.get('quantidade', 1)  # Quantidade padrão é 1 se não for fornecida
+    return JsonResponse('Item adicionado', safe=False)
 
-        produto = get_object_or_404(Produto, id_produto=id_produto)
-        carrinho, criado = Pedido.objects.get_or_create(cliente=request.user, status='carrinho')
+@csrf_exempt
+def processaPedido(request):
+    id_transacao = datetime.datetime.now().timestamp()
+    data = json.loads(request.body)
 
-        # Verifique se o produto já está no carrinho
-        pedido_produto, criado = PedidoProduto.objects.get_or_create(pedido=carrinho, produto=produto)
+    if request.user.is_authenticated:
+        cliente = request.user.usuario
+        pedido, criado = Pedido.objects.get_or_create(cliente=cliente)
+        total = float(data['form']['total'])
+        pedido.id_transacao = id_transacao
 
-        # Atualize a quantidade se o produto já estiver no carrinho
-        if not criado:
-            pedido_produto.quantidade_comprada += quantidade
-            pedido_produto.save()
+        if total == pedido.get_carrinho_total:
+            pedido.status = 'Finalizado'
+        pedido.save()
 
-        return JsonResponse({'mensagem': 'Produto adicionado ao carrinho com sucesso!'})
     else:
-        return JsonResponse({'mensagem': 'Método não permitido.'}, status=405)
+        print('Usuário não está logado')
+
+    return JsonResponse('Pedido processado', safe=False)

@@ -28,6 +28,14 @@ class Produto(models.Model):
     def __str__(self) -> str:
         return f'ID: {self.id_produto} | Nome: {self.nome_produto} | Descrição: {self.descricao} | Preço: {self.preco} | Categoria: {self.categoria}'
     
+    @property
+    def imageURL(self):
+        try:
+            url = self.imagem.url
+        except:
+            url = ''
+        return url
+    
 
 class ProdutoIngrediente(models.Model):
     produto = models.ForeignKey(Produto, on_delete=models.CASCADE)
@@ -49,7 +57,8 @@ class Funcionario(models.Model):
 
 class Pedido(models.Model):
     id_pedido = models.AutoField(primary_key=True)
-    cliente = models.ForeignKey(usuarios_models.Usuario, on_delete=models.CASCADE, default=1)
+    id_transacao = models.CharField(max_length=255, null=True)
+    cliente = models.ForeignKey(usuarios_models.Usuario, on_delete=models.SET_NULL, null=True, blank=True)
     data = models.DateField()
     valor_final = models.FloatField()
     produtos = models.ManyToManyField(Produto, through='PedidoProduto')
@@ -63,7 +72,29 @@ class Pedido(models.Model):
     
     def __str__(self) -> str:
         return f'ID: {self.id_pedido} | Cliente: {self.cliente} | Data: {self.data} | Valor Final: {self.valor_final}'
+    
+    @property
+    def get_carrinho_total(self):
+        pedido_produtos = self.pedidoproduto_set.all()
+        total = sum([item.produto.preco for item in pedido_produtos])
+        return total
+    
+    @property
+    def get_carrinho_itens(self):
+        pedido_produtos = self.pedidoproduto_set.all()
+        total = sum([item.quantidade_comprada for item in pedido_produtos])
+        return total
 
+class EnderecoEntrega(models.Model):
+    usuario = models.ForeignKey(usuarios_models.Usuario, on_delete=models.SET_NULL, null=True, blank=True)
+    pedido = models.ForeignKey(Pedido, on_delete=models.SET_NULL, null=True, blank=True)
+    endereco = models.CharField(max_length=255)
+    bairro = models.CharField(max_length=255)
+    cidade = models.CharField(max_length=255)
+    estado = models.CharField(max_length=255)
+
+    def __str__(self) -> str:
+        return self.endereco
     
 
 class PedidoProduto(models.Model):
@@ -73,6 +104,11 @@ class PedidoProduto(models.Model):
 
     def __str__(self) -> str:
         return f'Pedido: {self.pedido.id_pedido} | Produto: {self.produto.nome_produto} | Quantidade: {self.quantidade_comprada}'
+    
+    @property
+    def get_total(self):
+        total = self.produto.preco * self.quantidade_comprada
+        return total
 
 
 

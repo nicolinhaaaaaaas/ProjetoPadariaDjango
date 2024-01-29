@@ -91,7 +91,6 @@ margin-left: 140px;
 }
 
 .add-ingredientes{
-    margin-left: 200px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -100,6 +99,7 @@ margin-left: 140px;
     padding: 40px;
     border-radius: 20px;
     width: 1000px;
+    align-self: center;
 }
 
 .btn-add-ingredientes{

@@ -77,30 +77,3 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Estrutura básica do carrinho
-let carrinho = [];
-
-// Função para adicionar um item ao carrinho
-function adicionarAoCarrinho() {
-    const nome = document.getElementById('produto-nome-modal').textContent;
-    const preco = document.getElementById('produto-preco-modal').textContent;
-
-    const item = { nome, preco };
-    carrinho.push(item);
-    atualizarCarrinho();
-}
-
-// Função para atualizar a exibição do carrinho no HTML
-function atualizarCarrinho() {
-    const carrinhoItensElement = document.getElementById('carrinho-itens');
-
-    // Limpar o conteúdo anterior
-    carrinhoItensElement.innerHTML = '';
-
-    // Adicionar itens ao carrinho
-    carrinho.forEach(item => {
-        const itemElement = document.createElement('div');
-        itemElement.innerHTML = `<p>${item.nome} - R$ ${item.preco}</p>`;
-        carrinhoItensElement.appendChild(itemElement);
-    });
-}

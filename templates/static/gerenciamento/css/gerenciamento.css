@@ -96,6 +96,9 @@ font-weight: 600;
     margin: 20px;
     border-radius: 8px;
     border: var(--differential-color) solid 1px;
+    align-items: center;
+    justify-content: center;
+    display: flex;
 }
 .produtoform{
     display: flex;
@@ -118,6 +121,7 @@ font-weight: 600;
     font-size: 20px;
     font-weight: 550;
     margin-bottom: 5px;
+    padding: 5px 20px 5px 20px;
 }
 .btn-add-principal{
     background-color: var(--dark-color);
@@ -253,7 +257,8 @@ font-weight: 600;
 .row{
     display: flex;
     font-weight: 600;
-    width: 475px;
+    padding: 0px 20px 0px 20px;
+    
 }
 .quantidade-selecionar{
     width: 60px;
