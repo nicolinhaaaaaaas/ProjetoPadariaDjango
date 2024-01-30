@@ -71,6 +71,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+<<<<<<< HEAD
 var updateBtns = document.getElementsByClassName('update-cart')
 
 
@@ -138,3 +139,45 @@ const loginBtn = document.getElementById('login');
 //loginBtn.addEventListener('click', () => {
 //    container.classList.remove("active");
 //});
+=======
+var updateBtns = document.querySelectorAll('.update-cart');
+
+updateBtns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+        var productId = this.dataset.produto;
+        var action = this.dataset.action;
+        console.log('productId:', productId, 'Action:', action);
+        
+        if (user === 'AnonymousUser') {
+            console.log('Usuário não logado');
+        } else {
+            console.log('Logado')
+            updateUserOrder(productId, action);
+        }
+    });
+});
+
+function updateUserOrder(produtoId, action) {
+    console.log('Enviando dados...');
+    var url = '/update_item/';
+
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken
+        },
+        body: JSON.stringify({ 'produtoId': produtoId, 'action': action })
+    })
+    .then(function(response) {
+        return response.json();
+    })
+    .then(function(data) {
+        console.log('Data:', data);
+        location.reload(); // Recarrega a página após a atualização do item no carrinho
+    })
+    .catch(function(error) {
+        console.error('Erro:', error);
+    });
+}
+>>>>>>> 7b6d530b5626df96047c2b1f1352cc1637edc94b

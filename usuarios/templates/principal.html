@@ -24,8 +24,12 @@
 
             <div class="profile">
                 <a class="cart" href="{% url 'carrinho' %}"><ion-icon name="cart-outline"></ion-icon></a>
+<<<<<<< HEAD
                 <p id="cart-total">{{pedidoCarrinho}}</p>
+=======
+>>>>>>> 7b6d530b5626df96047c2b1f1352cc1637edc94b
             </div>
+            <p id="cart-total">{{carrinho_itens}}</p>
 
             <!-- Container do Carrinho -->
             <div id="carrinho-container" class="carrinho-popup" style="display: none;">
@@ -52,7 +56,7 @@
                         <img class="highlight-img" src="{{ produto.imagem.url }}" alt="{{ produto.nome_produto }}">
                         <div class="highlight-desc">
                             <h4>{{ produto.nome_produto }}</h4>
-                            <p>R$ {{ produto.preco }}</p>
+                            <p>R$ {{ produto.preco|floatformat:2 }}</p>
                         </div>
                     </div> 
                 {% endfor %}
@@ -108,13 +112,17 @@
                 <h2 class="main-title">Faça seu pedido</h2>
                 <div class="detail-wrapper">
                     {% for produto in produtos %}
+<<<<<<< HEAD
                     <div class="detail-card produto-card {{ produto.categoria }}" >
+=======
+                    <div class="detail-card produto-card {{ produto.categoria }}" onclick="expandirProduto('{{produto.id_produto}}', '{{ produto.nome_produto }}', '{{ produto.descricao }}', '{{ produto.preco }}', '{{ produto.imagem.url }}')">
+>>>>>>> 7b6d530b5626df96047c2b1f1352cc1637edc94b
                         <img class="detail-img" src="{{ produto.imagem.url }}" alt="{{ produto.nome_produto }}">
                         <div class="detail-desc">
                             <div class="detail-name">
                                 <h4>{{produto.nome_produto}}</h4>
                                 <p class="detail-sub">{{produto.descricao}}</p>
-                                <p class="price">R$ {{produto.preco}}</p>
+                                <p class="price">R$ {{produto.preco|floatformat:2}}</p>
                             </div>
                             <ion-icon class="detail-favorites" name="bookmark-outline"></ion-icon>
                         </div>
@@ -143,7 +151,7 @@
                 </div>
             </div>
             
-            <button class="botao-add-carrinho" onclick="adicionarAoCarrinho()">Adicionar ao Carrinho</button>
+            <button class="botao-add-carrinho add-btn update-cart" data-produto='produto-id-modal' data-action="add">Adicionar ao Carrinho</button>
         </div>
     </div>
 </body>
