@@ -71,9 +71,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-<<<<<<< HEAD
 var updateBtns = document.getElementsByClassName('update-cart')
-
 
 for(var i = 0; i < updateBtns.length; i++){
     updateBtns[i].addEventListener('click', function(){
@@ -139,7 +137,7 @@ const loginBtn = document.getElementById('login');
 //loginBtn.addEventListener('click', () => {
 //    container.classList.remove("active");
 //});
-=======
+
 var updateBtns = document.querySelectorAll('.update-cart');
 
 updateBtns.forEach(function(btn) {
@@ -180,4 +178,3 @@ function updateUserOrder(produtoId, action) {
         console.error('Erro:', error);
     });
 }
->>>>>>> 7b6d530b5626df96047c2b1f1352cc1637edc94b

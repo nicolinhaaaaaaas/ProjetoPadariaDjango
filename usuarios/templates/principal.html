@@ -24,10 +24,7 @@
 
             <div class="profile">
                 <a class="cart" href="{% url 'carrinho' %}"><ion-icon name="cart-outline"></ion-icon></a>
-<<<<<<< HEAD
                 <p id="cart-total">{{pedidoCarrinho}}</p>
-=======
->>>>>>> 7b6d530b5626df96047c2b1f1352cc1637edc94b
             </div>
             <p id="cart-total">{{carrinho_itens}}</p>
 
@@ -112,11 +109,7 @@
                 <h2 class="main-title">Faça seu pedido</h2>
                 <div class="detail-wrapper">
                     {% for produto in produtos %}
-<<<<<<< HEAD
                     <div class="detail-card produto-card {{ produto.categoria }}" >
-=======
-                    <div class="detail-card produto-card {{ produto.categoria }}" onclick="expandirProduto('{{produto.id_produto}}', '{{ produto.nome_produto }}', '{{ produto.descricao }}', '{{ produto.preco }}', '{{ produto.imagem.url }}')">
->>>>>>> 7b6d530b5626df96047c2b1f1352cc1637edc94b
                         <img class="detail-img" src="{{ produto.imagem.url }}" alt="{{ produto.nome_produto }}">
                         <div class="detail-desc">
                             <div class="detail-name">
