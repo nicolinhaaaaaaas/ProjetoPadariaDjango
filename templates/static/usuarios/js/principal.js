@@ -38,12 +38,6 @@ function exibirSugestoes(sugestoes) {
     dropdown.style.display = sugestoes.length > 0 ? 'block' : 'none';
 }
 
-// Manipulador de eventos para a barra de pesquisa
-const barraPesquisa = document.getElementById('barra-pesquisa');
-barraPesquisa.addEventListener('input', function() {
-    const termoPesquisa = barraPesquisa.value;
-    buscarSugestoes(termoPesquisa);
-});
 
 function getCookie(name) {
     // Função para obter um cookie específico pelo nome
@@ -77,3 +71,70 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+var updateBtns = document.getElementsByClassName('update-cart')
+
+
+for(var i = 0; i < updateBtns.length; i++){
+    updateBtns[i].addEventListener('click', function(){
+        var id_produto = this.dataset.produto
+        var action = this.dataset.action
+        console.log('id_produto:', id_produto, 'Action:', action)
+
+        console.log('USER:', user)
+        if(user === 'AnonymousUser'){
+            console.log('Não logado')
+        }
+        else{
+            updateUserOrder(id_produto, action)
+        }
+    })
+}
+
+function updateUserOrder(id_produto, action){
+    console.log('Logado, enviando dados...')
+
+    var url = '/usuarios/update_item/'
+
+    fetch(url, {
+        method:'POST',
+        headers:{
+            'Content-Type':'application/json',
+            'X-CSRFToken': csrftoken,
+        },
+        body:JSON.stringify({'id_produto':id_produto, 'action':action})
+    })
+
+    .then((response) =>{
+        return response.json()
+    })
+    .then((data) =>{
+        console.log('data:', data)
+        location.reload()
+    })
+}
+
+function exibir_perfil(tipo){
+
+    att_perfil = document.getElementById('att-perfil');
+    mostrar_pedidos = document.getElementById('mostrar-pedidos');
+
+    if(tipo == 1){
+        att_perfil.style.display = 'none';
+        mostrar_pedidos.style.display = 'block';
+    }else if(tipo == 2){
+        att_perfil.style.display = 'none';
+        mostrar_pedidos.style.display = 'block';
+    }
+}
+
+const container = document.getElementById('container');
+const registerBtn = document.getElementById('register');
+const loginBtn = document.getElementById('login');
+
+//registerBtn.addEventListener('click', () => {
+//    container.classList.add("active");
+//});
+
+//loginBtn.addEventListener('click', () => {
+//    container.classList.remove("active");
+//});

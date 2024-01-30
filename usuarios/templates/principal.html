@@ -23,7 +23,8 @@
             </div>
 
             <div class="profile">
-                <a class="cart" href="#" onclick="mostrarCarrinho()"><ion-icon name="cart-outline"></ion-icon></a>
+                <a class="cart" href="{% url 'carrinho' %}"><ion-icon name="cart-outline"></ion-icon></a>
+                <p id="cart-total">{{pedidoCarrinho}}</p>
             </div>
 
             <!-- Container do Carrinho -->
@@ -107,7 +108,7 @@
                 <h2 class="main-title">Faça seu pedido</h2>
                 <div class="detail-wrapper">
                     {% for produto in produtos %}
-                    <div class="detail-card produto-card {{ produto.categoria }}" onclick="expandirProduto('{{ produto.nome_produto }}', '{{ produto.descricao }}', '{{ produto.preco }}', '{{ produto.imagem.url }}')">
+                    <div class="detail-card produto-card {{ produto.categoria }}" >
                         <img class="detail-img" src="{{ produto.imagem.url }}" alt="{{ produto.nome_produto }}">
                         <div class="detail-desc">
                             <div class="detail-name">
@@ -117,6 +118,7 @@
                             </div>
                             <ion-icon class="detail-favorites" name="bookmark-outline"></ion-icon>
                         </div>
+                        <button type="button" data-produto="{{produto.id_produto}}" data-action="add" class="btn botao-add-carrinho add-btn update-cart">Add ao Carrinho</button>
                     </div> 
                     {% endfor %}
                 </div>

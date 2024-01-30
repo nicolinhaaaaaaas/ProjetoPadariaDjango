@@ -7,39 +7,48 @@ from django.contrib.auth import authenticate, logout
 from django.contrib.auth import login as login_django
 from django.contrib.auth.decorators import login_required
 from .models import Usuario
-from gerenciamento.models import Pedido, PedidoProduto, Produto
+from gerenciamento.models import EnderecoEntrega, Pedido, PedidoProduto, Produto
 import re
 import datetime
 
-@login_required(login_url='/usuarios/login/')
+@csrf_exempt
 def principal(request):
     produtos_list = Produto.objects.all()
     if request.user.is_authenticated:
-        pedido, criado = Pedido.objects.get_or_create(cliente=request.user)
+        pedido, criado = Pedido.objects.get_or_create(cliente=request.user, data=datetime.datetime.now() , completo=False)
         itens = pedido.pedidoproduto_set.all()
         carrinho_itens = pedido.get_carrinho_itens
+    else:
+        itens = []
+        carrinho_itens = {'get_carrinho_total': 0, 'get_carrinho_itens': 0}
 
-    contexto = {'produtos': produtos_list, 'itens': itens, 'carrinho_itens': carrinho_itens}
+    contexto = {'pedido':pedido ,'produtos': produtos_list, 'itens': itens, 'carrinho_itens': carrinho_itens}
     return render(request, 'principal.html', contexto)
 
 def carrinho(request):
     
     if request.user.is_authenticated:
-        pedido, criado = Pedido.objects.get_or_create(cliente=request.user)
+        pedido, criado = Pedido.objects.get_or_create(cliente=request.user, data=datetime.datetime.now() , completo=False)
         itens = pedido.pedidoproduto_set.all()
         carrinho_itens = pedido.get_carrinho_itens
+    else:
+        itens = []
+        carrinho_itens = {'get_carrinho_total': 0, 'get_carrinho_itens': 0}
 
-    contexto = {'itens': itens, 'carrinho_itens': carrinho_itens}
+    contexto = {'pedido':pedido , 'itens': itens, 'carrinho_itens': carrinho_itens}
     return render(request, 'carrinho.html', contexto)
 
 def checkout(request):
     
     if request.user.is_authenticated:
-        pedido, criado = Pedido.objects.get_or_create(cliente=request.user)
+        pedido, criado = Pedido.objects.get_or_create(cliente=request.user, data=datetime.datetime.now() , completo=False)
         itens = pedido.pedidoproduto_set.all()
         carrinho_itens = pedido.get_carrinho_itens
+    else:
+        itens = []
+        carrinho_itens = {'get_carrinho_total': 0, 'get_carrinho_itens': 0}
 
-    contexto = {'itens': itens, 'carrinho_itens': carrinho_itens, 'pedido': pedido}
+    contexto = {'pedido':pedido , 'itens': itens, 'carrinho_itens': carrinho_itens}
     return render(request, 'checkout.html', contexto)
 
 def cadastro(request):
@@ -117,52 +126,32 @@ def atualizarPerfil(request):
 def excluirPerfil():
     pass
 
-def adicionarAoCarrinho(request, id):
+def updateItem(request):
     if request.method == 'POST':
         data = json.loads(request.body)
-        id_produto = data.get('id_produto')  # Certifique-se de enviar o ID do produto na solicitação
-        quantidade = data.get('quantidade', 1)  # Quantidade padrão é 1 se não for fornecida
+        id_produto = data['id_produto']
+        action = data['action']
 
-        produto = get_object_or_404(Produto, id_produto=id_produto)
-        carrinho, criado = Pedido.objects.get_or_create(cliente=request.user)
+        print('Action:', action)
+        print('Produto:', id_produto)
 
-        # Verifique se o produto já está no carrinho
-        pedido_produto, criado = PedidoProduto.objects.get_or_create(pedido=carrinho, produto=produto)
+        cliente = request.user
+        produto = Produto.objects.get(id_produto=id_produto)
+        pedido, criado = Pedido.objects.get_or_create(cliente=cliente, completo=False)
 
-        # Atualize a quantidade se o produto já estiver no carrinho
-        if not criado:
-            pedido_produto.quantidade_comprada += quantidade
-            pedido_produto.save()
+        pedido_produto, criado = PedidoProduto.objects.get_or_create(pedido=pedido, produto=produto)
 
-        return JsonResponse({'mensagem': 'Produto adicionado ao carrinho com sucesso!'})
-    else:
-        return JsonResponse({'mensagem': 'Método não permitido.'}, status=405)
+        if action == 'add':
+            pedido_produto.quantidade_comprada = (pedido_produto.quantidade_comprada + 1)
+        elif action == 'remove':
+            pedido_produto.quantidade_comprada = (pedido_produto.quantidade_comprada - 1)
+        
+        pedido_produto.save()
 
-def updateItem(request):
-    data = json.loads(request.body)
-    id_produto = data['id_produto']
-    action = data['action']
+        if pedido_produto.quantidade_comprada <= 0:
+            pedido_produto.delete()
 
-    print('Action:', action)
-    print('Produto:', id_produto)
-
-    cliente = request.user.usuario
-    produto = Produto.objects.get(id_produto=id_produto)
-    pedido, criado = Pedido.objects.get_or_create(cliente=cliente, status='carrinho')
-
-    pedido_produto, criado = PedidoProduto.objects.get_or_create(pedido=pedido, produto=produto)
-
-    if action == 'add':
-        pedido_produto.quantidade_comprada = (pedido_produto.quantidade_comprada + 1)
-    elif action == 'remove':
-        pedido_produto.quantidade_comprada = (pedido_produto.quantidade_comprada - 1)
-    
-    pedido_produto.save()
-
-    if pedido_produto.quantidade_comprada <= 0:
-        pedido_produto.delete()
-
-    return JsonResponse('Item adicionado', safe=False)
+        return JsonResponse('Item adicionado', safe=False)
 
 @csrf_exempt
 def processaPedido(request):
@@ -170,14 +159,24 @@ def processaPedido(request):
     data = json.loads(request.body)
 
     if request.user.is_authenticated:
-        cliente = request.user.usuario
-        pedido, criado = Pedido.objects.get_or_create(cliente=cliente)
-        total = float(data['form']['total'])
+        cliente = request.user
+        pedido, criado = Pedido.objects.get_or_create(cliente=cliente, completo=False)
+        total = float(data['form']['total'].replace(',', '.'))
         pedido.id_transacao = id_transacao
 
         if total == pedido.get_carrinho_total:
-            pedido.status = 'Finalizado'
+            pedido.completo = True
         pedido.save()
+
+        enderecoEntrega = EnderecoEntrega.objects.create(
+            usuario=cliente,
+            pedido=pedido,
+            endereco=data['form']['endereco'],
+            bairro=data['form']['bairro'],
+            cidade=data['form']['cidade'],
+            estado=data['form']['estado'],
+        )
+        enderecoEntrega.save()
 
     else:
         print('Usuário não está logado')

@@ -59,9 +59,10 @@ class Pedido(models.Model):
     id_pedido = models.AutoField(primary_key=True)
     id_transacao = models.CharField(max_length=255, null=True)
     cliente = models.ForeignKey(usuarios_models.Usuario, on_delete=models.SET_NULL, null=True, blank=True)
-    data = models.DateField()
-    valor_final = models.FloatField()
+    data = models.DateField(auto_now_add=True)
+    valor_final = models.FloatField(default=0.0)
     produtos = models.ManyToManyField(Produto, through='PedidoProduto')
+    completo = models.BooleanField(default=False, null=True, blank=False)
 
     def precoTotal(self):
         total = float(0)
@@ -76,7 +77,7 @@ class Pedido(models.Model):
     @property
     def get_carrinho_total(self):
         pedido_produtos = self.pedidoproduto_set.all()
-        total = sum([item.produto.preco for item in pedido_produtos])
+        total = sum([item.get_total for item in pedido_produtos])
         return total
     
     @property
@@ -100,7 +101,7 @@ class EnderecoEntrega(models.Model):
 class PedidoProduto(models.Model):
     pedido = models.ForeignKey(Pedido, on_delete=models.CASCADE)
     produto = models.ForeignKey(Produto, on_delete=models.CASCADE)
-    quantidade_comprada = models.FloatField()
+    quantidade_comprada = models.FloatField(default=0.0, null=True, blank=True)
 
     def __str__(self) -> str:
         return f'Pedido: {self.pedido.id_pedido} | Produto: {self.produto.nome_produto} | Quantidade: {self.quantidade_comprada}'

@@ -55,14 +55,14 @@
                 </div>
                 {% endfor %}
 
-                <h5>Itens:  {{pedido.get_cart_items}}</h5>
-                <h5>Total:  R$ {{pedido.get_cart_total|floatformat:2}}</h5>
+                <h5>Itens:  {{pedido.get_carrinho_itens}}</h5>
+                <h5>Total:  R$ {{pedido.get_carrinho_total|floatformat:2}}</h5>
             </div>
         </div>
     </div>
 
     <script type="text/javascript">
-        var total = '{{pedido.get_cart_total}}'
+        var total = '{{pedido.get_carrinho_total}}'
 
         var form = document.getElementById('form')
 
@@ -91,7 +91,7 @@
                 'total': total,
             }
 
-            var url = "/processar_pedido/"
+            var url = "/usuarios/processar_pedido/"
             fetch(url, {
                 method: 'POST',
                 headers: {

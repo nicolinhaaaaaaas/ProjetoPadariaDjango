@@ -16,8 +16,8 @@
                     <br>
                     <table class="table">
                         <tr>
-                            <th><h5>Itens: <strong>{{pedido.get_cart_items}}</strong></h5></th>
-                            <th><h5>Total: <strong>R$ {{pedido.get_cart_total|floatformat:2}}</strong></h5></th>
+                            <th><h5>Itens: <strong>{{pedido.get_carrinho_itens}}</strong></h5></th>
+                            <th><h5>Total: <strong>R$ {{pedido.get_carrinho_total|floatformat:2}}</strong></h5></th>
                             <th>
                                 <a style="float:right; margin:5px;" class="btn btn-success" href="{% url 'checkout' %}">Finalizar Compra</a>
                             </th>
@@ -52,5 +52,6 @@
                 </div>
             </div>
         </div>
+        <script src="{% static 'usuarios/js/principal.js' %}"></script>
     </body>
 {% endblock %}
