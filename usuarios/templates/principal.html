@@ -24,9 +24,9 @@
 
             <div class="profile">
                 <a class="cart" href="{% url 'carrinho' %}"><ion-icon name="cart-outline"></ion-icon></a>
-                <p id="cart-total">{{pedidoCarrinho}}</p>
+                <p id="cart-total">{{carrinho_itens|floatformat:0}}</p>
             </div>
-            <p id="cart-total">{{carrinho_itens}}</p>
+            
 
             <!-- Container do Carrinho -->
             <div id="carrinho-container" class="carrinho-popup" style="display: none;">
@@ -40,16 +40,11 @@
         <div class="main-highlight">
             <div class="main-header">
                 <h2 class="main-title">Recomendações</h2>
-                <div class="main-arrow">
-                    <ion-icon class="back" name="chevron-back-circle-outline"></ion-icon>
-                    <ion-icon class="next" name="chevron-forward-circle-outline"></ion-icon>
-
-                </div>
             </div>
             <!--highlight menu-->
             <div class="highlight-wrapper">
                 {% for produto in produtos|slice:":4" %}
-                    <div class="highlight-card" onclick="expandirProduto('{{ produto.nome_produto }}', '{{ produto.descricao }}', '{{ produto.preco }}', '{{ produto.imagem.url }}')">
+                    <div class="highlight-card">
                         <img class="highlight-img" src="{{ produto.imagem.url }}" alt="{{ produto.nome_produto }}">
                         <div class="highlight-desc">
                             <h4>{{ produto.nome_produto }}</h4>
@@ -65,10 +60,6 @@
             <div class="main-filter">
                 <div>
                     <h2 class="main-title">Menu<br>Categoria</h2>
-                    <div class="main-arrow">
-                        <ion-icon class="back-menus" name="chevron-back-circle-outline"></ion-icon>
-                        <ion-icon class="next-menus" name="chevron-forward-circle-outline"></ion-icon>
-                    </div>
                 </div>
                 <div class="filter-wrapper">
                     <div class="filter-card category-filter" data-category="cardapio">
@@ -117,15 +108,17 @@
                                 <p class="detail-sub">{{produto.descricao}}</p>
                                 <p class="price">R$ {{produto.preco|floatformat:2}}</p>
                             </div>
-                            <ion-icon class="detail-favorites" name="bookmark-outline"></ion-icon>
                         </div>
-                        <button type="button" data-produto="{{produto.id_produto}}" data-action="add" class="btn botao-add-carrinho add-btn update-cart">Add ao Carrinho</button>
+                        <div class="row">
+                            <button type="button" data-produto="{{produto.id_produto}}" data-action="add" class="btn botao-add-carrinho add-btn update-cart">Add ao Carrinho</button>
+                        </div>
                     </div> 
                     {% endfor %}
                 </div>
             </div>
         </div>
     </div>
+    <!--Modal
     <div id="produto-modal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="fecharModal()">&times;</span>
@@ -143,11 +136,31 @@
                     </div> 
                 </div>
             </div>
-            
-            <button class="botao-add-carrinho add-btn update-cart" data-produto='produto-id-modal' data-action="add">Adicionar ao Carrinho</button>
+            <button type="button" data-produto="produto-id-modal" data-action="add" class="btn botao-add-carrinho add-btn update-cart">Add ao Carrinho</button>
         </div>
     </div>
+    -->
 </body>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const categoryFilters = document.querySelectorAll('.category-filter');
+
+    categoryFilters.forEach(filter => {
+        filter.addEventListener('click', () => {
+            const selectedCategory = filter.getAttribute('data-category');
+
+            const produtos = document.querySelectorAll('.produto-card');
+            produtos.forEach(produto => {
+                if (selectedCategory === 'cardapio' || produto.classList.contains(selectedCategory)) {
+                    produto.style.display = 'block';
+                } else {
+                    produto.style.display = 'none';
+                }
+            });
+        });
+    });
+});
+</script>
 <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 <!-- javascript-->

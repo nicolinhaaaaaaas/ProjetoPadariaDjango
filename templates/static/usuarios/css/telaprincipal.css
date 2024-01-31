@@ -272,14 +272,15 @@ body{
 }
 .detail-wrapper{
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(250px, 315px));
     width: 100%;
     margin-top: 1rem;
     gap: 2%;
     border-radius: 8px;
 }
 .detail-card{
-    min-height: 280px;
+    height: minmax(280px, 1fr);
+    width: minmax(330px, 360px);
     height: 100%;
     background-color: var(--light-color);
     border-radius: 8px;

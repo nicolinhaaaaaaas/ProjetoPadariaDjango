@@ -10,6 +10,7 @@ from .models import Usuario
 from gerenciamento.models import EnderecoEntrega, Pedido, PedidoProduto, Produto
 import re
 import datetime
+from django.db import transaction
 
 @csrf_exempt
 def principal(request):
@@ -126,6 +127,7 @@ def atualizarPerfil(request):
 def excluirPerfil():
     pass
 
+@transaction.atomic
 def updateItem(request):
     if request.method == 'POST':
         data = json.loads(request.body)
@@ -161,10 +163,10 @@ def processaPedido(request):
     if request.user.is_authenticated:
         cliente = request.user
         pedido, criado = Pedido.objects.get_or_create(cliente=cliente, completo=False)
-        total = float(data['form']['total'].replace(',', '.'))
+        pedido.valor_final = float(data['form']['total'].replace(',', '.'))
         pedido.id_transacao = id_transacao
 
-        if total == pedido.get_carrinho_total:
+        if pedido.valor_final == pedido.get_carrinho_total:
             pedido.completo = True
         pedido.save()
 

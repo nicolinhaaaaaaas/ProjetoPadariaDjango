@@ -198,7 +198,7 @@ def notaPedido(request, id_pedido):
             pdf.cell(35, 10, '', 0, 0, 'L', 0)
 
     pdf.cell(35, 10, 'Valor Total: ', 1, 0, 'L', 1)
-    pdf.cell(0, 10, f'R${pedido.valor_final}', 1, 1, 'L', 1)
+    pdf.cell(0, 10, f'R${pedido.get_carrinho_total}', 1, 1, 'L', 1)
     
     pdf_content = pdf.output(dest='S').encode('latin-1')
     pdf_bytes = BytesIO(pdf_content)

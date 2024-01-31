@@ -130,34 +130,34 @@ const container = document.getElementById('container');
 const registerBtn = document.getElementById('register');
 const loginBtn = document.getElementById('login');
 
-//registerBtn.addEventListener('click', () => {
-//    container.classList.add("active");
-//});
+registerBtn.addEventListener('click', () => {
+    container.classList.add("active");
+});
 
-//loginBtn.addEventListener('click', () => {
-//    container.classList.remove("active");
-//});
+loginBtn.addEventListener('click', () => {
+    container.classList.remove("active");
+});
 
 var updateBtns = document.querySelectorAll('.update-cart');
 
 updateBtns.forEach(function(btn) {
     btn.addEventListener('click', function() {
-        var productId = this.dataset.produto;
+        var id_produto = this.dataset.produto;
         var action = this.dataset.action;
-        console.log('productId:', productId, 'Action:', action);
+        console.log('id_produto:', id_produto, 'Action:', action);
         
         if (user === 'AnonymousUser') {
             console.log('Usuário não logado');
         } else {
             console.log('Logado')
-            updateUserOrder(productId, action);
+            updateUserOrder(id_produto, action);
         }
     });
 });
 
-function updateUserOrder(produtoId, action) {
+function updateUserOrder(id_produto, action) {
     console.log('Enviando dados...');
-    var url = '/update_item/';
+    var url = '/usuarios/update_item/';
 
     fetch(url, {
         method: 'POST',
@@ -165,7 +165,7 @@ function updateUserOrder(produtoId, action) {
             'Content-Type': 'application/json',
             'X-CSRFToken': csrftoken
         },
-        body: JSON.stringify({ 'produtoId': produtoId, 'action': action })
+        body: JSON.stringify({ 'id_produto': id_produto, 'action': action })
     })
     .then(function(response) {
         return response.json();
@@ -178,3 +178,30 @@ function updateUserOrder(produtoId, action) {
         console.error('Erro:', error);
     });
 }
+
+function expandirProduto( nome_produto, descricao, preco, imagemUrl) {
+    
+    document.getElementById('produto-nome-modal').innerText = nome_produto;
+    console.log('nome_produto', nome_produto);
+    document.getElementById('produto-descricao-modal').innerText = descricao;
+    console.log('descricao', descricao);
+    document.getElementById('produto-preco-modal').innerText = 'R$ '+ preco;
+    console.log('preco', preco);
+    
+    var imagemModal = document.getElementById('produto-imagem-modal');
+    imagemModal.src = imagemUrl;
+    imagemModal.alt = 'Imagem de ' + nome_produto;
+
+    document.getElementById('produto-modal').style.display = 'block';
+    console.log('expandirProduto');
+}
+
+
+function fecharModal() {
+    // Recupera o elemento modal
+    var modal = document.getElementById('produto-modal'); // Substitua 'seuModalId' pelo ID real do seu modal
+
+    // Define o estilo display como 'none' para esconder o modal
+    modal.style.display = 'none';
+}
+
