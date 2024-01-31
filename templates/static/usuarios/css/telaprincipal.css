@@ -257,7 +257,7 @@ body{
 
 .filter-card.category-filter.ativo {
     /* Estilo quando o botão está ativo */
-    background-color: #3498db; /* Cor de fundo azul, por exemplo */
+    background-color: var(--dark-color); /* Cor de fundo azul, por exemplo */
     color: #fff; /* Texto branco para melhor legibilidade */
 }
 .divider{
@@ -272,7 +272,7 @@ body{
 }
 .detail-wrapper{
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 315px));
+    grid-template-columns: repeat(auto-fit, minmax(250px, 300px));
     width: 100%;
     margin-top: 1rem;
     gap: 2%;

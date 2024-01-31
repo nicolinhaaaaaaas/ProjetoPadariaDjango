@@ -8,12 +8,14 @@
     --differential-color: #4b280b;
     --red-color: #9E7047;
 }
+
 *{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: 'Montserrat', sans-serif;
 }
+
 body{
     background-color: var(--light-color);
     background: linear-gradient(to right, var(--light-color), var(--main-color));
@@ -213,4 +215,3 @@ body{
 .container.active .toggle-right{
     transform: translateX(200%);
 }
-
