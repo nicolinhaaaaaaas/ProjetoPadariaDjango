@@ -179,7 +179,7 @@ function updateUserOrder(id_produto, action) {
     });
 }
 
-function expandirProduto( nome_produto, descricao, preco, imagemUrl) {
+function expandirProduto(imageUrl, nome_produto, descricao, preco ) {
     
     document.getElementById('produto-nome-modal').innerText = nome_produto;
     console.log('nome_produto', nome_produto);
@@ -189,7 +189,7 @@ function expandirProduto( nome_produto, descricao, preco, imagemUrl) {
     console.log('preco', preco);
     
     var imagemModal = document.getElementById('produto-imagem-modal');
-    imagemModal.src = imagemUrl;
+    imagemModal.src = imageUrl;
     imagemModal.alt = 'Imagem de ' + nome_produto;
 
     document.getElementById('produto-modal').style.display = 'block';

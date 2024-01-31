@@ -218,8 +218,8 @@ font-weight: 600;
 }
 
 .modal-img {
-    width: 466px;
-    height: 466px;
+    width: 450px;
+    height: 450px;
     display: block;
     margin: 0 auto;
     object-fit: cover; /* Isso irá cobrir a área mantendo a proporção original */

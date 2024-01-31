@@ -101,7 +101,9 @@
                 <div class="detail-wrapper">
                     {% for produto in produtos %}
                     <div class="detail-card produto-card {{ produto.categoria }}" >
-                        <img class="detail-img" src="{{ produto.imagem.url }}" alt="{{ produto.nome_produto }}">
+                        <span class="detail-icon" onclick="expandirProduto('{{produto.imageURL}}', '{{produto.nome_produto}}', '{{produto.descricao}}', '{{produto.preco}}')">
+                            <img class="detail-img" src="{{ produto.imagem.url }}" alt="{{ produto.nome_produto }}">
+                        </span>
                         <div class="detail-desc">
                             <div class="detail-name">
                                 <h4>{{produto.nome_produto}}</h4>
