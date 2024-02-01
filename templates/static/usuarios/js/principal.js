@@ -179,8 +179,10 @@ function updateUserOrder(id_produto, action) {
     });
 }
 
-function expandirProduto(imageUrl, nome_produto, descricao, preco ) {
-    
+function expandirProduto(id_produto, imageUrl, nome_produto, descricao, preco ) {
+    produtoIdModal = id_produto; // Armazena o ID do produto na variável global
+    document.getElementById('produto-id-modal').innerText = id_produto;
+    console.log('id_produto', id_produto);
     document.getElementById('produto-nome-modal').innerText = nome_produto;
     console.log('nome_produto', nome_produto);
     document.getElementById('produto-descricao-modal').innerText = descricao;

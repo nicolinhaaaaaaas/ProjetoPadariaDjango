@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, logout
+from django.contrib.auth import authenticate, logout as logout_django
 from django.contrib.auth import login as login_django
 from django.contrib.auth.decorators import login_required
 from .models import Usuario
@@ -12,7 +12,7 @@ import re
 import datetime
 from django.db import transaction
 
-@csrf_exempt
+@login_required(login_url='/usuarios/cadastro/')
 def principal(request):
     produtos_list = Produto.objects.all()
     if request.user.is_authenticated:
@@ -23,9 +23,14 @@ def principal(request):
         itens = []
         carrinho_itens = {'get_carrinho_total': 0, 'get_carrinho_itens': 0}
 
-    contexto = {'pedido':pedido ,'produtos': produtos_list, 'itens': itens, 'carrinho_itens': carrinho_itens}
+    ingredientes_produto = {}
+    for produto in produtos_list:
+        ingredientes_produto[produto.id_produto] = produto.ingredientes.all()
+
+    contexto = {'pedido':pedido ,'produtos': produtos_list, 'itens': itens, 'carrinho_itens': carrinho_itens, 'ingredientes_produto': ingredientes_produto}
     return render(request, 'principal.html', contexto)
 
+@login_required(login_url='/usuarios/cadastro/')
 def carrinho(request):
     
     if request.user.is_authenticated:
@@ -39,6 +44,7 @@ def carrinho(request):
     contexto = {'pedido':pedido , 'itens': itens, 'carrinho_itens': carrinho_itens}
     return render(request, 'carrinho.html', contexto)
 
+@login_required(login_url='/usuarios/cadastro/')
 def checkout(request):
     
     if request.user.is_authenticated:
@@ -108,22 +114,42 @@ def pesquisar_produto(request):
     resultados = Produto.objects.filter(nome_produto__icontains=termo_pesquisa)
     return render(request, 'pesquisarProduto.html', {'resultados': resultados})
         
-#@login_required
+@login_required(login_url='/usuarios/cadastro/')
 def logout(request):
-    logout(request)
-    return HttpResponse('Usuário deslogado com sucesso!')
+    # Exclui o pedido atual do usuário, se existir e não estiver completo
+    if request.user.is_authenticated:
+        pedido_incompleto = Pedido.objects.filter(cliente=request.user, completo=False).first()
+        if pedido_incompleto:
+            pedido_incompleto.delete()
 
-@login_required(login_url='/usuarios/login/')
+    # Realiza o logout do usuário
+    logout_django(request)
+    
+    # Redireciona para a página de login
+    return redirect('/usuarios/login/')
+
+@login_required(login_url='/usuarios/cadastro/')
 def perfil(request):
-    pedidos = Pedido.objects.filter(cliente=request.user)
+    if request.method == 'POST':
+        user = request.user
+        user.nome = request.POST.get('nome')
+        user.sobrenome = request.POST.get('sobrenome')
+        user.telefone = request.POST.get('telefone')
+        user.endereco = request.POST.get('endereco')
+        user.email = request.POST.get('email')
+        user.set_password(request.POST.get('senha'))
+        user.save()
+        return redirect('perfil')
+    # Filtra os pedidos do usuário com valor maior que 0
+    pedidos = Pedido.objects.filter(cliente=request.user, valor_final__gt=0)
     return render(request, 'perfil.html',{'pedidos': pedidos})
 
-#@login_required
+@login_required
 def atualizarPerfil(request):
     if request.method == 'POST':
         pass
 
-#@login_required
+@login_required
 def excluirPerfil():
     pass
 

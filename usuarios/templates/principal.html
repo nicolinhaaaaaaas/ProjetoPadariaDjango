@@ -101,7 +101,7 @@
                 <div class="detail-wrapper">
                     {% for produto in produtos %}
                     <div class="detail-card produto-card {{ produto.categoria }}" >
-                        <span class="detail-icon" onclick="expandirProduto('{{produto.imageURL}}', '{{produto.nome_produto}}', '{{produto.descricao}}', '{{produto.preco}}')">
+                        <span class="detail-icon" onclick="expandirProduto('{{produto.id_produto}}', '{{produto.imageURL}}', '{{produto.nome_produto}}', '{{produto.descricao}}', '{{produto.preco}}')">
                             <img class="detail-img" src="{{ produto.imagem.url }}" alt="{{ produto.nome_produto }}">
                         </span>
                         <div class="detail-desc">
@@ -120,7 +120,7 @@
             </div>
         </div>
     </div>
-    <!--Modal-->
+    <!--Modal
     <div id="produto-modal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="fecharModal()">&times;</span>
@@ -128,6 +128,17 @@
             <div class="conteudo-text">
                 <h2 id="produto-nome-modal"></h2>
                 <p id="produto-descricao-modal"></p>
+                <row>
+                    <div class="col-md">
+                        <p>{{ ingrediente.nome_ingrediente }}</p>
+                    </div>
+                    <div class="col-md">
+                        <p>{{ ingrediente.quantidade }}</p>
+                    </div>
+                    <div class="col-md">
+                        <p>{{ ingrediente.unidade_medida }}</p>
+                    </div>
+                </row>
                 <div class="row">
                     <div class="col-md">
                         <p id="produto-preco-modal"></p>
@@ -141,6 +152,7 @@
             <button type="button" data-produto="produto-id-modal" data-action="add" class="btn botao-add-carrinho add-btn update-cart">Add ao Carrinho</button>
         </div>
     </div>
+    -->
 
 </body>
 <script>

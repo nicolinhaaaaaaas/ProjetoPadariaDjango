@@ -74,13 +74,13 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for pedido in pedidos %}
-                                <tr>
-                                    <th><a href="{% url 'notaPedido' pedido.id_pedido %}">{{pedido.id_pedido}}</a></th>
-                                    <td>{{pedido.data}}</td>
-                                    <td>{{pedido.valor_final}}</td>
-                                    <td>{{pedido.status}}</td>
-                                </tr>
+                                {% for pedido in pedidos|dictsortreversed:"id_pedido" %}
+                                    <tr>
+                                        <th><a href="{% url 'notaPedido' pedido.id_pedido %}">{{ pedido.id_pedido }}</a></th>
+                                        <td>{{ pedido.data }}</td>
+                                        <td>{{ pedido.valor_final }}</td>
+                                        <td>{% if pedido.completo %}Completo{% else %}Incompleto{% endif %}</td>
+                                    </tr>
                                 {% endfor %}
                             </tbody>
                         </table>

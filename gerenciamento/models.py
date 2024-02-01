@@ -36,6 +36,11 @@ class Produto(models.Model):
             url = ''
         return url
     
+    @property
+    def get_ingredientes(self):
+        ingredientes_produto = self.produtoingrediente_set.all()
+        ingredientes = [item.ingrediente for item in ingredientes_produto]
+        return ingredientes
 
 class ProdutoIngrediente(models.Model):
     produto = models.ForeignKey(Produto, on_delete=models.CASCADE)
