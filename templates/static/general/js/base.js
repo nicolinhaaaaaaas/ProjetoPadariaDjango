@@ -21,15 +21,16 @@ if(sidebar.classList.contains("open")){
 }
 
 
-// Função para exibir a mensagem de confirmação e realizar o logout
-function confirmarLogout() {
-    if (confirm("Tem certeza que deseja sair?")) {
-        window.location.href = "{% url 'logout' %}";
-    }
-}
 
-// Adiciona um ouvinte de evento de clique ao botão de logout
-document.getElementById("logout-btn").addEventListener("click", function(event) {
-    event.preventDefault(); // Evita o comportamento padrão de redirecionamento
-    confirmarLogout(); // Chama a função para exibir a mensagem de confirmação
+document.getElementById('logout-link').addEventListener('click', function(event) {
+    event.preventDefault(); // Impede o comportamento padrão do link (redirecionamento)
+        
+    // Exibe um prompt de confirmação
+    var confirmLogout = confirm('Tem certeza de que deseja sair?');
+
+    // Se o usuário confirmar o logout, redireciona para a página de logout
+    if (confirmLogout) {
+        window.location.href = this.getAttribute('href');
+    }
 });
+

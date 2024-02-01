@@ -78,7 +78,7 @@
                                     <tr>
                                         <th><a href="{% url 'notaPedido' pedido.id_pedido %}">{{ pedido.id_pedido }}</a></th>
                                         <td>{{ pedido.data }}</td>
-                                        <td>{{ pedido.valor_final }}</td>
+                                        <td>R$ {{ pedido.valor_final|floatformat:2 }}</td>
                                         <td>{% if pedido.completo %}Completo{% else %}Incompleto{% endif %}</td>
                                     </tr>
                                 {% endfor %}
@@ -88,6 +88,9 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class="row">
+        <button class="btn-remover-principal" onclick="confirmarExclusao()">Excluir Perfil</button>      
     </div>
     <script src="{% static 'usuarios/js/usuarios.js' %}"></script>
 </body>

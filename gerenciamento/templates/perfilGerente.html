@@ -11,10 +11,10 @@
 <body>
     <div class="container-perfil">
         <div id="att-perfil">
-            <form action="{% url 'perfil' %}" method="POST">
+            <form action="{% url 'perfil' %}" method="POST" id="form-perfil">
                 {% csrf_token %}
                 <div class="caixa-perfil">
-                    <div id="perfil" class="att-perfil">
+                    <div id="perfil">
                         <h1 class="titulo_perfil">Atualizar Perfil</h1>
                         <div class="row">
                             <div class="col-md">
@@ -54,5 +54,10 @@
             </form>
         </div>
     </div>
+
+    <div class="row">
+        <button class="btn-remover-principal" onclick="confirmarExclusao()">Excluir Perfil</button>      
+    </div>
+    <script src="{% static 'usuarios/js/usuarios.js' %}"></script>
 </body>
 {% endblock %}

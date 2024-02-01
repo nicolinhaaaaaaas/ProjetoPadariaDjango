@@ -108,11 +108,20 @@ def login(request):
 
     return render(request, 'cadastro.html')
 
-        
+@login_required(login_url='/usuarios/cadastro/')
 def pesquisar_produto(request):
+    if request.user.is_authenticated:
+        pedido, criado = Pedido.objects.get_or_create(cliente=request.user, data=datetime.datetime.now() , completo=False)
+        itens = pedido.pedidoproduto_set.all()
+        carrinho_itens = pedido.get_carrinho_itens
+    else:
+        itens = []
+        carrinho_itens = {'get_carrinho_total': 0, 'get_carrinho_itens': 0}
+
     termo_pesquisa = request.GET.get('Pesquisar', '')
     resultados = Produto.objects.filter(nome_produto__icontains=termo_pesquisa)
-    return render(request, 'pesquisarProduto.html', {'resultados': resultados})
+    contexto = {'pedido':pedido , 'itens': itens, 'carrinho_itens': carrinho_itens, 'resultados': resultados, 'termo_pesquisa': termo_pesquisa}
+    return render(request, 'pesquisarProduto.html', contexto)
         
 @login_required(login_url='/usuarios/cadastro/')
 def logout(request):
@@ -126,7 +135,7 @@ def logout(request):
     logout_django(request)
     
     # Redireciona para a página de login
-    return redirect('/usuarios/login/')
+    return redirect('/usuarios/cadastro/')
 
 @login_required(login_url='/usuarios/cadastro/')
 def perfil(request):
@@ -137,7 +146,8 @@ def perfil(request):
         user.telefone = request.POST.get('telefone')
         user.endereco = request.POST.get('endereco')
         user.email = request.POST.get('email')
-        user.set_password(request.POST.get('senha'))
+        user.password = (request.POST.get('senha'))
+        user.username = (request.POST.get('nome'))
         user.save()
         return redirect('perfil')
     # Filtra os pedidos do usuário com valor maior que 0
@@ -145,13 +155,12 @@ def perfil(request):
     return render(request, 'perfil.html',{'pedidos': pedidos})
 
 @login_required
-def atualizarPerfil(request):
+def excluirPerfil(request):
     if request.method == 'POST':
-        pass
-
-@login_required
-def excluirPerfil():
-    pass
+        user = request.user
+        user.delete()
+        print('Usuário excluído com sucesso!')
+        return render(request, 'cadastro.html')
 
 @transaction.atomic
 def updateItem(request):
