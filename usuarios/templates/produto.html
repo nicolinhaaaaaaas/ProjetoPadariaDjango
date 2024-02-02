@@ -3,11 +3,34 @@
 
 {% block 'head' %}
     <link rel="stylesheet" href="{% static 'usuarios/css/telaprincipal.css' %}">
+    <link rel="stylesheet" href="{% static 'usuarios/css/detalheProduto.css' %}">
     <link rel="stylesheet" href="{% static 'gerenciamento/css/gerenciamento.css' %}">
 {% endblock %}
 
 {% block 'dashboard' %}
 <body>
+    
+    <div class = "main-wrapper">
+        <div class = "container">
+            <div class = "product-div">
+                <div class = "product-div-left">
+                    <div class = "img-container">
+                        <img src = "{{produto.imageURL}}" alt = "{{produto.nome_produto}}">
+                    </div>
+                    
+                </div>
+                <div class = "product-div-right">
+                    <span class = "product-name">{{produto.nome_produto}}</span>
+                    <span class = "product-price">R$ {{produto.preco|floatformat:2}}</span>
+                    <p class = "product-description">{{produto.descricao}}</p>
+                    <div class = "btn-groups">
+                        <button type = "button" class = "add-cart-btn"><i class = "fas fa-shopping-cart"></i>add no carrinho</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <form id="avaliacao-produto" method="POST" action="{% url 'produto' produto.id_produto %}"> {% csrf_token %}
         <input type="text" name="comentario" value="{{comentario}}">
         <input type="number" name="nota" min="1" max="5" step="0.1" value="{{nota}}">
