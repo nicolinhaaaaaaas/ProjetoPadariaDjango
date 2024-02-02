@@ -61,6 +61,7 @@ def checkout(request):
 @login_required(login_url='/usuarios/cadastro/')
 def produto(request, id_produto):
     produto = get_object_or_404(Produto, id_produto=id_produto)
+    ingredientes_produto = produto.ingredientes.all()
 
     if request.user.is_authenticated:
         pedido, criado = Pedido.objects.get_or_create(cliente=request.user, data=datetime.datetime.now(), completo=False)
@@ -82,7 +83,7 @@ def produto(request, id_produto):
         itens = []
         carrinho_itens = {'get_carrinho_total': 0, 'get_carrinho_itens': 0}
 
-    contexto = {'produto': produto, 'pedido': pedido, 'itens': itens, 'carrinho_itens': carrinho_itens, 'avaliacoes': avaliacoes}
+    contexto = {'produto': produto, 'pedido': pedido, 'itens': itens, 'carrinho_itens': carrinho_itens, 'avaliacoes': avaliacoes, 'ingredientes_produto': ingredientes_produto}
     return render(request, 'produto.html', contexto)
 
 def cadastro(request):

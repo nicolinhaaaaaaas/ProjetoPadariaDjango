@@ -10,13 +10,19 @@ html, body{
     font-family: 'Roboto', sans-serif;
 }
 
-img{
-    width: 100%;
-    display: block;
+.img-container img {
+    width: 500px; /* A imagem irá preencher todo o contêiner */
+    height: auto; /* Isso garante que a altura seja ajustada proporcionalmente à largura */
+}
+.img-container {
+    width: 500px; /* Defina o tamanho desejado para a largura */
+    height: auto; /* Isso manterá a proporção original da imagem */
+    overflow: hidden;
+    border-radius: 8px;
+    border: 1px solid #FF9F00;
 }
 .main-wrapper{
     min-height: 100vh;
-    background-color: #f1f1f1;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -40,10 +46,6 @@ img{
 }
 .product-div-right{
     padding: 20px;
-}
-.img-container img{
-    width: 200px;
-    margin: 0 auto;
 }
 .hover-container{
     display: flex;

@@ -73,10 +73,9 @@ class Produto(models.Model):
 class ProdutoIngrediente(models.Model):
     produto = models.ForeignKey(Produto, on_delete=models.CASCADE)
     ingrediente = models.ForeignKey(Ingrediente, on_delete=models.CASCADE)
-    quantidade_usada = models.FloatField()
 
     def __str__(self) -> str:
-        return f'Produto: {self.produto.nome_produto} | Ingrediente: {self.ingrediente.nome_ingrediente} | Quantidade: {self.quantidade_usada}'
+        return f'Produto: {self.produto.nome_produto} | Ingrediente: {self.ingrediente.nome_ingrediente}'
 
 class Funcionario(models.Model):
     id_funcionario = models.AutoField(primary_key=True)
