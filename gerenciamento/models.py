@@ -8,6 +8,13 @@ class Ingrediente(models.Model):
 
     def __str__(self) -> str:
         return f'ID: {self.id_ingrediente} | Nome: {self.nome_ingrediente} | Unidade de Medida: {self.unidade_Medida}'
+    
+class Like(models.Model):
+    usuario = models.ForeignKey(usuarios_models.Usuario, on_delete=models.CASCADE)
+    produto = models.ForeignKey('Produto', on_delete=models.CASCADE, related_name='likes')
+
+    def __str__(self) -> str:
+        return f'Usuario: {self.usuario.username} | Produto: {self.produto.nome_produto}'
 
 class Produto(models.Model):
     CATEGORIA_CHOICES = [
@@ -27,6 +34,10 @@ class Produto(models.Model):
 
     def __str__(self) -> str:
         return f'ID: {self.id_produto} | Nome: {self.nome_produto} | Descrição: {self.descricao} | Preço: {self.preco} | Categoria: {self.categoria}'
+    
+    @property
+    def numero_likes(self):
+        return self.likes.count()
     
     @property
     def imageURL(self):

@@ -15,6 +15,7 @@ urlpatterns = [
     path('checkout/', views.checkout, name='checkout'),
     path('update_item/', views.updateItem, name='update_item'),
     path('processar_pedido/', views.processaPedido, name='processar_pedido'),
+    path('like/<int:produto_id>/', views.like, name='like_produto'),
 ]
 
 if settings.DEBUG:

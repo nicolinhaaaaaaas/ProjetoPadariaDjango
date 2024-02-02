@@ -271,9 +271,40 @@ font-weight: 600;
     color: white;
     border: none;
     border-radius: 20px;
-    width: 250px;
+    width: 210px;
     cursor: pointer;
     padding: 9px;
     align-self: center;
+    margin: 0px 5px 5px 5px;
+}
+.botao-like{
+    background-color: var(--dark-color);
+    color: white;
+    border: none;
+    border-radius: 180px;
+    width: 45px;
+    cursor: pointer;
+    padding: 10px;
+    align-self: center;
     margin-bottom: 5px;
+    margin: 0px 5px 5px 5px;
+}
+.botao-like:hover{
+    background-color: var(--contrast-color);
+    color: var(--dark-color);
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+.botao-like.curtido {
+    background-color: var(--contrast-color);
+    color: var(--dark-color);
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+.botao-like.curtido:hover {
+    background-color: var(--dark-color);
+    color: white;
+}
+.like-btn.liked ion-icon {
+    --ionicon-stroke-width: 32px; /* Ajuste conforme necessário */
+    --ionicon-fill-color: var(--dark-color); /* Cor do coração preenchido */
 }

@@ -7,7 +7,7 @@ from django.contrib.auth import authenticate, logout as logout_django
 from django.contrib.auth import login as login_django
 from django.contrib.auth.decorators import login_required
 from .models import Usuario
-from gerenciamento.models import EnderecoEntrega, Pedido, PedidoProduto, Produto
+from gerenciamento.models import EnderecoEntrega, Pedido, PedidoProduto, Produto, Like
 import re
 import datetime
 from django.db import transaction
@@ -19,6 +19,7 @@ def principal(request):
         pedido, criado = Pedido.objects.get_or_create(cliente=request.user, data=datetime.datetime.now() , completo=False)
         itens = pedido.pedidoproduto_set.all()
         carrinho_itens = pedido.get_carrinho_itens
+        user_likes = Like.objects.filter(usuario=request.user).values_list('produto_id', flat=True)
     else:
         itens = []
         carrinho_itens = {'get_carrinho_total': 0, 'get_carrinho_itens': 0}
@@ -27,7 +28,7 @@ def principal(request):
     for produto in produtos_list:
         ingredientes_produto[produto.id_produto] = produto.ingredientes.all()
 
-    contexto = {'pedido':pedido ,'produtos': produtos_list, 'itens': itens, 'carrinho_itens': carrinho_itens, 'ingredientes_produto': ingredientes_produto}
+    contexto = {'pedido':pedido ,'produtos': produtos_list, 'likes':user_likes, 'itens': itens, 'carrinho_itens': carrinho_itens, 'ingredientes_produto': ingredientes_produto}
     return render(request, 'principal.html', contexto)
 
 @login_required(login_url='/usuarios/cadastro/')
@@ -57,6 +58,27 @@ def checkout(request):
 
     contexto = {'pedido':pedido , 'itens': itens, 'carrinho_itens': carrinho_itens}
     return render(request, 'checkout.html', contexto)
+
+@login_required(login_url='/usuarios/cadastro/')
+def like(request, produto_id):
+     if request.method == 'POST':
+        # Verifica se o usuário está autenticado
+        if request.user.is_authenticated:
+            # Obtém o produto pelo ID
+            produto = Produto.objects.get(id_produto=produto_id)
+            # Verifica se o produto já foi curtido pelo usuário
+            if Like.objects.filter(usuario=request.user, produto=produto).exists():
+                # Se o produto já foi curtido pelo usuário, remova o like
+                Like.objects.filter(usuario=request.user, produto=produto).delete()
+                liked = False
+            else:
+                # Caso contrário, adicione um novo like
+                Like.objects.create(usuario=request.user, produto=produto)
+                liked = True
+            return JsonResponse({'liked': liked})
+        else:
+            # Se o usuário não estiver autenticado, retorne uma resposta de erro
+            return JsonResponse({'error': 'Usuário não autenticado'}, status=401)
 
 def cadastro(request):
     if request.method == 'GET':
