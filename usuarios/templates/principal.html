@@ -101,9 +101,9 @@
                 <div class="detail-wrapper">
                     {% for produto in produtos %}
                     <div class="detail-card produto-card {{ produto.categoria }}">
-                        <span class="detail-icon" onclick="expandirProduto('{{produto.id_produto}}', '{{produto.imageURL}}', '{{produto.nome_produto}}', '{{produto.descricao}}', '{{produto.preco}}')">
+                        <a class="detail-icon" href="{% url 'produto' produto.id_produto %}">
                             <img class="detail-img" src="{{ produto.imageURL }}" alt="{{ produto.nome_produto }}">
-                        </span>
+                        </a>
                         <div class="detail-desc">
                             <div class="detail-name">
                                 <h4>{{produto.nome_produto}}</h4>
@@ -112,15 +112,6 @@
                             </div>
                         </div>
                         <div class="row">
-                            {% if produto.id_produto in user_likes %}
-                                <button class="like-btn botao-like liked" type="submit" name="like" value="like" data-product-id="{{ produto.id_produto }}">
-                                    <ion-icon name="heart-outline"></ion-icon>
-                                </button>
-                            {% else %}
-                                <button class="like-btn botao-like" type="submit" name="like" value="like" data-product-id="{{ produto.id_produto }}">
-                                    <ion-icon name="thumbs-up-outline"></ion-icon>
-                                </button>
-                            {% endif %}
                             <button type="button" data-produto="{{produto.id_produto}}" data-action="add" class="btn botao-add-carrinho add-btn update-cart">Add ao Carrinho</button>
                         </div>
                     </div> 
@@ -129,39 +120,6 @@
             </div>
         </div>
     </div>
-    <!--Modal
-    <div id="produto-modal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="fecharModal()">&times;</span>
-            <img id="produto-imagem-modal" class="modal-img" alt="Imagem do Produto">
-            <div class="conteudo-text">
-                <h2 id="produto-nome-modal"></h2>
-                <p id="produto-descricao-modal"></p>
-                <row>
-                    <div class="col-md">
-                        <p>{{ ingrediente.nome_ingrediente }}</p>
-                    </div>
-                    <div class="col-md">
-                        <p>{{ ingrediente.quantidade }}</p>
-                    </div>
-                    <div class="col-md">
-                        <p>{{ ingrediente.unidade_medida }}</p>
-                    </div>
-                </row>
-                <div class="row">
-                    <div class="col-md">
-                        <p id="produto-preco-modal"></p>
-                    </div>
-                    <div class="col-md">
-                        <label for="quantidade-modal">Quantidade:</label>
-                        <input class="quantidade-selecionar" type="number" id="quantidade-modal" name="quantidade-modal" value="1" min="1">
-                    </div> 
-                </div>
-            </div>
-            <button type="button" data-produto="produto-id-modal" data-action="add" class="btn botao-add-carrinho add-btn update-cart">Add ao Carrinho</button>
-        </div>
-    </div>
-    -->
 
 </body>
 <script>
@@ -190,40 +148,4 @@
 <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
 <script src="{% static 'usuarios/js/principal.js' %}"></script>
 <script src="{% static 'gerenciamento/js/gerenciamento.js' %}"></script>
-<script>
-$('.like-btn').on('click', function() {
-    $(this).toggleClass('liked');
-});
-
-document.addEventListener('DOMContentLoaded', function() {
-    var likeButtons = document.querySelectorAll('.like-btn');
-    likeButtons.forEach(function(button) {
-        button.addEventListener('click', function(event) {
-            event.preventDefault();
-            var productId = button.getAttribute('data-product-id');
-            var formData = new FormData();
-            formData.append('product_id', productId);
-            formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
-
-            fetch('/usuarios/like/' + productId + '/', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.liked) {
-                    button.classList.add('liked');
-                    this.innerHTML = '<ion-icon name="heart-outline"></ion-icon>';
-                    console.log('Curtido');
-                } else {
-                    button.classList.remove('liked');
-                    this.innerHTML = '<ion-icon name="thumbs-up-outline"></ion-icon>';
-                    console.log('Descurtido');
-                }
-            })
-            .catch(error => console.error('Error:', error));
-        });
-    });
-});
-</script>
 {% endblock %}

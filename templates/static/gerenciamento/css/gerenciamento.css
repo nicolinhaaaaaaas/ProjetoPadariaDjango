@@ -275,7 +275,7 @@ font-weight: 600;
     cursor: pointer;
     padding: 9px;
     align-self: center;
-    margin: 0px 5px 5px 5px;
+    margin: 0px 5px 5px 25px;
 }
 .botao-like{
     background-color: var(--dark-color);

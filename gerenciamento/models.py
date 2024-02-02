@@ -9,12 +9,15 @@ class Ingrediente(models.Model):
     def __str__(self) -> str:
         return f'ID: {self.id_ingrediente} | Nome: {self.nome_ingrediente} | Unidade de Medida: {self.unidade_Medida}'
     
-class Like(models.Model):
+class Avaliacao(models.Model):
     usuario = models.ForeignKey(usuarios_models.Usuario, on_delete=models.CASCADE)
     produto = models.ForeignKey('Produto', on_delete=models.CASCADE, related_name='likes')
+    comentario = models.TextField()
+    data = models.DateField(auto_now_add=True)
+    nota = models.FloatField()
 
     def __str__(self) -> str:
-        return f'Usuario: {self.usuario.username} | Produto: {self.produto.nome_produto}'
+        return f'Usuario: {self.usuario.username} | Produto: {self.produto.nome_produto} | Nota: {self.nota}'
 
 class Produto(models.Model):
     CATEGORIA_CHOICES = [
@@ -35,9 +38,23 @@ class Produto(models.Model):
     def __str__(self) -> str:
         return f'ID: {self.id_produto} | Nome: {self.nome_produto} | Descrição: {self.descricao} | Preço: {self.preco} | Categoria: {self.categoria}'
     
-    @property
-    def numero_likes(self):
-        return self.likes.count()
+    def get_media_nota(self):
+        # Obtém todas as avaliações associadas a este produto
+        avaliacoes = Avaliacao.objects.filter(produto=self)
+        
+        # Calcula a média das notas
+        total_notas = sum(avaliacao.nota for avaliacao in avaliacoes)
+        quantidade_avaliacoes = avaliacoes.count()
+        if quantidade_avaliacoes > 0:
+            media_nota = total_notas / quantidade_avaliacoes
+            return media_nota
+        else:
+            return 0  # Retorna 0 se não houver avaliações
+
+    def get_quantidade_avaliacoes(self):
+        # Obtém a quantidade de avaliações associadas a este produto
+        quantidade_avaliacoes = Avaliacao.objects.filter(produto=self).count()
+        return quantidade_avaliacoes
     
     @property
     def imageURL(self):
@@ -93,7 +110,7 @@ class Pedido(models.Model):
     @property
     def get_carrinho_total(self):
         pedido_produtos = self.pedidoproduto_set.all()
-        total = sum([item.get_total for item in pedido_produtos])
+        total = sum([item.get_total() for item in pedido_produtos])  # Corrigindo chamada de função
         return total
     
     @property
