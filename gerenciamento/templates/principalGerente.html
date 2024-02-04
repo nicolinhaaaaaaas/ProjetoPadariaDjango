@@ -16,7 +16,7 @@
             <ion-icon class="menu-toggle" name="menu-outline"></ion-icon>
 
             <div class="search">
-                <form id="pesquisa-produto" method="GET" action="{% url 'pesquisar_produto' %}">
+                <form id="pesquisa-produto" method="GET" action="{% url 'pesquisaProdutoGerente' %}">
                     <input type="text" placeholder="Pesquisar" name="Pesquisar" value="{{termo_pesquisa}}">
                     <button class="search-btn">Pesquisar</button>
                 </form>
@@ -36,13 +36,13 @@
             <!--highlight menu-->
             <div class="highlight-wrapper">
                 {% for produto in produtos|slice:":4" %}
-                    <div class="highlight-card">
+                    <a class="highlight-card" href="{% url 'produtoGerente' produto.id_produto %}">
                         <img class="highlight-img" src="{{ produto.imagem.url }}" alt="{{ produto.nome_produto }}">
                         <div class="highlight-desc">
                             <h4>{{ produto.nome_produto }}</h4>
                             <p>R$ {{ produto.preco|floatformat:2 }}</p>
                         </div>
-                    </div> 
+                    </a> 
                 {% endfor %}
             </div>
         </div>
@@ -92,10 +92,10 @@
                 <h2 class="main-title">Faça seu pedido</h2>
                 <div class="detail-wrapper">
                     {% for produto in produtos %}
-                    <div class="detail-card produto-card {{ produto.categoria }}" >
-                        <span class="detail-icon" onclick="expandirProduto('{{produto.id_produto}}', '{{produto.imageURL}}', '{{produto.nome_produto}}', '{{produto.descricao}}', '{{produto.preco}}')">
-                            <img class="detail-img" src="{{ produto.imagem.url }}" alt="{{ produto.nome_produto }}">
-                        </span>
+                    <div class="detail-card produto-card {{ produto.categoria }}">
+                        <a class="detail-icon" href="{% url 'produtoGerente' produto.id_produto %}">
+                            <img class="detail-img" src="{{ produto.imageURL }}" alt="{{ produto.nome_produto }}">
+                        </a>
                         <div class="detail-desc">
                             <div class="detail-name">
                                 <h4>{{produto.nome_produto}}</h4>
@@ -104,7 +104,9 @@
                             </div>
                         </div>
                         <div class="row">
-                            <button type="button" data-produto="{{produto.id_produto}}" data-action="add" class="btn botao-add-carrinho add-btn update-cart">Add ao Carrinho</button>
+                            <a class="detail-icon" href="{% url 'produtoGerente' produto.id_produto %}">
+                                <button type="button" data-produto="{{produto.id_produto}}" class="btn botao-add-carrinho">Ver Detalhes</button>
+                            </a>
                         </div>
                     </div> 
                     {% endfor %}
@@ -112,39 +114,6 @@
             </div>
         </div>
     </div>
-    <!--Modal
-    <div id="produto-modal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="fecharModal()">&times;</span>
-            <img id="produto-imagem-modal" class="modal-img" alt="Imagem do Produto">
-            <div class="conteudo-text">
-                <h2 id="produto-nome-modal"></h2>
-                <p id="produto-descricao-modal"></p>
-                <row>
-                    <div class="col-md">
-                        <p>{{ ingrediente.nome_ingrediente }}</p>
-                    </div>
-                    <div class="col-md">
-                        <p>{{ ingrediente.quantidade }}</p>
-                    </div>
-                    <div class="col-md">
-                        <p>{{ ingrediente.unidade_medida }}</p>
-                    </div>
-                </row>
-                <div class="row">
-                    <div class="col-md">
-                        <p id="produto-preco-modal"></p>
-                    </div>
-                    <div class="col-md">
-                        <label for="quantidade-modal">Quantidade:</label>
-                        <input class="quantidade-selecionar" type="number" id="quantidade-modal" name="quantidade-modal" value="1" min="1">
-                    </div> 
-                </div>
-            </div>
-            <button type="button" data-produto="produto-id-modal" data-action="add" class="btn botao-add-carrinho add-btn update-cart">Add ao Carrinho</button>
-        </div>
-    </div>
-    -->
 
 </body>
 <script>

@@ -32,7 +32,7 @@
                         <td>{{ pedido.cliente.first_name }} {{ pedido.cliente.last_name }}</td>
                         <td>{{ pedido.data }}</td>
                         <td>R$ {{ pedido.valor_final }}</td>
-                        <td>{{ pedido.status }}</td>
+                        <td>{% if pedido.completo %}Completo{% else %}Incompleto{% endif %}</td>
                     </tr>
                 {% endfor %}
             </tbody>

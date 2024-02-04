@@ -1,3 +1,4 @@
+import datetime
 import json
 from django.http import FileResponse, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -7,7 +8,7 @@ from gerenciamento.forms import ProdutoForm
 from fpdf import FPDF
 from io import BytesIO
 
-from gerenciamento.models import Funcionario, Ingrediente, Pedido, PedidoProduto, Produto, ProdutoIngrediente
+from gerenciamento.models import Funcionario, Ingrediente, Pedido, PedidoProduto, Produto, ProdutoIngrediente, Avaliacao
 from usuarios.models import Usuario
 
 #telas
@@ -16,12 +17,12 @@ def principalGerente(request):
     return render(request, 'principalGerente.html', {'produtos': produtos_list})
 
 def lista_pedidos(request):
-    pedidos_list = Pedido.objects.all()
+    pedidos_list = Pedido.objects.order_by('-data')
     return render(request, 'listarPedidos.html', {'pedidos': pedidos_list})
 
 def clientes(request):
     if request.method == "GET":
-        clientes_list = Usuario.objects.all()
+        clientes_list = Usuario.objects.order_by('-date_joined')
         return render(request, 'clientes.html', {'clientes': clientes_list})
     else:
         return render(request, 'clientes.html')
@@ -83,6 +84,16 @@ def addProduto(request):
             # Se o formulário não for válido, você pode querer lidar com isso de acordo com seus requisitos
             return render(request, 'adicionarProduto.html', {'form': form})
         
+def produtoGerente(request, id_produto):
+    produto = get_object_or_404(Produto, id_produto=id_produto)
+    media_avaliacoes = Avaliacao.calcular_media_avaliacoes(produto)
+    ingredientes_produto = produto.ingredientes.all()
+
+    avaliacoes = Avaliacao.objects.filter(produto=produto) 
+
+    contexto = {'produto': produto,  'avaliacoes': avaliacoes, 'media_avaliacoes': media_avaliacoes, 'ingredientes_produto': ingredientes_produto}
+    return render(request, 'produtoGerente.html', contexto)
+        
 # FUNÇÕES DE BUSCA
 def buscar_sugestoes(request):
     termo_pesquisa = request.GET.get('termo', '')
@@ -91,8 +102,11 @@ def buscar_sugestoes(request):
     sugestoes_data = [{'nome': produto.nome_produto, 'preco': produto.preco, 'imagem_url': produto.imagem.url} for produto in sugestoes]
     return JsonResponse({'sugestoes': sugestoes_data})
 
-def pesquisaProduto(request):
-    return render(request, 'pesquisaProduto.html')
+def pesquisarProdutoGerente(request):
+    termo_pesquisa = request.GET.get('Pesquisar', '')
+    resultados = Produto.objects.filter(nome_produto__icontains=termo_pesquisa)
+    contexto = {'resultados': resultados, 'termo_pesquisa': termo_pesquisa}
+    return render(request, 'pesquisaProdutoGerente.html', contexto)
 
 #funções de atualizar
 def attProduto(request):

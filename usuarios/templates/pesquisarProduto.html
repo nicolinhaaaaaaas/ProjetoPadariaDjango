@@ -27,14 +27,6 @@
                 <p id="cart-total">{{carrinho_itens|floatformat:0}}</p>
             </div>
             
-
-            <!-- Container do Carrinho -->
-            <div id="carrinho-container" class="carrinho-popup" style="display: none;">
-                <h2>Seu Carrinho</h2>
-                <ul id="produtos-carrinho">
-                    <!-- Lista de produtos no carrinho será atualizada dinamicamente com JavaScript -->
-                </ul>
-            </div>
         </div>
         <!--Menu-->
         <br>
@@ -46,9 +38,9 @@
                 <div class="detail-wrapper">
                     {% for produto in resultados %}
                     <div class="detail-card produto-card {{ produto.categoria }}" >
-                        <span class="detail-icon" onclick="expandirProduto('{{produto.id_produto}}', '{{produto.imageURL}}', '{{produto.nome_produto}}', '{{produto.descricao}}', '{{produto.preco}}')">
+                        <a class="detail-icon" href="{% url 'produtoGerente' produto.id_produto %}">
                             <img class="detail-img" src="{{ produto.imagem.url }}" alt="{{ produto.nome_produto }}">
-                        </span>
+                        </a>
                         <div class="detail-desc">
                             <div class="detail-name">
                                 <h4>{{produto.nome_produto}}</h4>
@@ -65,8 +57,6 @@
             </div>
         </div>
     </div>
-
-
 </body>
 
 <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>

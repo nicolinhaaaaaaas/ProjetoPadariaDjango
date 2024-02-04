@@ -7,14 +7,16 @@ from django.contrib.auth import authenticate, logout as logout_django
 from django.contrib.auth import login as login_django
 from django.contrib.auth.decorators import login_required
 from .models import Usuario
-from gerenciamento.models import Avaliacao, EnderecoEntrega, Pedido, PedidoProduto, Produto
+from gerenciamento.models import Avaliacao, EnderecoEntrega, Pedido, PedidoProduto, Produto, Avaliacao
 import re
 import datetime
 from django.db import transaction
+from django.db.models import Avg, F, Subquery, OuterRef
 
 @login_required(login_url='/usuarios/cadastro/')
 def principal(request):
     produtos_list = Produto.objects.all()
+
     if request.user.is_authenticated:
         pedido, criado = Pedido.objects.get_or_create(cliente=request.user, data=datetime.datetime.now() , completo=False)
         itens = pedido.pedidoproduto_set.all()
@@ -61,6 +63,7 @@ def checkout(request):
 @login_required(login_url='/usuarios/cadastro/')
 def produto(request, id_produto):
     produto = get_object_or_404(Produto, id_produto=id_produto)
+    media_avaliacoes = Avaliacao.calcular_media_avaliacoes(produto)
     ingredientes_produto = produto.ingredientes.all()
 
     if request.user.is_authenticated:
@@ -83,7 +86,7 @@ def produto(request, id_produto):
         itens = []
         carrinho_itens = {'get_carrinho_total': 0, 'get_carrinho_itens': 0}
 
-    contexto = {'produto': produto, 'pedido': pedido, 'itens': itens, 'carrinho_itens': carrinho_itens, 'avaliacoes': avaliacoes, 'ingredientes_produto': ingredientes_produto}
+    contexto = {'produto': produto, 'pedido': pedido, 'itens': itens, 'carrinho_itens': carrinho_itens, 'avaliacoes': avaliacoes, 'media_avaliacoes': media_avaliacoes, 'ingredientes_produto': ingredientes_produto}
     return render(request, 'produto.html', contexto)
 
 def cadastro(request):
@@ -112,7 +115,7 @@ def cadastro(request):
         usuario = Usuario.objects.create(username=username, first_name=nome, last_name=sobrenome, cpf=cpf, telefone=telefone, endereco=endereco, email=email, password=password, permissao=permissao)
         print(username, nome, sobrenome, cpf, email, password, telefone, endereco, permissao)
         usuario.save()
-        return HttpResponse('Usuário cadastrado com sucesso!')
+        return render(request, 'cadastro.html')
     else:
         return render(request, 'cadastro.html')
 

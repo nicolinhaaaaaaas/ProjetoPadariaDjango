@@ -1,5 +1,6 @@
 from django.db import models
 from usuarios import models as usuarios_models
+from django.db.models import Avg
 
 class Ingrediente(models.Model):
     id_ingrediente = models.AutoField(primary_key=True)
@@ -15,6 +16,17 @@ class Avaliacao(models.Model):
     comentario = models.TextField()
     data = models.DateField(auto_now_add=True)
     nota = models.FloatField()
+
+    @classmethod
+    def calcular_media_avaliacoes(cls, produto_id):
+        # Calcular a média das notas das avaliações para o produto especificado
+        media = cls.objects.filter(produto_id=produto_id).aggregate(media=Avg('nota'))['media']
+
+        # Verificar se há algum valor de média calculado
+        if media is not None:
+            return round(media, 2)  # Arredondar para 2 casas decimais
+        else:
+            return None  # Retornar None se não houver avaliações para o produto
 
     def __str__(self) -> str:
         return f'Usuario: {self.usuario.username} | Produto: {self.produto.nome_produto} | Nota: {self.nota}'
@@ -109,7 +121,7 @@ class Pedido(models.Model):
     @property
     def get_carrinho_total(self):
         pedido_produtos = self.pedidoproduto_set.all()
-        total = sum([item.get_total() for item in pedido_produtos])  # Corrigindo chamada de função
+        total = sum([item.get_total for item in pedido_produtos])  # Corrigindo chamada de função
         return total
     
     @property
