@@ -17,13 +17,9 @@ from django.db.models import Avg, F, Subquery, OuterRef
 def principal(request):
     produtos_list = Produto.objects.all()
 
-    if request.user.is_authenticated:
-        pedido, criado = Pedido.objects.get_or_create(cliente=request.user, data=datetime.datetime.now() , completo=False)
-        itens = pedido.pedidoproduto_set.all()
-        carrinho_itens = pedido.get_carrinho_itens
-    else:
-        itens = []
-        carrinho_itens = {'get_carrinho_total': 0, 'get_carrinho_itens': 0}
+    pedido, criado = Pedido.objects.get_or_create(cliente=request.user, data=datetime.datetime.now() , completo=False)
+    itens = pedido.pedidoproduto_set.all()
+    carrinho_itens = pedido.get_carrinho_itens
 
     ingredientes_produto = {}
     for produto in produtos_list:
@@ -90,10 +86,7 @@ def produto(request, id_produto):
     return render(request, 'produto.html', contexto)
 
 def cadastro(request):
-    if request.method == 'GET':
-        usuarios_list = Usuario.objects.all()
-        return render(request, 'cadastro.html', {'usuarios': usuarios_list})
-    elif request.method == 'POST':
+    if request.method == 'POST':
         username = request.POST.get('email')
         nome = request.POST.get('nome')
         sobrenome = request.POST.get('sobrenome')
@@ -132,7 +125,10 @@ def login(request):
                 # Usuário encontrado, autenticação bem-sucedida
                 print('Usuário autenticado com sucesso!')
                 # Faça qualquer ação adicional necessária
-                return redirect('principal')
+                if usuario.permissao:
+                    return redirect('principalGerente')
+                else:
+                    return redirect('principal')
         else:
             # Loop concluído sem encontrar um usuário correspondente
             print('Falha na autenticação!')

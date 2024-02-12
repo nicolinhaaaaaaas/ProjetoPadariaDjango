@@ -163,8 +163,8 @@ def dadosPedido(request):
     return JsonResponse(data)
 
 def dadosProduto(request):
-    if_produto = request.POST.get('id_produto')
-    produto = Produto.objects.filter(id_produto=if_produto)
+    id_produto = request.POST.get('id_produto')
+    produto = Produto.objects.filter(id_produto=id_produto)
     ingredientes = ProdutoIngrediente.objects.filter(produto=produto[0])
 
     produto_json = json.loads(serializers.serialize('json', produto))[0]['fields']
@@ -177,12 +177,21 @@ def dadosProduto(request):
     return JsonResponse(data)
 
 def dadosFuncionario(request):
-    if_funcionario = request.POST.get('id_funcionario')
-    funcionario = Funcionario.objects.filter(id_funcionario=if_funcionario)
-    funcionario_json = json.loads(serializers.serialize('json', funcionario))[0]['fields']
-    funcionario_id = json.loads(serializers.serialize('json', funcionario))[0]['pk']
-    data = {'funcionario': funcionario_json, 'funcionario_id': funcionario_id}
-    return JsonResponse(data)
+    if request.method == "POST":
+        id_funcionario = request.POST.get('id_funcionario')
+        print("ID do funcionário:", id_funcionario)
+
+        funcionario = Funcionario.objects.filter(id_funcionario=id_funcionario).first()  # Use .first() para obter o primeiro objeto ou None se não houver nenhum
+        if funcionario:
+            funcionario_json = json.loads(serializers.serialize('json', [funcionario]))[0]['fields']
+            funcionario_id = funcionario.pk
+            data = {'funcionario': funcionario_json, 'funcionario_id': funcionario_id}
+            print(data)
+            return JsonResponse(data)
+        else:
+            # Retorna um erro ou uma resposta vazia, dependendo do que você quer fazer
+            return HttpResponse(status=404)  # Por exemplo, pode retornar um erro 404 se o funcionário não for encontrado
+
 
 #detalhes de pedido
 
