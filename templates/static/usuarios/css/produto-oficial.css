@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
 
 *{
     padding: 0;
@@ -7,7 +7,7 @@
 }
 
 html, body{
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .img-container img {
@@ -47,32 +47,7 @@ html, body{
 .product-div-right{
     padding: 20px;
 }
-.hover-container{
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    margin-top: 32px;
-}
-.hover-container div{
-    border: 2px solid rgba(252, 160, 175, 0.7);
-    padding: 1rem;
-    border-radius: 3px;
-    margin: 0 4px 8px 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.active{
-    border-color: rgb(255, 145, 163)!important;
-}
-.hover-container div:hover{
-    border-color: rgb(255, 145, 163);
-}
-.hover-container div img{
-    width: 50px;
-    cursor: pointer;
-}
+
 .product-div-right span{
     display: block;
 }
@@ -88,14 +63,6 @@ html, body{
     font-size: 24px;
     opacity: 0.9;
     font-weight: 500;
-}
-.product-rating{
-    display: flex;
-    align-items: center;
-    margin-top: 12px;
-}
-.product-rating span{
-    margin-right: 6px;
 }
 .product-description{
     font-weight: 18px;
@@ -120,44 +87,4 @@ html, body{
 .btn-groups button .fas{
     margin-right: 8px;
 }
-.add-cart-btn{
-    background-color: #FF9F00;
-    border: 2px solid #FF9F00;
-    margin-right: 8px;
-}
-.add-cart-btn:hover{
-    background-color: #fff;
-    color: #FF9F00;
-}
-.buy-now-btn{
-    background-color: #000;
-    border: 2px solid #000;
-}
-.buy-now-btn:hover{
-    background-color: #fff;
-    color: #000;
-}
 
-@media screen and (max-width: 992px){
-    .product-div{
-        grid-template-columns: 100%;
-    }
-    .product-div-right{
-        text-align: center;
-    }
-    .product-rating{
-        justify-content: center;
-    }
-    .product-description{
-        max-width: 400px;
-        margin-right: auto;
-        margin-left: auto;
-    }
-}
-
-@media screen and (max-width: 400px){
-    .btn-groups button{
-        width: 100%;
-        margin-bottom: 10px;
-    }
-}

@@ -24,7 +24,6 @@ body{
     justify-content: center;
     flex-direction: column;
     height: 100vh;
-
 }
 
 .container{
@@ -34,8 +33,8 @@ body{
     position: relative;
     overflow: hidden;
     width: 100%;
-    min-width: 90%;
-    min-height: 480px;
+    height: 100vh;
+    display: flex;
 }
 .container p{
     font-size: 14px;

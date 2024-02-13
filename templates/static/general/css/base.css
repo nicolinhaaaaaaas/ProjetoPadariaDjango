@@ -222,8 +222,9 @@
   background: none;
 }
 .home-section{
+  padding-top: 25px;
   position: relative;
-  min-height: 100vh;
+  min-height: 100%;
   top: 0;
   background: #E7E7E7;
   left: 78px;
@@ -347,4 +348,20 @@ h1,h2,h3,h4,h5,h6{
 
 .hidden{
 	display: none!important;
+}
+
+.form-control{
+  width: 500px;
+  height: 35px;
+  border-radius: 20px;
+  border: var(--differential-color) solid 1px;
+  padding-left: 10px;
+  margin-bottom: 10px;
+}
+
+.row{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 20px;
 }
