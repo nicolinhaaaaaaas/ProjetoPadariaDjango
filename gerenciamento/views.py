@@ -54,35 +54,42 @@ def addFuncionario(request):
 
         return render(request, 'funcionarios.html')
     
-def addProduto(request):
-    if request.method == "GET":
-        form = ProdutoForm()
-        produtos_list = Produto.objects.all()
-        return render(request, 'adicionarProduto.html', {'form': form, 'produtos': produtos_list})
-    elif request.method == "POST":
-        form = ProdutoForm(request.POST, request.FILES)
-        if form.is_valid():
-            produto = form.save()
-            
-            nome_ingredientes = request.POST.getlist('nome_ingrediente')
-            unidadeMedidas = request.POST.getlist('unidadeMedida')
-            quantidades = request.POST.getlist('quantidade')
 
-            for nome_ingrediente, unidadeMedida, quantidade in zip(nome_ingredientes, unidadeMedidas, quantidades):
-                try:
-                    ingrediente = Ingrediente.objects.get(nome_ingrediente=nome_ingrediente)
-                except Ingrediente.DoesNotExist:
-                    ingrediente = Ingrediente.objects.create(nome_ingrediente=nome_ingrediente, unidadeMedida=unidadeMedida)
-                    ingrediente.save()
-                
-                produtoIng = ProdutoIngrediente.objects.create(produto=produto, ingrediente=ingrediente, quantidade_usada=quantidade)
-                
-                produtoIng.save()
-            
-            return redirect('lista_produtos')  # Redireciona para a lista de produtos após adicionar com sucesso
-        else:
-            # Se o formulário não for válido, você pode querer lidar com isso de acordo com seus requisitos
-            return render(request, 'adicionarProduto.html', {'form': form})
+    
+def addProduto(request):
+    categorias = Produto.CATEGORIA_CHOICES
+    if request.method == 'POST':
+        nome_produto = request.POST.get('nome_produto')
+        descricao = request.POST.get('descricao')
+        preco = request.POST.get('preco')
+        categoria = request.POST.get('categoria')
+        imagem = request.FILES.get('imagem')
+
+        # Salvando os dados do produto no banco de dados
+        produto = Produto.objects.create(nome_produto=nome_produto, descricao=descricao, preco=preco, categoria=categoria, imagem=imagem)
+        produto.save()
+        print(produto)
+
+        # Itera sobre os dados enviados pelo formulário para capturar os ingredientes
+        ingredientes = []
+        for key, value in request.POST.items():
+            if key.startswith('nome_ingrediente_'):
+                ingrediente_id = key.split('_')[-1]
+                ingrediente_nome = value
+                unidade_medida = request.POST.get('unidade_medida_' + ingrediente_id)
+                ingredientes.append((ingrediente_nome, unidade_medida))
+        
+        print(ingredientes)
+        
+        for ingrediente_nome, unidade_medida in ingredientes:
+            ingrediente, created = Ingrediente.objects.get_or_create(nome_ingrediente=ingrediente_nome, unidade_Medida=unidade_medida)
+            produto_ingrediente = ProdutoIngrediente.objects.create(produto=produto, ingrediente=ingrediente)
+
+        # Redirecionar para alguma página de sucesso ou para a página inicial
+        return redirect('principalGerente')
+
+    # Se o método da requisição não for POST, renderizar o formulário vazio
+    return render(request, 'adicionarProduto.html', {'categorias': categorias})
         
 def produtoGerente(request, id_produto):
     produto = get_object_or_404(Produto, id_produto=id_produto)
@@ -137,7 +144,22 @@ def attFuncionario(request, id):
 #funções de deletar
     
 def excluirProduto(request):
-    pass
+    if request.method == 'POST':
+        # Recebe o ID do produto a ser excluído do corpo da requisição POST
+        produto_id = request.POST.get('produto_id')
+
+        try:
+            # Tenta encontrar o produto pelo ID e excluí-lo do banco de dados
+            produto = Produto.objects.get(pk=produto_id)
+            produto.delete()
+            return HttpResponse('Produto excluído com sucesso', status=200)
+        except Produto.DoesNotExist:
+            return HttpResponse('Produto não encontrado', status=404)
+        except Exception as e:
+            return HttpResponse(f'Erro ao excluir o produto: {e}', status=500)
+
+    # Se a requisição não for do tipo POST, retorna uma resposta de erro
+    return HttpResponse('Método não permitido', status=405)
 
 def excluirPedido(request):
     pass

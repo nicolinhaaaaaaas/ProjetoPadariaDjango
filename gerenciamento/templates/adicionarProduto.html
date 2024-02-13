@@ -14,6 +14,7 @@
                 <h3 class="titulo-produto">Gerenciamento de produto:</h3>
                 <p class="subtitulo-produto">Aqui você pode gerenciar os produtos do sistema.</p>
             </div>
+            <!--
             <div class="botoes">
                 <div class="add-produto" name="addproduto">
                     <button onclick="exibir_produto('1')" class="btn-add-principal">Cadastrar Produto</button>
@@ -22,72 +23,53 @@
                     <button onclick="exibir_produto('2')" class="btn-add-principal">Atualizar Produto</button>
                 </div>
             </div>
+            -->
         </div>
     
 
         <div id="add-produto" class="adicionar-produto" name="add-produto">
-            <form action="% url 'addProduto' %" method="POST" enctype="multipart/form-data">{% csrf_token %}
+            <form action="{% url 'addProduto' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
                 <div class="produtoform">
                     <h2 class="main-title">Adicionar produto</h2>
-                    #TODO tela de atualizar produto
                     <div class="row">
                         <div class="col-md">
                             <p class="label-text">Nome do produto</p>
+                            <input type="text" name="nome_produto" class="form-control" value="{{nome_produto}}">
                         </div>
                         <div class="col-md">
                             <p class="label-text">Descrição</p>
+                            <input type="text" name="descricao" class="form-control" value="{{descricao}}">
                         </div>
                         <div class="col-md">
                             <p class="label-text">Preço</p>
+                            <input type="text" name="preco" class="form-control" value="{{preco}}">
                         </div>
-                    </div>
-                
-                    <div class="row">
-                        <div class="col-md">
-                            {{ form.nome_produto }}
-                        </div>
-                        <div class="col-md">
-                            {{ form.descricao }}
-                        </div>
-                        <div class="col-md">
-                            {{ form.preco }}
-                        </div>      
                     </div>
                     <br>
                     <div class="row">
-                        <p class="label-text">Categoria</p>
-                        <div class="option-entrada">
-                            {{ form.categoria }}
+                        <div class="col-md">
+                            <p class="label-text">Categoria</p>
+                            <select name="categoria" class="form-control">
+                                {% for categoria in categorias %}
+                                    <option value="{{ categoria.0 }}">{{ categoria.1 }}</option>
+                                {% endfor %}
+                            </select>
                         </div>
-                        <div class="label-imagem">
-                            <label for="{{ form.imagem.id_for_label }}">Imagem</label>
-                            {{ form.imagem }}
+                        <div class="col-md">
+                            <p class="label-text">Imagem</p>
+                            <input type="file" name="imagem" accept="image/*">
                         </div>
                     </div>
-
                 </div>
-            <br>
-
+                <br>
                 <div class="add-ingredientes">
                     <h3>Ingredientes da receita</h3>
                     <span class="btn-add-ingredientes" onclick="addIngrediente()">+ Adicionar um ingrediente</span>
                     <div class="ingredientes" id="form-ingrediente">
-                        <br>
-                        <div class="row">
-                            <div class="col-md">
-                                {{ form.nome_ingrediente }}
-                            </div>
-                            <div class="col-md">
-                                {{ form.unidadeMedida }}
-                            </div>
-                            <div class="col-md">
-                                {{ form.quantidade_usada }}
-                            </div>
-                        </div>
-
+                        
                     </div>
                 </div>
-                {{form.submit}}
                 <br>
                 <br>
                 <div class="botao">
@@ -96,6 +78,7 @@
             </form>
         </div>
 
+        <!--
         <div id="att-produto" class="adicionar-produto" name="att-produto" style="display: none;">
             <div class="produtoform">
                 <h2 class="main-title">Atualizar produto</h2>
@@ -173,6 +156,7 @@
                 <input type="submit" value="Enviar" class="btn-add-principal">
             </div>
         </div>
+        -->
     </div>
 <script src="{% static 'gerenciamento/js/gerenciamento.js' %}"></script>
 </body>

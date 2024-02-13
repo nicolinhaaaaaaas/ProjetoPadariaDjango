@@ -4,16 +4,25 @@ $(document).ready(function() {
     });
 });
 
+var contadorIngrediente = 1; // Variável para contar o número de ingredientes adicionados
+
 function addIngrediente() {
     var container = document.getElementById("form-ingrediente");
-
-    var html = "";
-    html += "<br> <div class='row'> <div class='col-md'> <input type='text' class='ingrediente-entrada' id='nome-ingrediente' name='nome-ingrediente' placeholder='Nome do ingrediente'> </div>";
-    html += "<br> <div class='col-md'> <input type='text' class='ingrediente-entrada' id='unidadeMedida' name='unidadeMedida' placeholder='Unidade de medida'> </div>";
-    html += "<br> <div class='col-md'> <input type='text' class='ingrediente-entrada' id='quantidade' name='quantidade' placeholder='Quantidade'> </div> </div>";
+    
+    var html = "<div class='row'>";
+    html += "<div class='col-md'>";
+    html += "<input type='text' class='ingrediente-entrada' id='nome_ingrediente_" + contadorIngrediente + "' name='nome_ingrediente_" + contadorIngrediente + "' placeholder='Nome do ingrediente' >";
+    html += "</div>";
+    html += "<div class='col-md'>";
+    html += "<input type='text' class='ingrediente-entrada' id='unidade_medida_" + contadorIngrediente + "' name='unidade_medida_" + contadorIngrediente + "' placeholder='Unidade de medida' >";
+    html += "</div>";
+    html += "</div>";
 
     container.innerHTML += html;
+
+    contadorIngrediente++; // Incrementa o contador de ingredientes
 }
+
 function exibir_produto(tipo){
     
     var add_produto = document.getElementById("add-produto");

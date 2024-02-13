@@ -179,31 +179,48 @@ function updateUserOrder(id_produto, action) {
     });
 }
 
-function expandirProduto(id_produto, imageUrl, nome_produto, descricao, preco ) {
-    produtoIdModal = id_produto; // Armazena o ID do produto na variável global
-    document.getElementById('produto-id-modal').innerText = id_produto;
-    console.log('id_produto', id_produto);
-    document.getElementById('produto-nome-modal').innerText = nome_produto;
-    console.log('nome_produto', nome_produto);
-    document.getElementById('produto-descricao-modal').innerText = descricao;
-    console.log('descricao', descricao);
-    document.getElementById('produto-preco-modal').innerText = 'R$ '+ preco;
-    console.log('preco', preco);
-    
-    var imagemModal = document.getElementById('produto-imagem-modal');
-    imagemModal.src = imageUrl;
-    imagemModal.alt = 'Imagem de ' + nome_produto;
-
-    document.getElementById('produto-modal').style.display = 'block';
-    console.log('expandirProduto');
+// Função para mostrar o modal de confirmação
+function confirmarExclusao(produtoId) {
+    var modal = document.getElementById('modal-confirmacao');
+    modal.style.display = 'block';
+    // Guarde o ID do produto a ser excluído em uma variável global para acessá-lo depois
+    window.produtoIdParaExcluir = produtoId;
 }
 
-
+// Função para fechar o modal de confirmação
 function fecharModal() {
-    // Recupera o elemento modal
-    var modal = document.getElementById('produto-modal'); // Substitua 'seuModalId' pelo ID real do seu modal
-
-    // Define o estilo display como 'none' para esconder o modal
+    var modal = document.getElementById('modal-confirmacao');
     modal.style.display = 'none';
+}
+
+// Função para excluir o produto
+function excluirProduto(produtoId) {
+    // Aqui você pode enviar uma requisição AJAX para excluir o produto
+    // Certifique-se de incluir o CSRF token na requisição
+    var csrfToken = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+    fetch('/gerenciamento/excluir_produto/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken
+        },
+        body: JSON.stringify({ produto_id: produtoId })
+    })
+    .then(response => {
+        if (response.ok) {
+            alert('Produto excluído com sucesso');
+            // Atualizar a página ou fazer outras ações necessárias após excluir o produto
+        } else {
+            alert('Erro ao excluir o produto');
+        }
+    })
+    .catch(error => {
+        console.error('Erro ao excluir o produto:', error);
+        alert('Erro ao excluir o produto');
+    })
+    .finally(() => {
+        // Fechar o modal de confirmação após excluir o produto
+        fecharModal();
+    });
 }
 
