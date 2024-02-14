@@ -23,6 +23,7 @@
                     <th class="data" scope="col">Data</th>
                     <th class="valor" scope="col">Valor</th>
                     <th class="status" scope="col">Status</th>
+                    <th class="acoes" scope="col">Ações</th>
                 </tr>
             </thead>
             <tbody>
@@ -33,10 +34,15 @@
                         <td>{{ pedido.data }}</td>
                         <td>R$ {{ pedido.valor_final }}</td>
                         <td>{% if pedido.completo %}Completo{% else %}Incompleto{% endif %}</td>
+                        <td>
+                            <a class="btn btn-danger" href="{% url 'excluir_pedido' pedido.id_pedido %}">Excluir</a>
+                        </td>
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
 </body>
+
+
 {% endblock %}

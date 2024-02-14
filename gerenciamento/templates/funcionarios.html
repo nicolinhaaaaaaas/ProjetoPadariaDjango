@@ -110,6 +110,7 @@
                         <th class="telefone" scope="col">Telefone</th>
                         <th class="cargo" scope="col">Cargo</th>
                         <th class="salario" scope="col">Salário</th>
+                        <th class="acoes" scope="col">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -120,6 +121,9 @@
                             <td>{{ funcionario.telefone_funcionario }}</td>
                             <td>{{ funcionario.cargo }}</td>
                             <td>R$ {{ funcionario.salario }}</td>
+                            <td>
+                                <a class="btn btn-danger" href="{% url 'excluir_funcionario' funcionario.id_funcionario %}">Excluir</a>
+                            </td>
                         </tr>
                     {% endfor %}
                 </tbody>

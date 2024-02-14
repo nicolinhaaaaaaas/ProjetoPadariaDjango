@@ -222,9 +222,8 @@
   background: none;
 }
 .home-section{
-  padding-top: 25px;
   position: relative;
-  min-height: 100%;
+  min-height: 100vh;
   top: 0;
   background: #E7E7E7;
   left: 78px;

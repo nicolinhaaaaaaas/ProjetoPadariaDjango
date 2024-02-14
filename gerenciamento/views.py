@@ -17,7 +17,7 @@ def principalGerente(request):
     return render(request, 'principalGerente.html', {'produtos': produtos_list})
 
 def lista_pedidos(request):
-    pedidos_list = Pedido.objects.order_by('-data')
+    pedidos_list = Pedido.objects.order_by('-id_pedido')
     return render(request, 'listarPedidos.html', {'pedidos': pedidos_list})
 
 def clientes(request):
@@ -143,36 +143,23 @@ def attFuncionario(request, id):
     
 #funções de deletar
     
-def excluirProduto(request):
-    if request.method == 'POST':
-        # Recebe o ID do produto a ser excluído do corpo da requisição POST
-        produto_id = request.POST.get('produto_id')
+def excluirProduto(request, id_produto):
+    produto = Produto.objects.get(id_produto=id_produto)
+    print(produto)
+    produto.delete()
+    return redirect('principalGerente')
 
-        try:
-            # Tenta encontrar o produto pelo ID e excluí-lo do banco de dados
-            produto = Produto.objects.get(pk=produto_id)
-            produto.delete()
-            return HttpResponse('Produto excluído com sucesso', status=200)
-        except Produto.DoesNotExist:
-            return HttpResponse('Produto não encontrado', status=404)
-        except Exception as e:
-            return HttpResponse(f'Erro ao excluir o produto: {e}', status=500)
+def excluirPedido(request, id_pedido):
+    pedido = Pedido.objects.get(id_pedido=id_pedido)
+    print(pedido)
+    pedido.delete()
+    return redirect('listaPedidos')
 
-    # Se a requisição não for do tipo POST, retorna uma resposta de erro
-    return HttpResponse('Método não permitido', status=405)
-
-def excluirPedido(request):
-    pass
-
-def excluirFuncionario(request, id):
-    funcionario = get_object_or_404(Funcionario)
-
-    if request.method == 'POST':
-        # Se a solicitação é um POST, exclua o funcionário
-        funcionario.delete()
-        return redirect('lista_funcionarios')  # Redirecione para a página de lista de funcionários após a exclusão
-
-    return render(request, 'excluir_funcionario.html', {'funcionario': funcionario})
+def excluirFuncionario(request, id_funcionario):
+    funcionario = Funcionario.objects.get(id_funcionario=id_funcionario)
+    print(funcionario)
+    funcionario.delete()
+    return redirect('funcionarios')
 
 #funções de dados
 
