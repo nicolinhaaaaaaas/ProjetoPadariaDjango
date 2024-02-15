@@ -1,3 +1,4 @@
+from django.utils import timezone
 import datetime
 import json
 from django.http import FileResponse, HttpResponse, JsonResponse
@@ -17,8 +18,16 @@ def principalGerente(request):
     return render(request, 'principalGerente.html', {'produtos': produtos_list})
 
 def lista_pedidos(request):
+     # Obtém a data do primeiro dia do mês atual
+    primeiro_dia_mes_atual = timezone.now().replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+
+    # Obtém todos os pedidos do mês atual
+    pedidos_mes_atual = Pedido.objects.filter(data__gte=primeiro_dia_mes_atual)
+
+    # Calcula a soma do valor de todos os pedidos do mês atual
+    soma_valor_pedidos_mes_atual = sum(pedido.valor_final for pedido in pedidos_mes_atual)
     pedidos_list = Pedido.objects.order_by('-id_pedido')
-    return render(request, 'listarPedidos.html', {'pedidos': pedidos_list})
+    return render(request, 'listarPedidos.html', {'pedidos': pedidos_list, 'soma_valor_pedidos_mes_atual': soma_valor_pedidos_mes_atual})
 
 def clientes(request):
     if request.method == "GET":
@@ -82,6 +91,7 @@ def addProduto(request):
                 ingrediente_nome = value
                 unidade_medida = request.POST.get('unidade_medida_' + ingrediente_id)
                 ingredientes.append((ingrediente_nome, unidade_medida))
+                print(ingrediente_nome, unidade_medida)
         
         print(ingredientes)
         

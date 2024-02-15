@@ -120,9 +120,11 @@ function dados_funcionario() {
 
         cargo = document.getElementById('cargo')
         cargo.value = data['cargo']
+        console.log(data['cargo'])
 
         salario = document.getElementById('salario')
         salario.value = data['salario']
+        console.log(data['salario'])
 
     })
     .catch(error => console.error('Erro ao buscar dados do funcionário:', error));
