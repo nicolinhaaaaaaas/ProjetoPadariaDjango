@@ -12,7 +12,7 @@ urlpatterns = [
     path('pedido/<int:id_pedido>', views.pedido, name='pedido'),
     path('funcionarios/', views.funcionarios, name='funcionarios'),
     path('addFuncionario/', views.addFuncionario, name='addFuncionario'),
-    path('updateFuncionario/<int:id_funcionario>', views.attFuncionario, name='updateFuncionario'),
+    path('updateFuncionario/', views.attFuncionario, name='updateFuncionario'),
     path('addProduto/', views.addProduto, name='addProduto'),
     path('updateProduto/<int:id_produto>', views.attProduto, name='updateProduto'),
     path('clientes/' , views.clientes, name='clientes'),
@@ -26,7 +26,7 @@ urlpatterns = [
     path('excluir_funcionario/<int:id_funcionario>/', views.excluirFuncionario, name='excluir_funcionario'),
 
     # FUNÇÕES DE DADOS #
-    path('dados_funcionario/', views.dadosFuncionario, name='dados_funcionario'),
+    path('dados_funcionario/', views.dados_funcionario, name='dados_funcionario'),
     path('dados_produto/', views.dadosProduto, name='dados_produto'),
     path('dados_pedido/', views.dadosPedido, name='dados_pedido'),
 ]

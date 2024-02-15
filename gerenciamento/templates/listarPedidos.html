@@ -32,7 +32,7 @@
                         <th><a href="{% url 'notaPedido' pedido.id_pedido %}">{{pedido.id_pedido}}</a></th>
                         <td>{{ pedido.cliente.first_name }} {{ pedido.cliente.last_name }}</td>
                         <td>{{ pedido.data }}</td>
-                        <td>R$ {{ pedido.valor_final }}</td>
+                        <td>R$ {{ pedido.valor_final|floatformat:2 }}</td>
                         <td>{% if pedido.completo %}Completo{% else %}Incompleto{% endif %}</td>
                         <td>
                             <a class="btn btn-danger" href="{% url 'excluir_pedido' pedido.id_pedido %}">Excluir</a>

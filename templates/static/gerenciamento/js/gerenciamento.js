@@ -1,8 +1,4 @@
-$(document).ready(function() {
-    $('.search-btn').on('click', function() {
-        pesquisarProdutos();
-    });
-});
+
 
 var contadorIngrediente = 1; // Variável para contar o número de ingredientes adicionados
 
@@ -59,10 +55,15 @@ function exibir_funcionario(tipo){
 
 function update_funcionario(){
     id = document.getElementById("id_funcionario").value;
-    nome = document.getElementById("nome_funcionario").value;
-    telefone = document.getElementById("telefone_funcionario").value;
+    console.log(id)
+    nome_funcionario = document.getElementById("nome_funcionario").value;
+    console.log(nome_funcionario)
+    telefone_funcionario = document.getElementById("telefone_funcionario").value;
+    console.log(telefone_funcionario)
     cargo = document.getElementById("cargo").value;
+    console.log(cargo)
     salario = document.getElementById("salario").value;
+    console.log(salario)
 
     fetch('/gerenciamento/updateFuncionario/' + id, {
         method: "POST",
@@ -70,23 +71,20 @@ function update_funcionario(){
             'X-CSRFToken': csrftoken,
         },
         body: JSON.stringify({
-            nome_funcionario: nome,
-            telefone_funcionario: telefone,
+            nome_funcionario: nome_funcionario,
+            telefone_funcionario: telefone_funcionario,
             cargo: cargo,
             salario: salario,
         })
     }).then(function (result){
         return result.json()
     }).then (function(data){
-        if(data['status'] == 200){
-            nome_funcionario = data['nome_funcionario'];
-            telefone_funcionario = data['telefone_funcionario'];
-            cargo = data['cargo'];
-            salario = data['salario'];
-            console.log('Sucesso')
-        }else{
-            console.log('Erro')
-        }
+        console.log(data)
+        nome_funcionario = data['nome_funcionario'];
+        telefone_funcionario = data['telefone_funcionario'];
+        cargo = data['cargo'];
+        salario = data['salario'];
+        console.log('Sucesso')
     })
 }
 
@@ -96,19 +94,36 @@ function dados_funcionario() {
     id_funcionario = funcionario.value;
     console.log(id_funcionario)
 
+    data =  new FormData();
+    data.append('id_funcionario', id_funcionario);
+
     fetch('/gerenciamento/dados_funcionario/', {
         method: "POST",
         headers: {
             'X-CSRFToken': csrf_token,
         },
-        body: JSON.stringify({ id_funcionario: id_funcionario }),
-    }).then(response => response.json())
-    .then(data => {
-        // Preencher os campos de input com os dados do funcionário
-        document.getElementById('nome_funcionario').value = data.funcionario.nome_funcionario;
-        document.getElementById('telefone_funcionario').value = data.funcionario.telefone_funcionario;
-        document.getElementById('cargo').value = data.funcionario.cargo;
-        document.getElementById('salario').value = data.funcionario.salario;
+        body: data
+    }).then(function(result){
+        return result.json()
+    }).then(function(data){
+        console.log(data)
+        document.getElementById('form-att-funcionario').style.display = 'block'
+
+        id_funcionario = document.getElementById('id_funcionario')
+        id_funcionario.value = data['id_funcionario']
+
+        nome_funcionario = document.getElementById('nome_funcionario')
+        nome_funcionario.value = data['nome_funcionario']
+
+        telefone_funcionario = document.getElementById('telefone_funcionario')
+        telefone_funcionario.value = data['telefone_funcionario']
+
+        cargo = document.getElementById('cargo')
+        cargo.value = data['cargo']
+
+        salario = document.getElementById('salario')
+        salario.value = data['salario']
+
     })
     .catch(error => console.error('Erro ao buscar dados do funcionário:', error));
 }

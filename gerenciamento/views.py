@@ -39,8 +39,8 @@ def perfil(request):
 #funções de adicionar
     
 def addFuncionario(request):
+    funcionarios_list = Funcionario.objects.all()
     if request.method == "GET":
-        funcionarios_list = Funcionario.objects.all()
         return render(request, 'funcionarios.html', {'funcionarios': funcionarios_list})
     elif request.method == "POST":
         nome_funcionario = request.POST.get('nome_funcionario')
@@ -48,11 +48,15 @@ def addFuncionario(request):
         cargo = request.POST.get('cargo')
         salario = request.POST.get('salario')
 
-        funcionario = Funcionario.objects.create(nome_funcionario=nome_funcionario, telefone_funcionario=telefone_funcionario, cargo=cargo, salario=salario)
-        
-        funcionario.save()
+        funcionario = Funcionario.objects.filter(nome_funcionario=nome_funcionario, telefone_funcionario=telefone_funcionario, cargo=cargo, salario=salario)
 
-        return render(request, 'funcionarios.html')
+        if funcionario:
+            return JsonResponse({'status': '500'})
+        else:
+            funcionario = Funcionario.objects.create(nome_funcionario=nome_funcionario, telefone_funcionario=telefone_funcionario, cargo=cargo, salario=salario)
+            funcionario.save()
+
+        return render(request, 'funcionarios.html', {'funcionarios': funcionarios_list})
     
 
     
@@ -122,24 +126,20 @@ def attProduto(request):
 def attPedido(request):
     pass
 
-def attFuncionario(request, id):
-    body = json.loads(request.body)
-
-    nome_funcionario = body['nome']
-    telefone_funcionario = body['telefone']
-    cargo = body['cargo']
-    salario = body['salario']
-
-    funcionario = get_object_or_404(Funcionario, id=id)
-    try:
-        funcionario.nome_funcionario = nome_funcionario
-        funcionario.telefone_funcionario = telefone_funcionario
-        funcionario.cargo = cargo
-        funcionario.salario = salario
-        funcionario.save()
-        return JsonResponse({'status': '200', 'nome_funcionario': nome_funcionario, 'telefone_funcionario': telefone_funcionario, 'cargo': cargo, 'salario': salario})
-    except:
-        return JsonResponse({'status': '500'})
+def attFuncionario(request):
+    if request.method == 'POST':
+        id_funcionario = request.POST.get('id_funcionario')
+        print(id_funcionario)
+        funcionarioAtt = Funcionario.objects.get(id_funcionario=id_funcionario)
+        print(funcionarioAtt)
+        funcionarioAtt.nome_funcionario = request.POST.get('nome_funcionario')
+        funcionarioAtt.telefone_funcionario = request.POST.get('telefone_funcionario')
+        funcionarioAtt.cargo = request.POST.get('cargo')
+        funcionarioAtt.salario = request.POST.get('salario')
+        print(funcionarioAtt)
+        funcionarioAtt.save()
+        return redirect('funcionarios')
+    return redirect('funcionarios')
     
 #funções de deletar
     
@@ -185,21 +185,23 @@ def dadosProduto(request):
     data = {'produto': produto_json, 'produto_id': produto_id, 'ingredientes': ingredientes_json}
     return JsonResponse(data)
 
-def dadosFuncionario(request):
+def dados_funcionario(request):
     if request.method == "POST":
         id_funcionario = request.POST.get('id_funcionario')
-        print("ID do funcionário:", id_funcionario)
-
-        funcionario = Funcionario.objects.filter(id_funcionario=id_funcionario).first()  # Use .first() para obter o primeiro objeto ou None se não houver nenhum
+        print(id_funcionario)
+        funcionario = Funcionario.objects.filter(id_funcionario=id_funcionario).first()  # Use .first() para obter apenas um objeto
         if funcionario:
-            funcionario_json = json.loads(serializers.serialize('json', [funcionario]))[0]['fields']
-            funcionario_id = funcionario.pk
-            data = {'funcionario': funcionario_json, 'funcionario_id': funcionario_id}
+            data = {
+                'id_funcionario': funcionario.id_funcionario,
+                'nome_funcionario': funcionario.nome_funcionario,
+                'telefone_funcionario': funcionario.telefone_funcionario,
+                'cargo': funcionario.cargo,
+                'salario': funcionario.salario,
+            }
             print(data)
             return JsonResponse(data)
         else:
-            # Retorna um erro ou uma resposta vazia, dependendo do que você quer fazer
-            return HttpResponse(status=404)  # Por exemplo, pode retornar um erro 404 se o funcionário não for encontrado
+            return JsonResponse({'error': 'Funcionário não encontrado'}, status=404)
 
 
 #detalhes de pedido

@@ -228,7 +228,7 @@
   background: #E7E7E7;
   left: 78px;
   color: #7F4600;
-  width: calc(100% - 90px);
+  width: calc(100% - 78px);
   transition: all 0.5s ease;
   z-index: 2;
 }
