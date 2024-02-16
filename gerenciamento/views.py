@@ -78,7 +78,7 @@ def addProduto(request):
         categoria = request.POST.get('categoria')
         imagem = request.FILES.get('imagem')
         nomeIngredientes = request.POST.getlist('nome_ingrediente')
-        unidadeMedidas = request.POST.getlist('unidade_medida')
+        unidadeMedidas = request.POST.getlist('unidade_Medida')
 
         # Salvando os dados do produto no banco de dados
         produto = Produto.objects.create(nome_produto=nome_produto, descricao=descricao, preco=preco, categoria=categoria, imagem=imagem)
@@ -123,8 +123,30 @@ def pesquisarProdutoGerente(request):
     return render(request, 'pesquisaProdutoGerente.html', contexto)
 
 #funções de atualizar
-def attProduto(request):
-    pass
+def attProduto(request, id_produto):
+    if request.method == 'POST':
+        produtoAtt = Produto.objects.get(id_produto=id_produto)
+        print(produtoAtt)
+        produtoAtt.nome_produto = request.POST.get('nome_produto')
+        produtoAtt.descricao = request.POST.get('descricao')
+        produtoAtt.preco = request.POST.get('preco')
+        produtoAtt.categoria = request.POST.get('categoria')
+        produtoAtt.save()
+
+        ProdutoIngrediente.objects.filter(produto=produtoAtt).delete()
+
+        nomeIngredientes = request.POST.getlist('nome_ingrediente')
+        unidadeMedidas = request.POST.getlist('unidade_Medida')
+
+        for nomeIngrediente, unidadeMedida in zip(nomeIngredientes, unidadeMedidas):
+            ingrediente, created = Ingrediente.objects.get_or_create(nome_ingrediente=nomeIngrediente, unidade_Medida=unidadeMedida)
+            produto_ingrediente = ProdutoIngrediente.objects.create(produto=produtoAtt, ingrediente=ingrediente)
+            produto_ingrediente.save()
+            print(ingrediente)
+
+        return redirect('produtoGerente', id_produto=id_produto)
+    
+    return redirect('produtoGerente', id_produto=id_produto)
 
 def attPedido(request):
     pass
@@ -164,6 +186,13 @@ def excluirFuncionario(request, id_funcionario):
     funcionario.delete()
     return redirect('funcionarios')
 
+def excluirIngrediente(request, id_ingrediente, id_produto):
+    produto = Produto.objects.get(id_produto=id_produto)
+    ingrediente = Ingrediente.objects.get(id_ingrediente=id_ingrediente)
+    produto_ingrediente = ProdutoIngrediente.objects.get(produto=produto, ingrediente=ingrediente)
+    produto_ingrediente.delete()
+    return redirect('produtoGerente', id_produto=id_produto)
+
 #funções de dados
 
 def dadosPedido(request):
@@ -181,13 +210,19 @@ def dadosProduto(request):
     if produto:
         # Obtém todos os ingredientes associados ao produto
         ingredientes = produto.get_ingredientes
-        print(ingredientes)
         
-        # Serializa os ingredientes em JSON
-        ingredientes_json = serializers.serialize('json', ingredientes)
+        # Serializa os ingredientes manualmente para um formato JSON válido
+        ingredientes_json = [
+            {
+                'id_ingrediente': ingrediente.id_ingrediente,
+                'nome_ingrediente': ingrediente.nome_ingrediente,
+                'unidade_Medida': ingrediente.unidade_Medida,
+            }
+            for ingrediente in ingredientes
+        ]
         
         # Retorna a lista de ingredientes como resposta JSON
-        return JsonResponse({'ingredientes': ingredientes_json})
+        return JsonResponse({'ingredientes': ingredientes_json, 'id_produto':produto.id_produto})
     else:
         # Se o produto não for encontrado, retorna uma resposta de erro
         return JsonResponse({'error': 'Produto não encontrado'}, status=404)
@@ -212,9 +247,6 @@ def dados_funcionario(request):
 
 
 #detalhes de pedido
-
-def pedido(request):
-    pass
 
 def notaPedido(request, id_pedido):
     pedido = get_object_or_404(Pedido, id_pedido=id_pedido)

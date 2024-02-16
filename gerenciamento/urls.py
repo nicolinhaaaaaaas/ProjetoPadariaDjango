@@ -23,6 +23,7 @@ urlpatterns = [
     path('excluir_produto/<int:id_produto>/', views.excluirProduto, name='excluir_produto'),
     path('excluir_pedido/<int:id_pedido>/', views.excluirPedido, name='excluir_pedido'),
     path('excluir_funcionario/<int:id_funcionario>/', views.excluirFuncionario, name='excluir_funcionario'),
+    path('excluir_ingrediente/<int:id_ingrediente>/<int:id_produto>/', views.excluirIngrediente, name='excluir_ingrediente'),
 
     path('attProduto/<int:id_produto>/', views.attProduto, name='attProduto'),
 

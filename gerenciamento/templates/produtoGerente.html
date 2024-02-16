@@ -63,8 +63,8 @@
             </div>
         </div>
 
-        <div id="att-produto" class="adicionar-produto" name="att-produto" >
-            <form action="{% url 'attProduto' produto.id_produto %}" method="POST" enctype="multipart/form-data">
+        <div id="att-produto" class="adicionar-produto" name="att-produto" style="display: none;">
+            <form action="{% url 'attProduto' produto.id_produto %}" method="POST" enctype="multipart/form-data" onsubmit="substituirVirgulaPorPonto()">
                 {% csrf_token %}
                 <div class="produtoform">
                     <h2 class="main-title">Atualizar produto</h2>
@@ -101,11 +101,14 @@
                 <div class="add-ingredientes">
                     <h3>Ingredientes da receita</h3>
                     <span class="btn-add-ingredientes" onclick="addIngrediente()">+ Adicionar um ingrediente</span>
-                    <div class="ingredientes" id="form-att-ingrediente">
+                    <div class="ingredientes" id="form-ingrediente">
                         
                     </div>
                 </div>
-                <div class="botao">
+                <div class="btn-groups">
+                    <!-- Botão de cancelar -->
+                    <button type="button" onclick="cancelarAtualizacao()">Cancelar</button>
+                    
                     <input type="submit" value="Enviar" class="btn-add-principal">
                 </div>
             </form>
