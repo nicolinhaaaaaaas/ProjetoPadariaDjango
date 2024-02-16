@@ -9,7 +9,6 @@ urlpatterns = [
     path('perfilGerente/', views.perfil, name='perfilGerente'),
     path('principalGerente/', views.principalGerente, name='principalGerente'),
     path('listaPedidos/', views.lista_pedidos, name='listaPedidos'),
-    path('pedido/<int:id_pedido>', views.pedido, name='pedido'),
     path('funcionarios/', views.funcionarios, name='funcionarios'),
     path('addFuncionario/', views.addFuncionario, name='addFuncionario'),
     path('updateFuncionario/', views.attFuncionario, name='updateFuncionario'),
@@ -24,6 +23,8 @@ urlpatterns = [
     path('excluir_produto/<int:id_produto>/', views.excluirProduto, name='excluir_produto'),
     path('excluir_pedido/<int:id_pedido>/', views.excluirPedido, name='excluir_pedido'),
     path('excluir_funcionario/<int:id_funcionario>/', views.excluirFuncionario, name='excluir_funcionario'),
+
+    path('attProduto/<int:id_produto>/', views.attProduto, name='attProduto'),
 
     # FUNÇÕES DE DADOS #
     path('dados_funcionario/', views.dados_funcionario, name='dados_funcionario'),

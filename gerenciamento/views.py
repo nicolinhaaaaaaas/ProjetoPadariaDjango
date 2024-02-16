@@ -77,27 +77,19 @@ def addProduto(request):
         preco = request.POST.get('preco')
         categoria = request.POST.get('categoria')
         imagem = request.FILES.get('imagem')
+        nomeIngredientes = request.POST.getlist('nome_ingrediente')
+        unidadeMedidas = request.POST.getlist('unidade_medida')
 
         # Salvando os dados do produto no banco de dados
         produto = Produto.objects.create(nome_produto=nome_produto, descricao=descricao, preco=preco, categoria=categoria, imagem=imagem)
         produto.save()
         print(produto)
 
-        # Itera sobre os dados enviados pelo formulário para capturar os ingredientes
-        ingredientes = []
-        for key, value in request.POST.items():
-            if key.startswith('nome_ingrediente_'):
-                ingrediente_id = key.split('_')[-1]
-                ingrediente_nome = value
-                unidade_medida = request.POST.get('unidade_medida_' + ingrediente_id)
-                ingredientes.append((ingrediente_nome, unidade_medida))
-                print(ingrediente_nome, unidade_medida)
-        
-        print(ingredientes)
-        
-        for ingrediente_nome, unidade_medida in ingredientes:
-            ingrediente, created = Ingrediente.objects.get_or_create(nome_ingrediente=ingrediente_nome, unidade_Medida=unidade_medida)
+        for nomeIngrediente, unidadeMedida in zip(nomeIngredientes, unidadeMedidas):
+            ingrediente, created = Ingrediente.objects.get_or_create(nome_ingrediente=nomeIngrediente, unidade_Medida=unidadeMedida)
             produto_ingrediente = ProdutoIngrediente.objects.create(produto=produto, ingrediente=ingrediente)
+            produto_ingrediente.save()
+            print(ingrediente)
 
         # Redirecionar para alguma página de sucesso ou para a página inicial
         return redirect('principalGerente')
@@ -106,13 +98,14 @@ def addProduto(request):
     return render(request, 'adicionarProduto.html', {'categorias': categorias})
         
 def produtoGerente(request, id_produto):
+    categorias = Produto.CATEGORIA_CHOICES
     produto = get_object_or_404(Produto, id_produto=id_produto)
     media_avaliacoes = Avaliacao.calcular_media_avaliacoes(produto)
     ingredientes_produto = produto.ingredientes.all()
 
     avaliacoes = Avaliacao.objects.filter(produto=produto) 
 
-    contexto = {'produto': produto,  'avaliacoes': avaliacoes, 'media_avaliacoes': media_avaliacoes, 'ingredientes_produto': ingredientes_produto}
+    contexto = {'produto': produto,  'avaliacoes': avaliacoes, 'media_avaliacoes': media_avaliacoes, 'ingredientes_produto': ingredientes_produto, 'categorias': categorias}
     return render(request, 'produtoGerente.html', contexto)
         
 # FUNÇÕES DE BUSCA
@@ -183,17 +176,21 @@ def dadosPedido(request):
 
 def dadosProduto(request):
     id_produto = request.POST.get('id_produto')
-    produto = Produto.objects.filter(id_produto=id_produto)
-    ingredientes = ProdutoIngrediente.objects.filter(produto=produto[0])
-
-    produto_json = json.loads(serializers.serialize('json', produto))[0]['fields']
-    produto_id = json.loads(serializers.serialize('json', produto))[0]['pk']
-
-    ingredientes_json = json.loads(serializers.serialize('json', ingredientes))
-    ingredientes_json = [{'fields': i['fields'], 'id': i['pk']} for i in ingredientes_json]
-    print(ingredientes_json)
-    data = {'produto': produto_json, 'produto_id': produto_id, 'ingredientes': ingredientes_json}
-    return JsonResponse(data)
+    produto = Produto.objects.filter(id_produto=id_produto).first()
+    print(produto)
+    if produto:
+        # Obtém todos os ingredientes associados ao produto
+        ingredientes = produto.get_ingredientes
+        print(ingredientes)
+        
+        # Serializa os ingredientes em JSON
+        ingredientes_json = serializers.serialize('json', ingredientes)
+        
+        # Retorna a lista de ingredientes como resposta JSON
+        return JsonResponse({'ingredientes': ingredientes_json})
+    else:
+        # Se o produto não for encontrado, retorna uma resposta de erro
+        return JsonResponse({'error': 'Produto não encontrado'}, status=404)
 
 def dados_funcionario(request):
     if request.method == "POST":

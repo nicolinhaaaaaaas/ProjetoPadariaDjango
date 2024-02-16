@@ -48,7 +48,7 @@
                                     <li>{{ ingrediente.nome_ingrediente }}</li>
                                 {% endfor %}
                         <div class = "btn-groups">
-                            <button type="button" data-produto="{{produto.id_produto}}" class="btn botao-add-carrinho">Atualizar Produto</button>
+                            <button type="button" onclick="dados_produto('{{produto.id_produto}}')" class="btn botao-add-carrinho">Atualizar Produto</button>
                             <!-- Botão para excluir produto -->
                             <button onclick="confirmarExclusao('{{ produto.id_produto }}')">Excluir Produto</button> 
                         </div>
@@ -62,8 +62,54 @@
                 </div>
             </div>
         </div>
-        <br>
 
+        <div id="att-produto" class="adicionar-produto" name="att-produto" >
+            <form action="{% url 'attProduto' produto.id_produto %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="produtoform">
+                    <h2 class="main-title">Atualizar produto</h2>
+                    <div class="row">
+                        <div class="col-md">
+                            <p class="label-text">Nome do produto</p>
+                            <input type="text" name="nome_produto" class="form-control" value="{{produto.nome_produto}}">
+                        </div>
+                        <div class="col-md">
+                            <p class="label-text">Descrição</p>
+                            <input type="text" name="descricao" class="form-control" value="{{produto.descricao}}">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md">
+                            <p class="label-text">Preço</p>
+                            <input type="text" name="preco" class="form-control" value="{{produto.preco}}">
+                        </div>
+                        <div class="col-md">
+                            <p class="label-text">Categoria</p>
+                            <select name="categoria" class="form-control">
+                                {% for categoria in categorias %}
+                                    <option value="{{ categoria.0 }}">{{ produto.categoria }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md">
+                            <p class="label-text">Imagem</p>
+                            <input type="file" name="imagem" accept="image/*">
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="add-ingredientes">
+                    <h3>Ingredientes da receita</h3>
+                    <span class="btn-add-ingredientes" onclick="addIngrediente()">+ Adicionar um ingrediente</span>
+                    <div class="ingredientes" id="form-att-ingrediente">
+                        
+                    </div>
+                </div>
+                <div class="botao">
+                    <input type="submit" value="Enviar" class="btn-add-principal">
+                </div>
+            </form>
+        </div>
         <br>
 
         {% if avaliacoes %}
@@ -87,5 +133,6 @@
 <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 <script src="{% static 'usuarios/js/principal.js' %}"></script>
+<script src="{% static 'gerenciamento/js/gerenciamento.js' %}"></script>
 
 {% endblock %}
