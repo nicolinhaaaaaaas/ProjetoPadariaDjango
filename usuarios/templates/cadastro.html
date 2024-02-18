@@ -16,8 +16,8 @@
                 <span>Insira seus dados para se registrar</span>
                 <input type="text" placeholder="Nome" name="nome" value="{{nome}}" />
                 <input type="text" placeholder="Sobrenome" name="sobrenome" value="{{sobrenome}}" />
-                <input type="text" placeholder="CPF" name="cpf" value="{{cpf}}" />
-                <input type="text" placeholder="Telefone" name="telefone" value="{{telefone}}" />
+                <input type="text" placeholder="CPF" name="cpf" id="cpfInput" maxlength="14" oninput="formatarCPF(this)" value="{{cpf}}" />
+                <input type="text" placeholder="Telefone" name="telefone" id="telefoneInput" maxlength="14" oninput="formatarTelefone(this)" value="{{telefone}}" />
                 <input type="text" placeholder="Endereço" name="endereco" value="{{endereco}}" />
                 <input type="email" placeholder="E-mail" name="email" value="{{email}}" />
                 <input type="password" placeholder="Senha" name="senha" value="{{senha}}" />
@@ -63,7 +63,41 @@
             container.classList.remove("active");
         });
     </script>
+    <script>
+        function formatarCPF(input) {
+        // Remove caracteres não numéricos
+        var cpfNumeros = input.value.replace(/\D/g, '');
+
+        // Limita o número de caracteres a 11
+        cpfNumeros = cpfNumeros.substring(0, 11);
+
+        // Adiciona pontos e traço
+        var cpfFormatado = cpfNumeros.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+
+        // Atualiza o valor no campo de input
+        input.value = cpfFormatado;
+    }
+        </script>
     <script src="{% static 'usuarios/js/principal.js' %}"></script>
+
+    <script>
+        function formatarTelefone(telefone) {
+            // Remove caracteres não numéricos do telefone
+            var telefoneFormatado = telefone.value.replace(/\D/g, '');
+    
+            // Verifica se o telefone já tem 11 dígitos (com DDD)
+            if (telefoneFormatado.length === 11) {
+                telefoneFormatado = telefoneFormatado.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+            } else {
+                // Se não tiver 11 dígitos, trata como um telefone sem DDD
+                telefoneFormatado = telefoneFormatado.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+            }
+    
+            // Atualiza o valor do campo de telefone com o telefone formatado
+            telefone.value = telefoneFormatado;
+        }
+    </script>
+    
 </body>
 
 {% endblock %}

@@ -12,7 +12,7 @@
 <body>
     <div class="container-perfil">
         <div id="att-perfil">
-            <form action="{% url 'perfil' %}" method="POST" id="form-perfil">
+            <form action="{% url 'perfilGerente' %}" method="POST" id="form-perfil">
                 {% csrf_token %}
                 <div class="caixa-perfil">
                     <div id="perfil">
@@ -63,4 +63,29 @@
     </div>
     <script src="{% static 'usuarios/js/usuarios.js' %}"></script>
 </body>
+<script>
+    window.onload = function() {
+        // Função para preencher os campos do formulário com os dados do usuário
+        function preencherCampos(data) {
+            document.querySelector('input[name="nome"]').value = data.nome;
+            document.querySelector('input[name="sobrenome"]').value = data.sobrenome;
+            document.querySelector('input[name="telefone"]').value = data.telefone;
+            document.querySelector('input[name="endereco"]').value = data.endereco;
+            document.querySelector('input[name="email"]').value = data.email;
+            document.querySelector('input[name="senha"]').value = data.senha;
+        }
+
+        // Solicitação AJAX para obter os dados do usuário
+        fetch("/gerenciamento/dados_perfil/", {
+            method: "POST",
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+            },
+            body: new FormData(document.getElementById("form-perfil")),
+        })
+        .then(response => response.json())
+        .then(data => preencherCampos(data))
+        .catch(error => console.error('Erro:', error));
+    };
+</script>
 {% endblock %}

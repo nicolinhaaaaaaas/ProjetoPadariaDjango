@@ -9,7 +9,7 @@ function confirmarExclusao() {
 }
 
 function excluirPerfil() {
-    fetch('/usuarios/excluir_perfil/', {
+    fetch('/gerenciamento/excluir_perfil/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

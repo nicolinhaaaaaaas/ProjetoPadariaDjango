@@ -12,11 +12,24 @@ from io import BytesIO
 from gerenciamento.models import Funcionario, Ingrediente, Pedido, PedidoProduto, Produto, ProdutoIngrediente, Avaliacao
 from usuarios.models import Usuario
 
-#telas
-def principalGerente(request):
-    produtos_list = Produto.objects.all()
-    return render(request, 'principalGerente.html', {'produtos': produtos_list})
+def verifica_permissao(func):
+    def wrapper(request, *args, **kwargs):
+        if request.user.is_authenticated and request.user.permissao:
+            return func(request, *args, **kwargs)
+        else:
+            return redirect('cadastro')
+    return wrapper
 
+#telas
+
+def principalGerente(request):
+    if request.user.is_authenticated and request.user.permissao:
+        produtos_list = Produto.objects.all()
+        return render(request, 'principalGerente.html', {'produtos': produtos_list})
+    else:
+        return redirect('cadastro')
+
+@verifica_permissao
 def lista_pedidos(request):
      # Obtém a data do primeiro dia do mês atual
     primeiro_dia_mes_atual = timezone.now().replace(day=1, hour=0, minute=0, second=0, microsecond=0)
@@ -29,6 +42,7 @@ def lista_pedidos(request):
     pedidos_list = Pedido.objects.order_by('-id_pedido')
     return render(request, 'listarPedidos.html', {'pedidos': pedidos_list, 'soma_valor_pedidos_mes_atual': soma_valor_pedidos_mes_atual})
 
+@verifica_permissao
 def clientes(request):
     if request.method == "GET":
         clientes_list = Usuario.objects.order_by('-date_joined')
@@ -36,17 +50,40 @@ def clientes(request):
     else:
         return render(request, 'clientes.html')
 
+@verifica_permissao
 def funcionarios(request):
     funcionarios_list = Funcionario.objects.all()
     return render(request, 'funcionarios.html', {'funcionarios': funcionarios_list})
 
+@verifica_permissao
 def perfil(request):
+    if request.method == 'POST':
+        user = request.user
+        user.first_name = request.POST.get('nome')
+        user.last_name = request.POST.get('sobrenome')
+        user.telefone = request.POST.get('telefone')
+        user.endereco = request.POST.get('endereco')
+        user.email = request.POST.get('email')
+        user.password = (request.POST.get('senha'))
+        user.username = (request.POST.get('nome'))
+        user.permissao = True
+        user.save()
+        return redirect('perfilGerente.html')
     return render(request, 'perfilGerente.html')
+    
+
+def excluirPerfil(request):
+    if request.method == 'POST':
+        user = request.user
+        user.delete()
+        print('Usuário excluído com sucesso!')
+        return render(request, 'cadastro.html')
 
 
     
 #funções de adicionar
-    
+
+@verifica_permissao
 def addFuncionario(request):
     funcionarios_list = Funcionario.objects.all()
     if request.method == "GET":
@@ -68,7 +105,7 @@ def addFuncionario(request):
         return render(request, 'funcionarios.html', {'funcionarios': funcionarios_list})
     
 
-    
+@verifica_permissao  
 def addProduto(request):
     categorias = Produto.CATEGORIA_CHOICES
     if request.method == 'POST':
@@ -96,7 +133,8 @@ def addProduto(request):
 
     # Se o método da requisição não for POST, renderizar o formulário vazio
     return render(request, 'adicionarProduto.html', {'categorias': categorias})
-        
+
+@verifica_permissao       
 def produtoGerente(request, id_produto):
     categorias = Produto.CATEGORIA_CHOICES
     produto = get_object_or_404(Produto, id_produto=id_produto)
@@ -109,6 +147,7 @@ def produtoGerente(request, id_produto):
     return render(request, 'produtoGerente.html', contexto)
         
 # FUNÇÕES DE BUSCA
+@verifica_permissao
 def buscar_sugestoes(request):
     termo_pesquisa = request.GET.get('termo', '')
     sugestoes = Produto.objects.filter(nome_produto__icontains=termo_pesquisa)[:5]
@@ -116,6 +155,7 @@ def buscar_sugestoes(request):
     sugestoes_data = [{'nome': produto.nome_produto, 'preco': produto.preco, 'imagem_url': produto.imagem.url} for produto in sugestoes]
     return JsonResponse({'sugestoes': sugestoes_data})
 
+@verifica_permissao
 def pesquisarProdutoGerente(request):
     termo_pesquisa = request.GET.get('Pesquisar', '')
     resultados = Produto.objects.filter(nome_produto__icontains=termo_pesquisa)
@@ -123,6 +163,7 @@ def pesquisarProdutoGerente(request):
     return render(request, 'pesquisaProdutoGerente.html', contexto)
 
 #funções de atualizar
+@verifica_permissao
 def attProduto(request, id_produto):
     if request.method == 'POST':
         produtoAtt = Produto.objects.get(id_produto=id_produto)
@@ -151,6 +192,7 @@ def attProduto(request, id_produto):
 def attPedido(request):
     pass
 
+@verifica_permissao
 def attFuncionario(request):
     if request.method == 'POST':
         id_funcionario = request.POST.get('id_funcionario')
@@ -168,24 +210,28 @@ def attFuncionario(request):
     
 #funções de deletar
     
+@verifica_permissao
 def excluirProduto(request, id_produto):
     produto = Produto.objects.get(id_produto=id_produto)
     print(produto)
     produto.delete()
     return redirect('principalGerente')
 
+@verifica_permissao
 def excluirPedido(request, id_pedido):
     pedido = Pedido.objects.get(id_pedido=id_pedido)
     print(pedido)
     pedido.delete()
     return redirect('listaPedidos')
 
+@verifica_permissao
 def excluirFuncionario(request, id_funcionario):
     funcionario = Funcionario.objects.get(id_funcionario=id_funcionario)
     print(funcionario)
     funcionario.delete()
     return redirect('funcionarios')
 
+@verifica_permissao
 def excluirIngrediente(request, id_ingrediente, id_produto):
     produto = Produto.objects.get(id_produto=id_produto)
     ingrediente = Ingrediente.objects.get(id_ingrediente=id_ingrediente)
@@ -195,6 +241,7 @@ def excluirIngrediente(request, id_ingrediente, id_produto):
 
 #funções de dados
 
+@verifica_permissao
 def dadosPedido(request):
     id_pedido = request.POST.get('id_pedido')
     pedido = Pedido.objects.filter(id_pedido=id_pedido)
@@ -203,6 +250,7 @@ def dadosPedido(request):
     data = {'pedido': pedido_json, 'pedido_id': pedido_id}
     return JsonResponse(data)
 
+@verifica_permissao
 def dadosProduto(request):
     id_produto = request.POST.get('id_produto')
     produto = Produto.objects.filter(id_produto=id_produto).first()
@@ -227,6 +275,7 @@ def dadosProduto(request):
         # Se o produto não for encontrado, retorna uma resposta de erro
         return JsonResponse({'error': 'Produto não encontrado'}, status=404)
 
+@verifica_permissao
 def dados_funcionario(request):
     if request.method == "POST":
         id_funcionario = request.POST.get('id_funcionario')
@@ -244,9 +293,23 @@ def dados_funcionario(request):
             return JsonResponse(data)
         else:
             return JsonResponse({'error': 'Funcionário não encontrado'}, status=404)
-
+        
+def dados_perfil(request):
+    if request.method == "POST":
+        user = request.user
+        data = {
+            'nome': user.first_name,
+            'sobrenome': user.last_name,
+            'telefone': user.telefone,
+            'endereco': user.endereco,
+            'email': user.email,
+            'senha': user.password,
+        }
+        print(data)
+        return JsonResponse(data)
 
 #detalhes de pedido
+
 
 def notaPedido(request, id_pedido):
     pedido = get_object_or_404(Pedido, id_pedido=id_pedido)

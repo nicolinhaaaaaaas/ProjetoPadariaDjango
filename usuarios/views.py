@@ -125,7 +125,7 @@ def login(request):
                 # Usuário encontrado, autenticação bem-sucedida
                 print('Usuário autenticado com sucesso!')
                 # Faça qualquer ação adicional necessária
-                if usuario.permissao:
+                if usuario.permissao == True:
                     return redirect('principalGerente')
                 else:
                     return redirect('principal')
@@ -168,8 +168,8 @@ def logout(request):
 def perfil(request):
     if request.method == 'POST':
         user = request.user
-        user.nome = request.POST.get('nome')
-        user.sobrenome = request.POST.get('sobrenome')
+        user.first_name = request.POST.get('nome')
+        user.last_name = request.POST.get('sobrenome')
         user.telefone = request.POST.get('telefone')
         user.endereco = request.POST.get('endereco')
         user.email = request.POST.get('email')

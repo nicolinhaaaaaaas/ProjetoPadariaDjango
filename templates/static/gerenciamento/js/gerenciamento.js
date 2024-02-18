@@ -154,7 +154,9 @@ function dados_produto(id_produto){
         console.log(data)
         document.getElementById('att-produto').style.display = 'block'
 
-        div_ingredientes = document.getElementById('form-ingrediente')
+         // Limpar o conteúdo atual dos ingredientes
+        var div_ingredientes = document.getElementById('form-ingrediente');
+        div_ingredientes.innerHTML = '';
 
         for(i=0; i<data['ingredientes'].length; i++){
             div_ingredientes.innerHTML += 
